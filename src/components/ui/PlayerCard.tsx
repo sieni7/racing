@@ -1,16 +1,19 @@
+import { useState } from 'react';
 import type { Player } from '../../types';
 
 export default function PlayerCard({ player }: { player: Player }) {
+  const [imgError, setImgError] = useState(false);
   const initials = `${player.first_name[0]}${player.last_name[0]}`;
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow group">
       <div className="relative h-56 bg-gradient-to-br from-orange-100 to-blue-100 dark:from-orange-900/20 dark:to-blue-900/20">
-        {player.photo_url ? (
+        {player.photo_url && !imgError ? (
           <img
             src={player.photo_url}
             alt={`${player.first_name} ${player.last_name}`}
             loading="lazy"
+            onError={() => setImgError(true)}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
         ) : (

@@ -12,13 +12,3 @@ export async function getPlayers(): Promise<Player[]> {
   return data ?? [];
 }
 
-export async function getPlayerBySlug(slug: string): Promise<Player | null> {
-  const { data, error } = await supabase
-    .from('players')
-    .select('*')
-    .eq('slug', slug)
-    .single();
-
-  if (error) throw error;
-  return data;
-}

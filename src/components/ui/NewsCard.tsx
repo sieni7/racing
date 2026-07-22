@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import type { NewsItem } from '../../types';
 
@@ -10,15 +11,17 @@ function formatDate(dateStr: string): string {
 }
 
 export default function NewsCard({ news }: { news: NewsItem }) {
+  const [imgError, setImgError] = useState(false);
   return (
     <article className="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow group">
       <Link to={`/news/${news.slug}`}>
         <div className="relative h-48 bg-gray-100 dark:bg-gray-700 overflow-hidden">
-          {news.cover_image_url ? (
+          {news.cover_image_url && !imgError ? (
             <img
               src={news.cover_image_url}
               alt={news.title}
               loading="lazy"
+              onError={() => setImgError(true)}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
             />
           ) : (

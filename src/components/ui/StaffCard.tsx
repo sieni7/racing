@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { Staff } from '../../types';
 
 function roleLabel(role: string): string {
@@ -16,14 +17,16 @@ function roleLabel(role: string): string {
 }
 
 export default function StaffCard({ member }: { member: Staff }) {
+  const [imgError, setImgError] = useState(false);
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-5 hover:shadow-md transition-shadow flex items-start gap-4">
       <div className="w-16 h-16 rounded-full bg-gradient-to-br from-orange-100 to-blue-100 dark:from-orange-900/20 dark:to-blue-900/20 flex-shrink-0 overflow-hidden">
-        {member.photo_url ? (
+        {member.photo_url && !imgError ? (
           <img
             src={member.photo_url}
             alt={`${member.first_name} ${member.last_name}`}
             loading="lazy"
+            onError={() => setImgError(true)}
             className="w-full h-full object-cover"
           />
         ) : (
