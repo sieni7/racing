@@ -30,14 +30,24 @@
 
 ## Performance
 - Lazy loading images (`loading="lazy"`) sur tous les composants
-- Pagination sur news et matches
+- Pagination serveur sur matchs (12/page) et news (9/page)
 - Code splitting : chaque page et chaque composant UI sont des chunks séparés
 - Squelettes de chargement (Skeleton) sur toutes les pages
+- MatchsPage : filtres serveur (upcoming/finished/all paginé)
+
+## Corrections post-audit
+| NC | Correction | Commit |
+|----|-----------|--------|
+| NC-201 | MatchsPage : pagination serveur via `getAllMatches` / `getPastMatches` / `getUpcomingMatches` | `ea0c0ab` |
+| NC-202 | Code mort supprimé : `getPlayerBySlug` retiré de `players.ts` | `ea0c0ab` |
+| NC-203 | `supabase/migrations/001-004.sql` créé (4 tables + RLS + index) | `ea0c0ab` |
+| NC-204 | `onError` fallback ajouté sur toutes les `<img>` (PlayerCard, StaffCard, NewsCard, NewsArticlePage) | `ea0c0ab` |
+| ADR-012 | Décisions Sprint 2 documentées (pattern service, types, pagination, erreurs) | `ea0c0ab` |
 
 ## Validation
-- ✅ Build : `npm run build` → OK (14 chunks, 1.33s)
+- ✅ Build : `npm run build` → OK (14 chunks, 1.58s)
 - ✅ Données dynamiques depuis Supabase (players, matches, news, staff)
-- ✅ Push GitHub : `8b80a88`
+- ✅ Push GitHub : `ea0c0ab`
 
 ## Verdict
 **GO** — Prêt pour le Sprint 3 (Administration CRUD + Tests).

@@ -4,7 +4,7 @@ import { getNews } from '../lib/news';
 import NewsCard from '../components/ui/NewsCard';
 import { ListSkeleton } from '../components/ui/Skeleton';
 
-const PER_PAGE = 9;
+const PER_PAGE = 5;
 
 export default function NewsPage() {
   const [news, setNews] = useState<NewsItem[]>([]);
