@@ -15,7 +15,7 @@
 
 ## React
 
-- Composants fonctionnels + hooks
+- Composants fonctionnels + hooks (sauf ErrorBoundary qui utilise obligatoirement un composant classe)
 - Pages dans `src/pages/`, composants réutilisables dans `src/components/`
 - Contexte React pour l'état global (auth, thème)
 - Lazy loading pour toutes les pages (`React.lazy` + `Suspense`)

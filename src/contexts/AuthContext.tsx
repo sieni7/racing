@@ -1,8 +1,9 @@
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import type { User } from '@supabase/supabase-js';
 import { supabase } from '../lib/supabase';
 
 type AuthContextValue = {
-  user: unknown;
+  user: User | null;
   loading: boolean;
   role: string | null;
   signIn: (email: string, password: string) => Promise<void>;
@@ -11,29 +12,33 @@ type AuthContextValue = {
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
+type UserMeta = { role?: string };
+function extractRole(user: User | null): string | null {
+  return (user?.user_metadata as UserMeta | undefined)?.role ?? null;
+}
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<unknown>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [role, setRole] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const initialized = useRef(false);
 
   useEffect(() => {
-    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
-      const currentUser = session?.user ?? null;
-      setUser(currentUser);
-      setRole((currentUser as { user_metadata?: { role?: string } } | null)?.user_metadata?.role ?? null);
+    if (initialized.current) return;
+    initialized.current = true;
+
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+      setRole(extractRole(session?.user ?? null));
       setLoading(false);
     });
 
-    supabase.auth.getSession().then(({ data }) => {
-      const currentUser = data.session?.user ?? null;
-      setUser(currentUser);
-      setRole((currentUser as { user_metadata?: { role?: string } } | null)?.user_metadata?.role ?? null);
-      setLoading(false);
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+      setRole(extractRole(session?.user ?? null));
     });
 
-    return () => {
-      authListener.subscription.unsubscribe();
-    };
+    return () => subscription.unsubscribe();
   }, []);
 
   const signIn = async (email: string, password: string) => {

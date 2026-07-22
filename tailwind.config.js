@@ -1,9 +1,12 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./index.html', './src/**/*.{ts,tsx}'],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
+        primary: '#F97316',
+        cta: '#EA580C',
         orange: {
           club: '#F97316',
           50: '#FFF7ED',
