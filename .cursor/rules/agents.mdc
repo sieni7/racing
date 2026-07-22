@@ -1,0 +1,32 @@
+---
+description: Définition des agents IA pour le projet Racing Club de Bingerville
+globs: 
+---
+# Agents IA – Racing Club de Bingerville
+
+## Core7 – Rôles principaux
+
+| Rôle | Code | Description |
+|------|------|-------------|
+| Architecte | ARCH | Responsable des décisions techniques et de l'architecture |
+| DevOps Engineer | DEVOPS | Configuration, CI/CD, déploiement, environnement |
+| Security Officer | SECU | Sécurité, dépendances, bonnes pratiques OWASP |
+| Database Designer | DBA | Schémas Supabase, migrations, relations |
+| QA Automation Engineer | QA | Tests (Vitest, Playwright), qualité |
+| Performance Engineer | PERF | Optimisation, Lighthouse, bundle size |
+| PWA Engineer | PWA | Service Worker, notifications push, offline |
+
+## N3 – Rôles de support
+
+| Rôle | Code | Description |
+|------|------|-------------|
+| Documentaliste | DOC | Documentation, README, guides |
+| Product Owner AI | PO | Backlog, priorisation, critères d'acceptation |
+| OPS Expert | OPS | Monitoring, production, incidents |
+| Accessibility Specialist | A11Y | WCAG, contrastes, aria, navigation clavier |
+
+## RACI
+
+- **Lead** : Responsable du sprint et des arbitrages
+- **Contributors** : Agents qui réalisent les travaux
+- **Validators** : Agents qui vérifient la conformité

@@ -1,32 +1,61 @@
-# React + TypeScript + Vite
+# Racing Club de Bingerville
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Site officiel du club de football de Bingerville, Côte d'Ivoire.
 
-Currently, two official plugins are available:
+## Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Frontend** : Vite 8 + React 18 + TypeScript 5 + Tailwind CSS 3
+- **Backend** : Supabase (Auth, PostgreSQL, Storage)
+- **Déploiement** : Netlify
+- **Tests** : Vitest + Playwright
 
-## React Compiler
+## Prérequis
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Node.js 22+
+- npm
 
-## Expanding the Oxlint configuration
+## Installation
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```bash
+npm install
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## Démarrage
+
+```bash
+npm run dev
+```
+
+Ouvrir http://localhost:5173.
+
+## Variables d'environnement
+
+Copier `.env.example` vers `.env.local` et remplir les valeurs :
+
+```
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_ANON_KEY=your-anon-key
+```
+
+## Commandes
+
+| Commande | Description |
+|----------|-------------|
+| `npm run dev` | Serveur de développement |
+| `npm run build` | Build production |
+| `npm run preview` | Prévisualisation du build |
+
+## Structure
+
+```
+src/
+├── components/     # Composants réutilisables
+│   └── ui/         #   Composants atomiques
+├── pages/          # Pages (publiques + admin)
+├── lib/            # Services Supabase
+├── contexts/       # Contextes React
+├── hooks/          # Hooks personnalisés
+├── types/          # Types TypeScript
+├── utils/          # Fonctions utilitaires
+└── styles/         # Styles supplémentaires
+```
