@@ -3,10 +3,6 @@ import type { Staff } from '../types';
 
 export type { Staff };
 
-function toResult<T>(data: T | null, error: Error | null) {
-  return { data, error };
-}
-
 export async function getStaff(): Promise<Staff[]> {
   const { data, error } = await supabase
     .from('staff')
@@ -24,7 +20,8 @@ export async function getAllStaff() {
     .select('*')
     .order('hired_at', { ascending: true });
 
-  return toResult(data, error);
+  if (error) throw error;
+  return data ?? [];
 }
 
 export async function getStaffById(id: string): Promise<Staff | null> {
@@ -45,7 +42,8 @@ export async function createStaff(data: Partial<Omit<Staff, 'id'>>) {
     .select()
     .single();
 
-  return toResult(inserted, error);
+  if (error) throw error;
+  return inserted;
 }
 
 export async function updateStaff(id: string, data: Partial<Omit<Staff, 'id'>>) {
@@ -56,7 +54,8 @@ export async function updateStaff(id: string, data: Partial<Omit<Staff, 'id'>>) 
     .select()
     .single();
 
-  return toResult(updated, error);
+  if (error) throw error;
+  return updated;
 }
 
 export async function deleteStaff(id: string) {
@@ -65,5 +64,5 @@ export async function deleteStaff(id: string) {
     .delete()
     .eq('id', id);
 
-  return toResult(null, error);
+  if (error) throw error;
 }

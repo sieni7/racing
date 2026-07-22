@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useAdmin } from '../../contexts/AdminContext';
 import toast from 'react-hot-toast';
 import { AdminTable } from '../../components/admin/AdminTable';
 import { AdminForm } from '../../components/admin/AdminForm';
 import { ConfirmModal } from '../../components/admin/ConfirmModal';
-import { getAllNews, createNews, updateNews, deleteNews } from '../../lib/news';
 import type { News } from '../../lib/news';
 
 const newsFields = [
@@ -20,7 +20,7 @@ const newsFields = [
 ];
 
 export const AdminNews: React.FC = () => {
-  const [news, setNews] = useState<News[]>([]);
+  const { news, fetchNews, createNews, updateNews, deleteNews } = useAdmin();
   const [formOpen, setFormOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formValues, setFormValues] = useState<Record<string, any>>({});
@@ -29,13 +29,7 @@ export const AdminNews: React.FC = () => {
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
-  const fetchNews = async () => {
-    const { data, error } = await getAllNews();
-    if (error) toast.error('Erreur chargement des actualités');
-    else setNews(data || []);
-  };
-
-  useEffect(() => { fetchNews(); }, []);
+  useEffect(() => { fetchNews(); }, [fetchNews]);
 
   const handleAdd = () => {
     setEditingId(null);
@@ -59,9 +53,7 @@ export const AdminNews: React.FC = () => {
   const confirmDelete = async () => {
     if (!deletingId) return;
     setSubmitting(true);
-    const { error } = await deleteNews(deletingId);
-    if (error) toast.error('Erreur lors de la suppression');
-    else { toast.success('Actualité supprimée'); fetchNews(); }
+    await deleteNews(deletingId);
     setSubmitting(false);
     setConfirmOpen(false);
     setDeletingId(null);
@@ -70,16 +62,16 @@ export const AdminNews: React.FC = () => {
   const handleSubmit = async () => {
     setSubmitting(true);
     setFormErrors({});
-    const result = editingId
-      ? await updateNews(editingId, formValues)
-      : await createNews(formValues as any);
-    if (result.error) {
-      toast.error('Erreur lors de l\'enregistrement');
-      setFormErrors({ general: result.error.message });
-    } else {
-      toast.success(editingId ? 'Actualité modifiée' : 'Actualité ajoutée');
+    try {
+      if (editingId) {
+        await updateNews(editingId, formValues);
+      } else {
+        await createNews(formValues);
+      }
       setFormOpen(false);
-      fetchNews();
+    } catch {
+      toast.error('Erreur lors de l\'enregistrement');
+      setFormErrors({ general: 'Erreur lors de l\'enregistrement' });
     }
     setSubmitting(false);
   };

@@ -3,10 +3,6 @@ import type { Player } from '../types';
 
 export type { Player };
 
-function toResult<T>(data: T | null, error: Error | null) {
-  return { data, error };
-}
-
 export async function getPlayers(): Promise<Player[]> {
   const { data, error } = await supabase
     .from('players')
@@ -24,7 +20,8 @@ export async function getAllPlayers() {
     .select('*')
     .order('jersey_number', { ascending: true });
 
-  return toResult(data, error);
+  if (error) throw error;
+  return data ?? [];
 }
 
 export async function getPlayerById(id: string): Promise<Player | null> {
@@ -45,7 +42,8 @@ export async function createPlayer(data: Partial<Omit<Player, 'id'>>) {
     .select()
     .single();
 
-  return toResult(inserted, error);
+  if (error) throw error;
+  return inserted;
 }
 
 export async function updatePlayer(id: string, data: Partial<Omit<Player, 'id'>>) {
@@ -56,7 +54,8 @@ export async function updatePlayer(id: string, data: Partial<Omit<Player, 'id'>>
     .select()
     .single();
 
-  return toResult(updated, error);
+  if (error) throw error;
+  return updated;
 }
 
 export async function deletePlayer(id: string) {
@@ -65,5 +64,5 @@ export async function deletePlayer(id: string) {
     .delete()
     .eq('id', id);
 
-  return toResult(null, error);
+  if (error) throw error;
 }

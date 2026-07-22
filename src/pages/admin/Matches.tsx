@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useAdmin } from '../../contexts/AdminContext';
 import toast from 'react-hot-toast';
 import { AdminTable } from '../../components/admin/AdminTable';
 import { AdminForm } from '../../components/admin/AdminForm';
 import { ConfirmModal } from '../../components/admin/ConfirmModal';
-import { getAllMatches, createMatch, updateMatch, deleteMatch } from '../../lib/matches';
 import type { Match } from '../../lib/matches';
 
 const matchFields = [
@@ -29,7 +29,7 @@ const matchFields = [
 ];
 
 export const AdminMatches: React.FC = () => {
-  const [matches, setMatches] = useState<Match[]>([]);
+  const { matches, fetchMatches, createMatch, updateMatch, deleteMatch } = useAdmin();
   const [formOpen, setFormOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formValues, setFormValues] = useState<Record<string, any>>({});
@@ -38,13 +38,7 @@ export const AdminMatches: React.FC = () => {
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
-  const fetchMatches = async () => {
-    const { data, error } = await getAllMatches();
-    if (error) toast.error('Erreur chargement des matchs');
-    else setMatches(data || []);
-  };
-
-  useEffect(() => { fetchMatches(); }, []);
+  useEffect(() => { fetchMatches(); }, [fetchMatches]);
 
   const handleAdd = () => {
     setEditingId(null);
@@ -68,9 +62,7 @@ export const AdminMatches: React.FC = () => {
   const confirmDelete = async () => {
     if (!deletingId) return;
     setSubmitting(true);
-    const { error } = await deleteMatch(deletingId);
-    if (error) toast.error('Erreur lors de la suppression');
-    else { toast.success('Match supprimé'); fetchMatches(); }
+    await deleteMatch(deletingId);
     setSubmitting(false);
     setConfirmOpen(false);
     setDeletingId(null);
@@ -79,17 +71,17 @@ export const AdminMatches: React.FC = () => {
   const handleSubmit = async () => {
     setSubmitting(true);
     setFormErrors({});
-    const data = { ...formValues, is_home: formValues.is_home === 'true' };
-    const result = editingId
-      ? await updateMatch(editingId, data)
-      : await createMatch(data as any);
-    if (result.error) {
-      toast.error('Erreur lors de l\'enregistrement');
-      setFormErrors({ general: result.error.message });
-    } else {
-      toast.success(editingId ? 'Match modifié' : 'Match ajouté');
+    try {
+      const data = { ...formValues, is_home: formValues.is_home === 'true' };
+      if (editingId) {
+        await updateMatch(editingId, data);
+      } else {
+        await createMatch(data);
+      }
       setFormOpen(false);
-      fetchMatches();
+    } catch {
+      toast.error('Erreur lors de l\'enregistrement');
+      setFormErrors({ general: 'Erreur lors de l\'enregistrement' });
     }
     setSubmitting(false);
   };

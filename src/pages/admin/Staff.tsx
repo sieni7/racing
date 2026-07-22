@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useAdmin } from '../../contexts/AdminContext';
 import toast from 'react-hot-toast';
 import { AdminTable } from '../../components/admin/AdminTable';
 import { AdminForm } from '../../components/admin/AdminForm';
 import { ConfirmModal } from '../../components/admin/ConfirmModal';
-import { getAllStaff, createStaff, updateStaff, deleteStaff } from '../../lib/staff';
 import type { Staff } from '../../lib/staff';
 
 const staffFields = [
@@ -29,7 +29,7 @@ const staffFields = [
 ];
 
 export const AdminStaff: React.FC = () => {
-  const [staff, setStaff] = useState<Staff[]>([]);
+  const { staff, fetchStaff, createStaff, updateStaff, deleteStaff } = useAdmin();
   const [formOpen, setFormOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formValues, setFormValues] = useState<Record<string, any>>({});
@@ -38,13 +38,7 @@ export const AdminStaff: React.FC = () => {
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
-  const fetchStaff = async () => {
-    const { data, error } = await getAllStaff();
-    if (error) toast.error('Erreur chargement du staff');
-    else setStaff(data || []);
-  };
-
-  useEffect(() => { fetchStaff(); }, []);
+  useEffect(() => { fetchStaff(); }, [fetchStaff]);
 
   const handleAdd = () => {
     setEditingId(null);
@@ -68,9 +62,7 @@ export const AdminStaff: React.FC = () => {
   const confirmDelete = async () => {
     if (!deletingId) return;
     setSubmitting(true);
-    const { error } = await deleteStaff(deletingId);
-    if (error) toast.error('Erreur lors de la suppression');
-    else { toast.success('Membre du staff supprimé'); fetchStaff(); }
+    await deleteStaff(deletingId);
     setSubmitting(false);
     setConfirmOpen(false);
     setDeletingId(null);
@@ -79,17 +71,17 @@ export const AdminStaff: React.FC = () => {
   const handleSubmit = async () => {
     setSubmitting(true);
     setFormErrors({});
-    const data = { ...formValues, is_active: formValues.is_active === 'true' };
-    const result = editingId
-      ? await updateStaff(editingId, data)
-      : await createStaff(data as any);
-    if (result.error) {
-      toast.error('Erreur lors de l\'enregistrement');
-      setFormErrors({ general: result.error.message });
-    } else {
-      toast.success(editingId ? 'Membre modifié' : 'Membre ajouté');
+    try {
+      const data = { ...formValues, is_active: formValues.is_active === 'true' };
+      if (editingId) {
+        await updateStaff(editingId, data);
+      } else {
+        await createStaff(data);
+      }
       setFormOpen(false);
-      fetchStaff();
+    } catch {
+      toast.error('Erreur lors de l\'enregistrement');
+      setFormErrors({ general: 'Erreur lors de l\'enregistrement' });
     }
     setSubmitting(false);
   };

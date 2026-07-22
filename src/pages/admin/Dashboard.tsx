@@ -1,44 +1,30 @@
 import React, { useEffect, useState } from 'react';
-import { getAllPlayers } from '../../lib/players';
-import { getAllMatches } from '../../lib/matches';
-import { getPublishedNews } from '../../lib/news';
-import { getAllStaff } from '../../lib/staff';
-
-interface Stat {
-  label: string;
-  value: number;
-  icon: string;
-  color: string;
-}
+import { useAdmin } from '../../contexts/AdminContext';
 
 export const Dashboard: React.FC = () => {
-  const [stats, setStats] = useState<Stat[]>([
-    { label: 'Joueurs', value: 0, icon: '👤', color: 'bg-blue-100 dark:bg-blue-900/30' },
-    { label: 'Matchs', value: 0, icon: '⚽', color: 'bg-green-100 dark:bg-green-900/30' },
-    { label: 'Actualités', value: 0, icon: '📰', color: 'bg-orange-100 dark:bg-orange-900/30' },
-    { label: 'Staff', value: 0, icon: '👥', color: 'bg-purple-100 dark:bg-purple-900/30' },
-  ]);
+  const { players, matches, news, staff, fetchPlayers, fetchMatches, fetchNews, fetchStaff } = useAdmin();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchStats = async () => {
       setLoading(true);
-      const [players, matches, news, staff] = await Promise.all([
-        getAllPlayers(),
-        getAllMatches(),
-        getPublishedNews(),
-        getAllStaff(),
-      ]);
-      setStats([
-        { ...stats[0], value: players.data?.length || 0 },
-        { ...stats[1], value: matches.data?.length || 0 },
-        { ...stats[2], value: news.data?.length || 0 },
-        { ...stats[3], value: staff.data?.length || 0 },
+      await Promise.all([
+        fetchPlayers(),
+        fetchMatches(),
+        fetchNews(),
+        fetchStaff(),
       ]);
       setLoading(false);
     };
     fetchStats();
-  }, []);
+  }, [fetchPlayers, fetchMatches, fetchNews, fetchStaff]);
+
+  const stats = [
+    { label: 'Joueurs', value: players.length, icon: '👤', color: 'bg-blue-100 dark:bg-blue-900/30' },
+    { label: 'Matchs', value: matches.length, icon: '⚽', color: 'bg-green-100 dark:bg-green-900/30' },
+    { label: 'Actualités', value: news.length, icon: '📰', color: 'bg-orange-100 dark:bg-orange-900/30' },
+    { label: 'Staff', value: staff.length, icon: '👥', color: 'bg-purple-100 dark:bg-purple-900/30' },
+  ];
 
   return (
     <div className="space-y-6">

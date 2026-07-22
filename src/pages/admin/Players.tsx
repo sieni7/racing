@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { AdminTable } from '../../components/admin/AdminTable';
 import { AdminForm } from '../../components/admin/AdminForm';
 import { ConfirmModal } from '../../components/admin/ConfirmModal';
-import { getAllPlayers, createPlayer, updatePlayer, deletePlayer } from '../../lib/players';
+import { useAdmin } from '../../contexts/AdminContext';
 import type { Player } from '../../lib/players';
 
 const playerFields = [
@@ -30,7 +30,7 @@ const playerFields = [
 ];
 
 export const AdminPlayers: React.FC = () => {
-  const [players, setPlayers] = useState<Player[]>([]);
+  const { players, fetchPlayers, createPlayer, updatePlayer, deletePlayer } = useAdmin();
   const [formOpen, setFormOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formValues, setFormValues] = useState<Record<string, any>>({});
@@ -39,13 +39,7 @@ export const AdminPlayers: React.FC = () => {
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
-  const fetchPlayers = async () => {
-    const { data, error } = await getAllPlayers();
-    if (error) toast.error('Erreur chargement des joueurs');
-    else setPlayers(data || []);
-  };
-
-  useEffect(() => { fetchPlayers(); }, []);
+  useEffect(() => { fetchPlayers(); }, [fetchPlayers]);
 
   const handleAdd = () => {
     setEditingId(null);
@@ -69,9 +63,7 @@ export const AdminPlayers: React.FC = () => {
   const confirmDelete = async () => {
     if (!deletingId) return;
     setSubmitting(true);
-    const { error } = await deletePlayer(deletingId);
-    if (error) toast.error('Erreur lors de la suppression');
-    else { toast.success('Joueur supprimé'); fetchPlayers(); }
+    await deletePlayer(deletingId);
     setSubmitting(false);
     setConfirmOpen(false);
     setDeletingId(null);
@@ -80,16 +72,16 @@ export const AdminPlayers: React.FC = () => {
   const handleSubmit = async () => {
     setSubmitting(true);
     setFormErrors({});
-    const result = editingId
-      ? await updatePlayer(editingId, formValues)
-      : await createPlayer(formValues as any);
-    if (result.error) {
-      toast.error('Erreur lors de l\'enregistrement');
-      setFormErrors({ general: result.error.message });
-    } else {
-      toast.success(editingId ? 'Joueur modifié' : 'Joueur ajouté');
+    try {
+      if (editingId) {
+        await updatePlayer(editingId, formValues);
+      } else {
+        await createPlayer(formValues);
+      }
       setFormOpen(false);
-      fetchPlayers();
+    } catch {
+      toast.error('Erreur lors de l\'enregistrement');
+      setFormErrors({ general: 'Erreur lors de l\'enregistrement' });
     }
     setSubmitting(false);
   };

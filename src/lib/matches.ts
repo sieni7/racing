@@ -3,10 +3,6 @@ import type { Match } from '../types';
 
 export type { Match };
 
-function toResult<T>(data: T | null, error: Error | null) {
-  return { data, error };
-}
-
 export async function getUpcomingMatches(limit = 5): Promise<Match[]> {
   const { data, error } = await supabase
     .from('matches')
@@ -25,10 +21,10 @@ export async function getAllMatches() {
     .select('*')
     .order('match_date', { ascending: false });
 
-  return toResult(data, error);
+  if (error) throw error;
+  return data ?? [];
 }
 
-// Paginated versions for public page
 export async function getPastMatches(page = 1, perPage = 12): Promise<{ matches: Match[]; count: number }> {
   const from = (page - 1) * perPage;
   const to = from + perPage - 1;
@@ -76,7 +72,8 @@ export async function createMatch(data: Partial<Omit<Match, 'id'>>) {
     .select()
     .single();
 
-  return toResult(inserted, error);
+  if (error) throw error;
+  return inserted;
 }
 
 export async function updateMatch(id: string, data: Partial<Omit<Match, 'id'>>) {
@@ -87,7 +84,8 @@ export async function updateMatch(id: string, data: Partial<Omit<Match, 'id'>>) 
     .select()
     .single();
 
-  return toResult(updated, error);
+  if (error) throw error;
+  return updated;
 }
 
 export async function deleteMatch(id: string) {
@@ -96,5 +94,5 @@ export async function deleteMatch(id: string) {
     .delete()
     .eq('id', id);
 
-  return toResult(null, error);
+  if (error) throw error;
 }

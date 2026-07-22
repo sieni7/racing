@@ -3,10 +3,6 @@ import type { NewsItem } from '../types';
 
 export type { NewsItem as News };
 
-function toResult<T>(data: T | null, error: Error | null) {
-  return { data, error };
-}
-
 export async function getNews(page = 1, perPage = 5): Promise<{ news: NewsItem[]; count: number }> {
   const from = (page - 1) * perPage;
   const to = from + perPage - 1;
@@ -28,7 +24,8 @@ export async function getAllNews() {
     .select('*')
     .order('published_at', { ascending: false });
 
-  return toResult(data, error);
+  if (error) throw error;
+  return data ?? [];
 }
 
 export async function getPublishedNews() {
@@ -38,7 +35,8 @@ export async function getPublishedNews() {
     .eq('status', 'published')
     .order('published_at', { ascending: false });
 
-  return toResult(data, error);
+  if (error) throw error;
+  return data ?? [];
 }
 
 export async function getRecentNews(limit = 3): Promise<NewsItem[]> {
@@ -82,7 +80,8 @@ export async function createNews(data: Partial<Omit<NewsItem, 'id'>>) {
     .select()
     .single();
 
-  return toResult(inserted, error);
+  if (error) throw error;
+  return inserted;
 }
 
 export async function updateNews(id: string, data: Partial<Omit<NewsItem, 'id'>>) {
@@ -93,7 +92,8 @@ export async function updateNews(id: string, data: Partial<Omit<NewsItem, 'id'>>
     .select()
     .single();
 
-  return toResult(updated, error);
+  if (error) throw error;
+  return updated;
 }
 
 export async function deleteNews(id: string) {
@@ -102,5 +102,5 @@ export async function deleteNews(id: string) {
     .delete()
     .eq('id', id);
 
-  return toResult(null, error);
+  if (error) throw error;
 }

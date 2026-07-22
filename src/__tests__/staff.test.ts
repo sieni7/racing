@@ -15,14 +15,13 @@ describe('staff service', () => {
       ];
 
       const mockSelect = vi.fn().mockReturnValue({
-        order: vi.fn().mockResolvedValue({ data: mockStaff, error: null }),
+        order: vi.fn().mockResolvedValue(mockStaff),
       });
       (supabase.from as vi.Mock).mockReturnValue({ select: mockSelect });
 
       const result = await getAllStaff();
 
-      expect(result.data).toEqual(mockStaff);
-      expect(result.error).toBeNull();
+      expect(result).toEqual(mockStaff);
     });
   });
 
@@ -31,15 +30,14 @@ describe('staff service', () => {
       const newStaff = { first_name: 'Pierre', last_name: 'Durand', role: 'preparateur_physique' };
       const createdStaff = { id: '3', ...newStaff };
 
-      const mockSingle = vi.fn().mockResolvedValue({ data: createdStaff, error: null });
+      const mockSingle = vi.fn().mockResolvedValue(createdStaff);
       const mockSelect = vi.fn().mockReturnValue({ single: mockSingle });
       const mockInsert = vi.fn().mockReturnValue({ select: mockSelect });
       (supabase.from as vi.Mock).mockReturnValue({ insert: mockInsert });
 
       const result = await createStaff(newStaff);
 
-      expect(result.data).toEqual(createdStaff);
-      expect(result.error).toBeNull();
+      expect(result).toEqual(createdStaff);
     });
   });
 
@@ -47,7 +45,7 @@ describe('staff service', () => {
     it('should update staff on success', async () => {
       const updatedStaff = { id: '1', first_name: 'Jean', last_name: 'Dupont', role: 'entraineur_adjoint' };
 
-      const mockSingle = vi.fn().mockResolvedValue({ data: updatedStaff, error: null });
+      const mockSingle = vi.fn().mockResolvedValue(updatedStaff);
       const mockSelect = vi.fn().mockReturnValue({ single: mockSingle });
       const mockEq = vi.fn().mockReturnValue({ select: mockSelect });
       const mockUpdate = vi.fn().mockReturnValue({ eq: mockEq });
@@ -55,20 +53,17 @@ describe('staff service', () => {
 
       const result = await updateStaff('1', { role: 'entraineur_adjoint' });
 
-      expect(result.data).toEqual(updatedStaff);
-      expect(result.error).toBeNull();
+      expect(result).toEqual(updatedStaff);
     });
   });
 
   describe('deleteStaff', () => {
     it('should delete staff on success', async () => {
-      const mockEq = vi.fn().mockResolvedValue({ error: null });
+      const mockEq = vi.fn().mockResolvedValue(undefined);
       const mockDelete = vi.fn().mockReturnValue({ eq: mockEq });
       (supabase.from as vi.Mock).mockReturnValue({ delete: mockDelete });
 
-      const result = await deleteStaff('1');
-
-      expect(result.error).toBeNull();
+      await expect(deleteStaff('1')).resolves.toBeUndefined();
     });
   });
 });

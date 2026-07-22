@@ -4,6 +4,7 @@ import Layout from './components/Layout';
 import PrivateRoute from './components/PrivateRoute';
 import ErrorBoundary from './components/ErrorBoundary';
 import { AdminLayout } from './components/admin/AdminLayout';
+import { AdminProvider } from './contexts/AdminContext';
 
 const HomePage = lazy(() => import('./pages/HomePage'));
 const SquadPage = lazy(() => import('./pages/SquadPage'));
@@ -43,7 +44,9 @@ function App() {
                 path="/admin"
                 element={
                   <PrivateRoute>
-                    <AdminLayout />
+                    <AdminProvider>
+                      <AdminLayout />
+                    </AdminProvider>
                   </PrivateRoute>
                 }
               >
