@@ -1,6 +1,12 @@
 import { supabase } from './supabase';
 import type { NewsItem } from '../types';
 
+export type { NewsItem as News };
+
+function toResult<T>(data: T | null, error: Error | null) {
+  return { data, error };
+}
+
 export async function getNews(page = 1, perPage = 5): Promise<{ news: NewsItem[]; count: number }> {
   const from = (page - 1) * perPage;
   const to = from + perPage - 1;
@@ -14,6 +20,25 @@ export async function getNews(page = 1, perPage = 5): Promise<{ news: NewsItem[]
 
   if (error) throw error;
   return { news: data ?? [], count: count ?? 0 };
+}
+
+export async function getAllNews() {
+  const { data, error } = await supabase
+    .from('news')
+    .select('*')
+    .order('published_at', { ascending: false });
+
+  return toResult(data, error);
+}
+
+export async function getPublishedNews() {
+  const { data, error } = await supabase
+    .from('news')
+    .select('*')
+    .eq('status', 'published')
+    .order('published_at', { ascending: false });
+
+  return toResult(data, error);
 }
 
 export async function getRecentNews(limit = 3): Promise<NewsItem[]> {
@@ -50,18 +75,17 @@ export async function getNewsById(id: string): Promise<NewsItem | null> {
   return data;
 }
 
-export async function createNews(data: Partial<Omit<NewsItem, 'id'>>): Promise<NewsItem> {
+export async function createNews(data: Partial<Omit<NewsItem, 'id'>>) {
   const { data: inserted, error } = await supabase
     .from('news')
     .insert(data)
     .select()
     .single();
 
-  if (error) throw error;
-  return inserted;
+  return toResult(inserted, error);
 }
 
-export async function updateNews(id: string, data: Partial<Omit<NewsItem, 'id'>>): Promise<NewsItem> {
+export async function updateNews(id: string, data: Partial<Omit<NewsItem, 'id'>>) {
   const { data: updated, error } = await supabase
     .from('news')
     .update(data)
@@ -69,15 +93,14 @@ export async function updateNews(id: string, data: Partial<Omit<NewsItem, 'id'>>
     .select()
     .single();
 
-  if (error) throw error;
-  return updated;
+  return toResult(updated, error);
 }
 
-export async function deleteNews(id: string): Promise<void> {
+export async function deleteNews(id: string) {
   const { error } = await supabase
     .from('news')
     .delete()
     .eq('id', id);
 
-  if (error) throw error;
+  return toResult(null, error);
 }

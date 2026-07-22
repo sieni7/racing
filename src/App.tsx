@@ -3,6 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout';
 import PrivateRoute from './components/PrivateRoute';
 import ErrorBoundary from './components/ErrorBoundary';
+import { AdminLayout } from './components/admin/AdminLayout';
 
 const HomePage = lazy(() => import('./pages/HomePage'));
 const SquadPage = lazy(() => import('./pages/SquadPage'));
@@ -10,7 +11,11 @@ const MatchsPage = lazy(() => import('./pages/MatchsPage'));
 const NewsPage = lazy(() => import('./pages/NewsPage'));
 const NewsArticlePage = lazy(() => import('./pages/NewsArticlePage'));
 const LoginPage = lazy(() => import('./pages/LoginPage'));
-const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
+const AdminDashboard = lazy(() => import('./pages/admin/Dashboard'));
+const AdminPlayers = lazy(() => import('./pages/admin/Players'));
+const AdminMatches = lazy(() => import('./pages/admin/Matches'));
+const AdminNews = lazy(() => import('./pages/admin/News'));
+const AdminStaff = lazy(() => import('./pages/admin/Staff'));
 
 function Loading() {
   return (
@@ -38,10 +43,16 @@ function App() {
                 path="/admin"
                 element={
                   <PrivateRoute>
-                    <AdminDashboard />
+                    <AdminLayout />
                   </PrivateRoute>
                 }
-              />
+              >
+                <Route index element={<AdminDashboard />} />
+                <Route path="players" element={<AdminPlayers />} />
+                <Route path="matches" element={<AdminMatches />} />
+                <Route path="news" element={<AdminNews />} />
+                <Route path="staff" element={<AdminStaff />} />
+              </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>

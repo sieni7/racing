@@ -45,22 +45,30 @@
 | NC-204 | `onError` fallback ajouté sur toutes les `<img>` (PlayerCard, StaffCard, NewsCard, NewsArticlePage) | `ea0c0ab` |
 | ADR-012 | Décisions Sprint 2 documentées (pattern service, types, pagination, erreurs) | `ea0c0ab` |
 
+## Écarts plan comblés
+| Plan vs Livré | Correctif | Commit |
+|--------------|-----------|--------|
+| `HeroCarousel.tsx` manquant | Créé : auto-défilement 5s, flèches, indicateurs, pause hover | `3fadbcf` |
+| Services CRUD manquants | `create/update/delete` + `getById` ajoutés aux 4 services | `3fadbcf` |
+| ADR-004/005 manquants | ADR-004 (Design System) et ADR-005 (Gestion des données) rédigés | `3fadbcf` |
+| NewsPage pagination 5/page | `getNews()` default changé à 5, NewsPage déjà à `PER_PAGE=5` | `3fadbcf` |
+
 ## Checklist de validation
-- [x] Tous les services d'accès aux données sont créés
+- [x] Tous les services d'accès aux données sont créés (lecture + écriture CRUD)
 - [x] `HomePage` affiche le carrousel (HeroCarousel), le prochain match et les dernières actualités
 - [x] `SquadPage` affiche les joueurs avec filtre par poste et recherche textuelle
 - [x] `MatchsPage` sépare les matchs à venir / terminés (onglets avec pagination serveur)
 - [x] `NewsPage` affiche les actualités avec pagination (5/page)
 - [x] Les images utilisent `loading="lazy"` et `onError` fallback
 - [x] Les squelettes de chargement sont présents sur toutes les pages
-- [x] Le build (`npm run build`) réussit (14 chunks, 1.74s)
+- [x] Le build (`npm run build`) réussit (14 chunks, 1.46s)
 - [x] ADR-004 (Design System) et ADR-005 (Gestion des données) rédigés
 - [x] Rapport de sprint complété
 
 ## Validation
-- ✅ Build : `npm run build` → OK (14 chunks)
+- ✅ Build : `npm run build` → OK (14 chunks, 1.46s)
 - ✅ Données dynamiques depuis Supabase (players, matches, news, staff)
-- ✅ Push GitHub : `817dc9a`
+- ✅ Push GitHub : `3fadbcf`
 
 ## Verdict
 **GO** — Prêt pour le Sprint 3 (Administration CRUD + Tests).

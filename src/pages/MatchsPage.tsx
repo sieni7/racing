@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { Match } from '../types';
-import { getUpcomingMatches, getPastMatches, getAllMatches } from '../lib/matches';
+import { getUpcomingMatches, getPastMatches, getAllMatchesPaginated } from '../lib/matches';
 import MatchCard from '../components/ui/MatchCard';
 import { ListSkeleton } from '../components/ui/Skeleton';
 
@@ -27,7 +27,7 @@ export default function MatchsPage() {
           setMatches(data);
           setCount(data.length);
         } else {
-          const fn = tab === 'finished' ? getPastMatches : getAllMatches;
+          const fn = tab === 'finished' ? getPastMatches : getAllMatchesPaginated;
           const { matches: data, count: total } = await fn(page, perPage);
           setMatches(data);
           setCount(total);
