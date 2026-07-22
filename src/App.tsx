@@ -8,6 +8,7 @@ const HomePage = lazy(() => import('./pages/HomePage'));
 const SquadPage = lazy(() => import('./pages/SquadPage'));
 const MatchsPage = lazy(() => import('./pages/MatchsPage'));
 const NewsPage = lazy(() => import('./pages/NewsPage'));
+const NewsArticlePage = lazy(() => import('./pages/NewsArticlePage'));
 const LoginPage = lazy(() => import('./pages/LoginPage'));
 const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
 
@@ -30,6 +31,7 @@ function App() {
               <Route path="/effectif" element={<SquadPage />} />
               <Route path="/matchs" element={<MatchsPage />} />
               <Route path="/news" element={<NewsPage />} />
+              <Route path="/news/:slug" element={<NewsArticlePage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<Navigate to="/login" replace />} />
               <Route
