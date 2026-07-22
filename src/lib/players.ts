@@ -12,3 +12,45 @@ export async function getPlayers(): Promise<Player[]> {
   return data ?? [];
 }
 
+export async function getPlayerById(id: string): Promise<Player | null> {
+  const { data, error } = await supabase
+    .from('players')
+    .select('*')
+    .eq('id', id)
+    .single();
+
+  if (error) throw error;
+  return data;
+}
+
+export async function createPlayer(data: Partial<Omit<Player, 'id'>>): Promise<Player> {
+  const { data: inserted, error } = await supabase
+    .from('players')
+    .insert(data)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return inserted;
+}
+
+export async function updatePlayer(id: string, data: Partial<Omit<Player, 'id'>>): Promise<Player> {
+  const { data: updated, error } = await supabase
+    .from('players')
+    .update(data)
+    .eq('id', id)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return updated;
+}
+
+export async function deletePlayer(id: string): Promise<void> {
+  const { error } = await supabase
+    .from('players')
+    .delete()
+    .eq('id', id);
+
+  if (error) throw error;
+}

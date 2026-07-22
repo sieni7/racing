@@ -36,14 +36,7 @@ export default function HomePage() {
       {loading ? (
         <div className="min-h-[80vh] -mt-16 bg-gray-200 dark:bg-gray-800 animate-pulse" />
       ) : recentNews.length > 0 ? (
-        <HeroCarousel
-          slides={recentNews.map((n) => ({
-            slug: n.slug,
-            title: n.title,
-            excerpt: n.excerpt,
-            cover_image_url: n.cover_image_url,
-          }))}
-        />
+        <HeroCarousel news={recentNews} />
       ) : (
         <section className="min-h-[80vh] flex items-center justify-center bg-gradient-to-br from-orange-500 to-blue-800 text-white -mt-16">
           <div className="text-center px-4 max-w-3xl">

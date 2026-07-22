@@ -41,3 +41,46 @@ export async function getAllMatches(page = 1, perPage = 12): Promise<{ matches: 
   if (error) throw error;
   return { matches: data ?? [], count: count ?? 0 };
 }
+
+export async function getMatchById(id: string): Promise<Match | null> {
+  const { data, error } = await supabase
+    .from('matches')
+    .select('*')
+    .eq('id', id)
+    .single();
+
+  if (error) throw error;
+  return data;
+}
+
+export async function createMatch(data: Partial<Omit<Match, 'id'>>): Promise<Match> {
+  const { data: inserted, error } = await supabase
+    .from('matches')
+    .insert(data)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return inserted;
+}
+
+export async function updateMatch(id: string, data: Partial<Omit<Match, 'id'>>): Promise<Match> {
+  const { data: updated, error } = await supabase
+    .from('matches')
+    .update(data)
+    .eq('id', id)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return updated;
+}
+
+export async function deleteMatch(id: string): Promise<void> {
+  const { error } = await supabase
+    .from('matches')
+    .delete()
+    .eq('id', id);
+
+  if (error) throw error;
+}

@@ -22,8 +22,9 @@
 | `src/components/ui/MatchCard.tsx` | Carte match avec score, statut, date, lieu | ✅ |
 | `src/components/ui/NewsCard.tsx` | Carte article avec image, titre, extrait, lien | ✅ |
 | `src/components/ui/StaffCard.tsx` | Carte staff avec photo, rôle, bio | ✅ |
+| `src/components/ui/HeroCarousel.tsx` | Carrousel hero avec auto-défilement et indicateurs | ✅ |
 | `src/pages/HomePage.tsx` | Hero section + prochain match + dernières news | ✅ |
-| `src/pages/SquadPage.tsx` | Joueurs groupés par poste + staff technique | ✅ |
+| `src/pages/SquadPage.tsx` | Joueurs groupés par poste + staff technique + recherche + filtre poste | ✅ |
 | `src/pages/MatchsPage.tsx` | Liste matchs avec filtre (tous/à venir/terminés) | ✅ |
 | `src/pages/NewsPage.tsx` | Articles paginés (9/page) | ✅ |
 | `src/pages/NewsArticlePage.tsx` | Article complet avec slug | ✅ |
@@ -44,10 +45,22 @@
 | NC-204 | `onError` fallback ajouté sur toutes les `<img>` (PlayerCard, StaffCard, NewsCard, NewsArticlePage) | `ea0c0ab` |
 | ADR-012 | Décisions Sprint 2 documentées (pattern service, types, pagination, erreurs) | `ea0c0ab` |
 
+## Checklist de validation
+- [x] Tous les services d'accès aux données sont créés
+- [x] `HomePage` affiche le carrousel (HeroCarousel), le prochain match et les dernières actualités
+- [x] `SquadPage` affiche les joueurs avec filtre par poste et recherche textuelle
+- [x] `MatchsPage` sépare les matchs à venir / terminés (onglets avec pagination serveur)
+- [x] `NewsPage` affiche les actualités avec pagination (5/page)
+- [x] Les images utilisent `loading="lazy"` et `onError` fallback
+- [x] Les squelettes de chargement sont présents sur toutes les pages
+- [x] Le build (`npm run build`) réussit (14 chunks, 1.74s)
+- [x] ADR-004 (Design System) et ADR-005 (Gestion des données) rédigés
+- [x] Rapport de sprint complété
+
 ## Validation
-- ✅ Build : `npm run build` → OK (14 chunks, 1.58s)
+- ✅ Build : `npm run build` → OK (14 chunks)
 - ✅ Données dynamiques depuis Supabase (players, matches, news, staff)
-- ✅ Push GitHub : `ea0c0ab`
+- ✅ Push GitHub : `817dc9a`
 
 ## Verdict
 **GO** — Prêt pour le Sprint 3 (Administration CRUD + Tests).
