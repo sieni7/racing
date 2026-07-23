@@ -6,8 +6,8 @@ function PlayerCard({ player }: { player: Player }) {
   const initials = `${player.first_name[0]}${player.last_name[0]}`;
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden card-hover group">
-      <div className="relative h-56 bg-gradient-to-br from-orange-100 to-blue-100 dark:from-orange-900/20 dark:to-blue-900/20">
+    <div className="bg-white dark:bg-gray-800 rounded-[18px] shadow-card overflow-hidden card-hover group">
+      <div className="relative h-56 bg-gradient-to-br from-racing-sky/20 to-racing-navy/10">
         {player.photo_url && !imgError ? (
           <img
             src={player.photo_url}
@@ -22,7 +22,7 @@ function PlayerCard({ player }: { player: Player }) {
             <span className="text-4xl font-bold text-gray-500 dark:text-gray-400">{initials}</span>
           </div>
         )}
-        <div className="absolute top-3 right-3 bg-primary text-white text-xs font-bold rounded-full w-8 h-8 flex items-center justify-center shadow">
+        <div className="absolute top-3 right-3 bg-secondary text-white text-xs font-bold rounded-full w-8 h-8 flex items-center justify-center shadow">
           {player.jersey_number}
         </div>
       </div>

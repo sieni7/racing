@@ -21,7 +21,7 @@ export default function HeroCarousel({ news }: { news: NewsItem[] }) {
 
   return (
     <div
-      className="relative min-h-[80vh] -mt-16 flex items-center bg-gradient-to-br from-orange-500 to-blue-800 text-white overflow-hidden"
+      className="relative min-h-[80vh] -mt-16 flex items-center gradient-hero text-white overflow-hidden"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
@@ -44,7 +44,7 @@ export default function HeroCarousel({ news }: { news: NewsItem[] }) {
         )}
         <Link
           to={`/news/${item.slug}`}
-          className="inline-block px-6 py-3 bg-white text-primary font-semibold rounded-lg hover:bg-gray-100 transition-colors"
+          className="inline-block px-6 py-3 bg-white text-secondary font-semibold rounded-xl hover:bg-primary transition-colors"
         >
           Lire l'article
         </Link>

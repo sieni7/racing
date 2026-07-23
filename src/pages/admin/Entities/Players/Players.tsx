@@ -3,6 +3,7 @@ import toast from 'react-hot-toast';
 import { useAdmin } from '../../../../contexts/AdminContext';
 import { DataTable, type Column } from '../../../../components/admin/data/DataTable';
 import { FormBuilder, type Field } from '../../../../components/admin/forms/FormBuilder';
+import { ViewModal } from '../../../../components/admin/ViewModal';
 import { ImportModal } from '../../../../components/admin/ImportModal';
 import { ExportButton } from '../../../../components/admin/ExportButton';
 import { AuditHistory } from '../../../../components/admin/AuditHistory';
@@ -42,6 +43,7 @@ export default function PlayersPage() {
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [importOpen, setImportOpen] = useState(false);
   const [auditOpen, setAuditOpen] = useState(false);
+  const [viewItem, setViewItem] = useState<Player | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const readOnly = useReadOnly();
 
@@ -49,6 +51,7 @@ export default function PlayersPage() {
 
   const handleAdd = useCallback(() => { setEditingId(null); setFormValues({}); setFormErrors({}); setFormOpen(true); }, []);
   const handleEdit = useCallback((item: Player) => { setEditingId(item.id); setFormValues(item); setFormErrors({}); setFormOpen(true); }, []);
+  const handleView = useCallback((item: Player) => { setViewItem(item); }, []);
   const handleDuplicate = useCallback((item: Player) => {
     const { id, slug, created_at, updated_at, ...rest } = item as any;
     setEditingId(null); setFormValues({ ...rest, first_name: `${rest.first_name} (copie)` }); setFormErrors({}); setFormOpen(true);
@@ -105,6 +108,20 @@ export default function PlayersPage() {
 
   const exportColumns = columns.map(({ key, label }) => ({ key, label }));
 
+  const viewFields = viewItem ? [
+    { label: 'Prénom', value: viewItem.first_name },
+    { label: 'Nom', value: viewItem.last_name },
+    { label: 'Numéro', value: viewItem.jersey_number },
+    { label: 'Poste', value: viewItem.position },
+    { label: 'Nationalité', value: viewItem.nationality },
+    { label: 'Date de naissance', value: viewItem.date_of_birth ? new Date(viewItem.date_of_birth).toLocaleDateString('fr-FR') : '—' },
+    { label: 'Taille', value: viewItem.height_cm ? `${viewItem.height_cm} cm` : '—' },
+    { label: 'Poids', value: viewItem.weight_kg ? `${viewItem.weight_kg} kg` : '—' },
+    { label: 'Pied fort', value: viewItem.preferred_foot || '—' },
+    { label: 'Actif', value: viewItem.is_active ? 'Oui' : 'Non' },
+    { label: 'Biographie', value: viewItem.bio || '—' },
+  ] : [];
+
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
@@ -132,6 +149,7 @@ export default function PlayersPage() {
         columns={columns}
         onAdd={readOnly ? undefined : handleAdd}
         onEdit={readOnly ? undefined : handleEdit}
+        onView={handleView}
         onDelete={readOnly ? undefined : handleDelete}
         onDuplicate={readOnly ? undefined : handleDuplicate}
         onBulkDelete={readOnly ? undefined : handleBulkDelete}
@@ -153,6 +171,9 @@ export default function PlayersPage() {
           errors={formErrors}
         />
       )}
+
+      <ViewModal open={!!viewItem} onClose={() => setViewItem(null)} item={viewItem}
+        title={`Joueur : ${viewItem?.first_name} ${viewItem?.last_name}`} fields={viewFields} />
 
       <ImportModal open={importOpen} onClose={() => setImportOpen(false)} onImport={handleImport}
         columns={exportColumns} title="Import joueurs CSV" />

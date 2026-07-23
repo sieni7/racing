@@ -64,9 +64,9 @@ export function AdminHeader({ onMenuToggle }: { onMenuToggle: () => void }) {
   }, []);
 
   const typeColors: Record<string, string> = {
-    Page: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
-    Joueur: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
-    Match: 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400',
+    Page: 'bg-primary/10 text-secondary dark:bg-primary/20 dark:text-primary',
+    Joueur: 'bg-success/10 text-success dark:bg-success/20 dark:text-success',
+    Match: 'bg-cta/10 text-cta dark:bg-cta/20 dark:text-cta',
   };
 
   return (
@@ -89,7 +89,7 @@ export function AdminHeader({ onMenuToggle }: { onMenuToggle: () => void }) {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Rechercher (Ctrl+K)..."
-          className="w-full pl-9 pr-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/40 transition-shadow"
+          className="w-full pl-9 pr-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-racing-sky/40 transition-shadow"
         />
         {open && results.length > 0 && (
           <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden z-50">
@@ -109,7 +109,7 @@ export function AdminHeader({ onMenuToggle }: { onMenuToggle: () => void }) {
       </div>
 
       <div className="flex items-center gap-2">
-        <span className="w-2 h-2 rounded-full bg-green-400" title="Connecté" />
+        <span className="w-2 h-2 rounded-full bg-success" title="Connecté" />
       </div>
     </header>
   );

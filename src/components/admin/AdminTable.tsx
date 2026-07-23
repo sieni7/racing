@@ -125,12 +125,12 @@ export function AdminTable<T extends { id: string }>({
             value={search}
             placeholder={searchPlaceholder}
             onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-            className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 transition-shadow"
+            className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-racing-sky/40 transition-shadow"
           />
         </div>
         <div className="flex gap-2">
           {onAdd && !readOnly && (
-            <button onClick={onAdd} className="px-5 py-2.5 rounded-xl bg-primary text-white text-sm font-medium hover:bg-cta transition-all shadow-sm">
+            <button onClick={onAdd} className="px-5 py-2.5 rounded-xl bg-secondary text-white text-sm font-medium hover:bg-primary transition-all shadow-sm">
               + {addLabel}
             </button>
           )}

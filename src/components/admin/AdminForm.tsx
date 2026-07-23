@@ -91,7 +91,7 @@ export const AdminForm: React.FC<AdminFormProps> = ({
     const err = allErrors[field.name];
     const id = `field-${field.name}`;
 
-    const baseInput = 'w-full px-4 py-2.5 border rounded-xl text-sm bg-white dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all';
+    const baseInput = 'w-full px-4 py-2.5 border rounded-xl text-sm bg-white dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-racing-sky/40 transition-all';
     const errorBorder = err ? 'border-red-400 dark:border-red-500' : '';
 
     if (field.type === 'select') {
@@ -130,7 +130,7 @@ export const AdminForm: React.FC<AdminFormProps> = ({
           id={id}
           type="file"
           onChange={(e) => { onChange(field.name, e.target.files?.[0] || null); setTouched(prev => new Set(prev).add(field.name)); }}
-          className="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-medium file:bg-primary file:text-white hover:file:bg-cta"
+          className="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-medium file:bg-secondary file:text-white hover:file:bg-primary"
           accept="image/*"
         />
       );
@@ -207,7 +207,7 @@ export const AdminForm: React.FC<AdminFormProps> = ({
               <button
                 type="submit"
                 disabled={loading}
-                className="px-5 py-2.5 rounded-xl bg-primary text-white text-sm font-medium hover:bg-cta transition-colors disabled:opacity-50 shadow-sm"
+                className="px-5 py-2.5 rounded-xl bg-secondary text-white text-sm font-medium hover:bg-primary transition-colors disabled:opacity-50 shadow-sm"
               >
                 {loading ? 'Enregistrement...' : 'Enregistrer'}
               </button>

@@ -72,10 +72,10 @@ export default function HomePage() {
       ) : recentNews.length > 0 ? (
         <HeroCarousel news={recentNews} />
       ) : (
-        <section className="relative min-h-[80vh] -mt-16 flex items-center justify-center bg-gradient-to-br from-orange-500 to-blue-800 text-white overflow-hidden">
+        <section className="relative min-h-[80vh] -mt-16 flex items-center justify-center gradient-hero text-white overflow-hidden">
           <div className="relative z-10 text-center px-4 max-w-3xl">
             <h1 className="font-display text-5xl md:text-7xl font-black mb-4">Racing Club de Bingerville</h1>
-            <p className="text-xl text-white/90 mb-8">L'orange et bleu, une histoire de passion</p>
+            <p className="text-xl text-white/90 mb-8">Le ciel et le marine, une histoire de passion</p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link to="/matchs" className="px-8 py-3 bg-white text-primary font-bold rounded-full hover:shadow-lg hover:bg-gray-100 transition-all">
                 Calendrier
@@ -88,7 +88,7 @@ export default function HomePage() {
         </section>
       )}
 
-      <AnimatedSection className="bg-gradient-to-r from-orange-50 to-blue-50 dark:from-gray-800 dark:to-gray-800 py-16">
+      <AnimatedSection className="bg-gradient-to-r from-sky-50 to-navy-50 dark:from-gray-800 dark:to-gray-800 py-16">
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             <StatCard label="Années d'histoire" target={75} suffix="+" />
@@ -145,7 +145,7 @@ export default function HomePage() {
                 <span className="text-3xl">🌟</span> Joueur du mois
               </h2>
               <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 text-center shadow-sm border border-gray-100 dark:border-gray-700">
-                <div className="w-28 h-28 rounded-full bg-gradient-to-br from-orange-100 to-blue-100 dark:from-orange-900/30 dark:to-blue-900/30 mx-auto flex items-center justify-center text-6xl shadow-inner">🏆</div>
+                <div className="w-28 h-28 rounded-full bg-gradient-to-br from-sky-100 to-navy-100 dark:from-sky-900/30 dark:to-navy-900/30 mx-auto flex items-center justify-center text-6xl shadow-inner">🏆</div>
                 <h3 className="text-xl font-display font-bold text-gray-900 dark:text-white mt-5">Karamoko Touré</h3>
                 <p className="text-primary font-semibold">Attaquant · 12 buts</p>
                 <p className="text-sm text-gray-600 dark:text-gray-300 mt-3 max-w-sm mx-auto">Un mois exceptionnel, avec 5 buts et 2 passes décisives en 4 matches.</p>
@@ -161,7 +161,7 @@ export default function HomePage() {
                     <span className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
                       i === 0 ? 'bg-yellow-100 text-yellow-700' :
                       i === 1 ? 'bg-gray-100 text-gray-500' :
-                      i === 2 ? 'bg-orange-100 text-orange-600' :
+                      i === 2 ? 'bg-sky-100 text-sky-600' :
                       'bg-gray-50 text-gray-400'
                     }`}>{i + 1}</span>
                     <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-100 to-blue-100 dark:from-orange-900/20 dark:to-blue-900/20 flex items-center justify-center text-sm font-bold text-gray-500 dark:text-gray-400">

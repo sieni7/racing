@@ -47,17 +47,17 @@ export function AdminSidebar({ collapsed, onToggle, mobileOpen, onMobileClose }:
     <>
       {mobileOpen && <div className="fixed inset-0 bg-black/50 z-30 md:hidden" onClick={onMobileClose} />}
 
-      <aside className={`fixed md:static inset-y-0 left-0 z-40 bg-gray-900 dark:bg-gray-950 text-white transition-all duration-300 flex flex-col ${
+      <aside className={`fixed md:static inset-y-0 left-0 z-40 bg-secondary text-white transition-all duration-300 flex flex-col ${
         collapsed ? 'w-16' : 'w-64'
       } ${mobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
-        <div className="h-16 flex items-center justify-between px-4 border-b border-gray-800">
+        <div className="h-16 flex items-center justify-between px-4 border-b border-white/10">
           {!collapsed && (
             <div>
               <span className="font-display font-bold text-base text-primary">RCB</span>
-              <span className="text-gray-400 text-xs ml-2">Admin</span>
+              <span className="text-white/60 text-xs ml-2">Admin</span>
             </div>
           )}
-          <button onClick={onToggle} className="p-1.5 rounded-lg hover:bg-gray-800 transition-colors text-gray-400" aria-label="Toggle sidebar">
+          <button onClick={onToggle} className="p-1.5 rounded-lg hover:bg-white/10 transition-colors text-white/60" aria-label="Toggle sidebar">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={collapsed ? 'M13 5l7 7-7 7M5 5l7 7-7 7' : 'M11 19l-7-7 7-7m8 14l-7-7 7-7'} />
             </svg>
@@ -67,7 +67,7 @@ export function AdminSidebar({ collapsed, onToggle, mobileOpen, onMobileClose }:
         <nav className="flex-1 overflow-y-auto py-4 px-2 space-y-6">
           {navGroups.map((group) => (
             <div key={group.label}>
-              {!collapsed && <p className="text-[10px] uppercase tracking-widest text-gray-500 px-3 mb-2">{group.label}</p>}
+              {!collapsed && <p className="text-[10px] uppercase tracking-widest text-white/40 px-3 mb-2">{group.label}</p>}
               <div className="space-y-0.5">
                 {group.items.map((item) => (
                   <NavLink
@@ -79,7 +79,7 @@ export function AdminSidebar({ collapsed, onToggle, mobileOpen, onMobileClose }:
                       `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all ${
                         isActive
                           ? 'bg-primary/20 text-primary font-medium'
-                          : 'text-gray-400 hover:text-white hover:bg-gray-800'
+                          : 'text-white/60 hover:text-white hover:bg-white/10'
                       }`
                     }
                     title={collapsed ? item.label : undefined}
@@ -89,7 +89,7 @@ export function AdminSidebar({ collapsed, onToggle, mobileOpen, onMobileClose }:
                     </svg>
                     {!collapsed && <span className="truncate">{item.label}</span>}
                     {item.badge !== undefined && item.badge > 0 && (
-                      <span className="ml-auto bg-primary text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">{item.badge}</span>
+                      <span className="ml-auto bg-cta text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">{item.badge}</span>
                     )}
                   </NavLink>
                 ))}
@@ -98,9 +98,9 @@ export function AdminSidebar({ collapsed, onToggle, mobileOpen, onMobileClose }:
           ))}
         </nav>
 
-        <div className="border-t border-gray-800 p-2">
+        <div className="border-t border-white/10 p-2">
           <button onClick={handleLogout}
-            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-gray-400 hover:text-red-400 hover:bg-gray-800 w-full transition-all"
+            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white/60 hover:text-cta hover:bg-white/10 w-full transition-all"
             title={collapsed ? 'Déconnexion' : undefined}>
             <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />

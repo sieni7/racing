@@ -11,12 +11,30 @@ function formatDate(dateStr: string): string {
   });
 }
 
+function getMatchResult(match: Match) {
+  if (match.status !== 'finished' || match.racing_score === null || match.opponent_score === null) {
+    return null;
+  }
+  if (match.racing_score > match.opponent_score) return 'victory';
+  if (match.racing_score < match.opponent_score) return 'defeat';
+  return 'draw';
+}
+
 function MatchCard({ match }: { match: Match }) {
   const isFinished = match.status === 'finished';
   const isUpcoming = match.status === 'upcoming';
+  const result = getMatchResult(match);
+
+  const borderColor = result === 'victory' 
+    ? 'border-racing-green' 
+    : result === 'defeat' 
+    ? 'border-racing-red' 
+    : result === 'draw'
+    ? 'border-primary'
+    : 'border-secondary';
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-5 card-hover border-l-4 border-primary">
+    <div className={`bg-white dark:bg-gray-800 rounded-[18px] shadow-card p-5 card-hover border-l-4 ${borderColor}`}>
       <div className="flex items-center justify-between mb-3">
         <span className="text-xs font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">
           {match.competition} · Journée {match.matchday}
@@ -25,7 +43,7 @@ function MatchCard({ match }: { match: Match }) {
           isFinished
             ? 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300'
             : isUpcoming
-            ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
+            ? 'bg-success/10 dark:bg-success/20 text-success'
             : 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400'
         }`}>
           {isFinished ? 'Terminé' : isUpcoming ? 'À venir' : 'Reporté'}
@@ -40,16 +58,16 @@ function MatchCard({ match }: { match: Match }) {
         <div className="flex items-center gap-3">
           {isFinished && match.racing_score !== null ? (
             <div className="flex items-center gap-2 text-2xl font-bold">
-              <span className={match.racing_score > (match.opponent_score ?? -1) ? 'text-primary' : 'text-gray-600 dark:text-gray-300'}>
+              <span className={match.racing_score > (match.opponent_score ?? -1) ? 'text-success' : match.racing_score < (match.opponent_score ?? Infinity) ? 'text-cta' : 'text-primary'}>
                 {match.racing_score}
               </span>
               <span className="text-gray-400 dark:text-gray-500">-</span>
-              <span className={match.opponent_score !== null && match.opponent_score > match.racing_score ? 'text-primary' : 'text-gray-600 dark:text-gray-300'}>
+              <span className={match.opponent_score !== null && match.opponent_score > match.racing_score ? 'text-success' : match.opponent_score !== null && match.opponent_score < match.racing_score ? 'text-cta' : 'text-primary'}>
                 {match.opponent_score}
               </span>
             </div>
           ) : (
-            <span className="text-sm font-semibold text-primary uppercase">VS</span>
+            <span className="text-sm font-semibold text-secondary uppercase">VS</span>
           )}
         </div>
 

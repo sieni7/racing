@@ -3,6 +3,7 @@ import toast from 'react-hot-toast';
 import { useAdmin } from '../../../../contexts/AdminContext';
 import { DataTable, type Column } from '../../../../components/admin/data/DataTable';
 import { FormBuilder, type Field } from '../../../../components/admin/forms/FormBuilder';
+import { ViewModal } from '../../../../components/admin/ViewModal';
 import { ConfirmModal } from '../../../../components/admin/ConfirmModal';
 import { AuditHistory } from '../../../../components/admin/AuditHistory';
 import { ExportButton } from '../../../../components/admin/ExportButton';
@@ -37,6 +38,7 @@ export default function MatchesPage() {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [auditOpen, setAuditOpen] = useState(false);
+  const [viewItem, setViewItem] = useState<Match | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const readOnly = useReadOnly();
 
@@ -44,6 +46,7 @@ export default function MatchesPage() {
 
   const handleAdd = useCallback(() => { setEditingId(null); setFormValues({}); setFormErrors({}); setFormOpen(true); }, []);
   const handleEdit = useCallback((item: Match) => { setEditingId(item.id); setFormValues({ ...item, is_home: String(item.is_home) }); setFormErrors({}); setFormOpen(true); }, []);
+  const handleView = useCallback((item: Match) => { setViewItem(item); }, []);
   const handleDuplicate = useCallback((item: Match) => {
     const { id, created_at, updated_at, ...rest } = item as any;
     setEditingId(null); setFormValues({ ...rest, opponent_name: `${rest.opponent_name} (copie)` }); setFormErrors({}); setFormOpen(true);
@@ -100,6 +103,19 @@ export default function MatchesPage() {
 
   const exportColumns = columns.map(({ key, label }) => ({ key, label }));
 
+  const viewFields = viewItem ? [
+    { label: 'Date', value: new Date(viewItem.match_date).toLocaleString('fr-FR') },
+    { label: 'Adversaire', value: viewItem.opponent_name },
+    { label: 'Domicile', value: viewItem.is_home ? 'Oui' : 'Non' },
+    { label: 'Stade', value: viewItem.venue || '—' },
+    { label: 'Compétition', value: viewItem.competition || '—' },
+    { label: 'Saison', value: viewItem.season || '—' },
+    { label: 'Journée', value: viewItem.matchday || '—' },
+    { label: 'Statut', value: viewItem.status },
+    { label: 'Score', value: viewItem.status === 'finished' ? `${viewItem.racing_score ?? '-'} - ${viewItem.opponent_score ?? '-'}` : '—' },
+    { label: 'Résumé', value: viewItem.summary || '—' },
+  ] : [];
+
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
@@ -119,6 +135,7 @@ export default function MatchesPage() {
       <DataTable data={matches} columns={columns}
         onAdd={readOnly ? undefined : handleAdd}
         onEdit={readOnly ? undefined : handleEdit}
+        onView={handleView}
         onDelete={readOnly ? undefined : handleDelete}
         onDuplicate={readOnly ? undefined : handleDuplicate}
         onBulkDelete={readOnly ? undefined : handleBulkDelete}
@@ -132,6 +149,9 @@ export default function MatchesPage() {
           onSubmit={handleSubmit} onCancel={() => setFormOpen(false)}
           loading={submitting} errors={formErrors} />
       )}
+
+      <ViewModal open={!!viewItem} onClose={() => setViewItem(null)} item={viewItem}
+        title={`Match : ${viewItem?.opponent_name}`} fields={viewFields} />
 
       <AuditHistory open={auditOpen} onClose={() => setAuditOpen(false)} tableName="matches" />
 

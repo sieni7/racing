@@ -92,7 +92,7 @@ export function FormBuilder({ fields, values, onChange, onSubmit, onCancel, titl
               Annuler
             </button>
             <button type="submit" disabled={loading} onClick={handleSubmit}
-              className="px-5 py-2.5 rounded-xl bg-primary text-white text-sm font-medium hover:bg-cta disabled:opacity-50 shadow-sm">
+              className="px-5 py-2.5 rounded-xl bg-secondary text-white text-sm font-medium hover:bg-primary disabled:opacity-50 shadow-sm">
               {loading ? 'Enregistrement...' : 'Enregistrer'}
             </button>
           </div>
@@ -104,7 +104,7 @@ export function FormBuilder({ fields, values, onChange, onSubmit, onCancel, titl
 
 function FormField({ field, value, onChange, error }: { field: Field; value: any; onChange: (v: any) => void; error?: string }) {
   const id = `field-${field.name}`;
-  const base = 'w-full px-4 py-2.5 border rounded-xl text-sm bg-white dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all';
+  const base = 'w-full px-4 py-2.5 border rounded-xl text-sm bg-white dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-racing-sky/40 transition-all';
   const errBorder = error ? 'border-red-400' : '';
 
   if (field.type === 'select') {
@@ -135,7 +135,7 @@ function FormField({ field, value, onChange, error }: { field: Field; value: any
     return (
       <div>
         <label htmlFor={id} className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">{field.label}</label>
-        <input id={id} type="file" onChange={e => onChange(e.target.files?.[0] || null)} className="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-medium file:bg-primary file:text-white hover:file:bg-cta" accept="image/*" />
+        <input id={id} type="file" onChange={e => onChange(e.target.files?.[0] || null)} className="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-medium file:bg-secondary file:text-white hover:file:bg-primary" accept="image/*" />
       </div>
     );
   }
@@ -143,7 +143,7 @@ function FormField({ field, value, onChange, error }: { field: Field; value: any
   if (field.type === 'checkbox') {
     return (
       <label className="flex items-center gap-2 cursor-pointer">
-        <input type="checkbox" checked={!!value} onChange={e => onChange(e.target.checked)} className="accent-primary w-4 h-4" />
+        <input type="checkbox" checked={!!value} onChange={e => onChange(e.target.checked)} className="accent-racing-sky w-4 h-4" />
         <span className="text-sm text-gray-700 dark:text-gray-300">{field.label}</span>
       </label>
     );

@@ -4,6 +4,7 @@ import { useAdmin } from '../../../../contexts/AdminContext';
 import { DataTable, type Column } from '../../../../components/admin/data/DataTable';
 import { FormBuilder, type Field } from '../../../../components/admin/forms/FormBuilder';
 import { NewsPreview } from '../../../../components/admin/NewsPreview';
+import { ViewModal } from '../../../../components/admin/ViewModal';
 import { ConfirmModal } from '../../../../components/admin/ConfirmModal';
 import { AuditHistory } from '../../../../components/admin/AuditHistory';
 import { ExportButton } from '../../../../components/admin/ExportButton';
@@ -35,6 +36,7 @@ export default function NewsPage() {
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [auditOpen, setAuditOpen] = useState(false);
+  const [viewItem, setViewItem] = useState<News | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const readOnly = useReadOnly();
   const prevValues = useRef<Record<string, any>>({});
@@ -47,6 +49,7 @@ export default function NewsPage() {
   }, []);
 
   const handleEdit = useCallback((item: News) => { setEditingId(item.id); setFormValues(item); setFormErrors({}); setFormOpen(true); }, []);
+  const handleView = useCallback((item: News) => { setViewItem(item); }, []);
   const handleDuplicate = useCallback((item: News) => {
     const { id, slug, created_at, updated_at, ...rest } = item as any;
     setEditingId(null); setFormValues({ ...rest, title: `${rest.title} (copie)` }); setFormErrors({}); setFormOpen(true);
@@ -113,6 +116,15 @@ export default function NewsPage() {
 
   const exportColumns = columns.map(({ key, label }) => ({ key, label }));
 
+  const viewFields = viewItem ? [
+    { label: 'Titre', value: viewItem.title },
+    { label: 'Slug', value: viewItem.slug },
+    { label: 'Résumé', value: viewItem.excerpt || '—' },
+    { label: 'Contenu', value: <div className="max-h-40 overflow-y-auto text-xs">{viewItem.content}</div> },
+    { label: 'Statut', value: viewItem.status },
+    { label: 'Publié le', value: viewItem.published_at ? new Date(viewItem.published_at).toLocaleString('fr-FR') : 'Brouillon' },
+  ] : [];
+
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
@@ -132,6 +144,7 @@ export default function NewsPage() {
       <DataTable data={news} columns={columns}
         onAdd={readOnly ? undefined : handleAdd}
         onEdit={readOnly ? undefined : handleEdit}
+        onView={handleView}
         onDelete={readOnly ? undefined : handleDelete}
         onDuplicate={readOnly ? undefined : handleDuplicate}
         onBulkDelete={readOnly ? undefined : handleBulkDelete}

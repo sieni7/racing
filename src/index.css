@@ -3,20 +3,81 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --rcb-sky: #59C7F7;
+    --rcb-navy: #233A72;
+    --rcb-red: #D7263D;
+    --rcb-green: #5B8C2A;
+    --rcb-bg: #F5FAFD;
+    --rcb-surface: #FFFFFF;
+    --rcb-text: #13213D;
+    --rcb-muted: #708090;
+    --radius: 18px;
+    --shadow: 0 10px 30px rgba(0,0,0,.08);
+    --transition: .3s ease;
+  }
+
   body {
-    @apply text-gray-800 dark:text-gray-100;
+    @apply text-[#13213D] bg-sky-50;
   }
 }
 
-.card-hover {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+@layer components {
+  .btn-primary {
+    @apply px-5 py-2.5 rounded-xl bg-secondary text-white text-sm font-medium 
+           hover:bg-primary transition-all shadow-sm;
+  }
+
+  .btn-secondary {
+    @apply px-5 py-2.5 rounded-xl bg-cta text-white text-sm font-medium 
+           hover:opacity-90 transition-all shadow-sm;
+  }
+
+  .btn-success {
+    @apply px-5 py-2.5 rounded-xl bg-success text-white text-sm font-medium 
+           hover:opacity-90 transition-all shadow-sm;
+  }
+
+  .btn-outline {
+    @apply px-5 py-2.5 rounded-xl border-2 border-secondary text-secondary text-sm font-medium 
+           hover:bg-secondary hover:text-white transition-all;
+  }
+
+  .card {
+    @apply bg-white rounded-[18px] shadow-card border border-primary/10;
+  }
+
+  .card-hover {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .card-hover:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 16px 40px rgba(0,0,0,.1);
+  }
+
+  .input-base {
+    @apply w-full px-4 py-2.5 border rounded-xl text-sm bg-white 
+           border-primary/20 text-[#13213D] 
+           focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary 
+           transition-all placeholder-[#708090];
+  }
+
+  .badge-victory {
+    @apply bg-success/10 text-success border border-success/20;
+  }
+
+  .badge-defeat {
+    @apply bg-cta/10 text-cta border border-cta/20;
+  }
+
+  .badge-draw {
+    @apply bg-primary/10 text-secondary border border-primary/20;
+  }
 }
-.card-hover:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
-}
+
 .card-hover-glow:hover {
-  box-shadow: 0 0 20px rgba(249, 115, 22, 0.3), 0 12px 40px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 0 20px rgba(89, 199, 247, 0.3), 0 16px 40px rgba(0,0,0,.1);
 }
 
 @keyframes shimmer {
@@ -27,6 +88,23 @@
   from { transform: scale(0); opacity: 1; }
   to { transform: scale(4); opacity: 0; }
 }
+
 .animate-ripple {
   animation: ripple 0.6s ease-out forwards;
+}
+
+.gradient-hero {
+  background: linear-gradient(135deg, #233A72 0%, #59C7F7 45%, #D7263D 100%);
+}
+
+.border-victory {
+  border-left: 5px solid #5B8C2A;
+}
+
+.border-defeat {
+  border-left: 5px solid #D7263D;
+}
+
+.border-draw {
+  border-left: 5px solid #59C7F7;
 }

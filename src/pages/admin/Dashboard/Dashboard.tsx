@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useAdmin } from '../../../contexts/AdminContext';
 import { getStandings } from '../../../lib/standings';
 import { getAuditLog } from '../../../lib/audit';
@@ -35,23 +35,24 @@ function Widget({ title, children, className = '' }: { title: string; children: 
 
 export default function Dashboard() {
   const { players, matches, news, staff, fetchPlayers, fetchMatches, fetchNews, fetchStaff } = useAdmin();
-  const [loading, setLoading] = useState(true);
+  const [ready, setReady] = useState(false);
   const [topTeam, setTopTeam] = useState<{ team_name: string; points: number } | null>(null);
   const [recentActivity, setRecentActivity] = useState<any[]>([]);
+  const mounted = useRef(true);
 
   useEffect(() => {
-    const init = async () => {
-      setLoading(true);
-      await Promise.all([fetchPlayers(), fetchMatches(), fetchNews(), fetchStaff()]);
-      try {
-        const [standings, audit] = await Promise.all([getStandings(), getAuditLog({ limit: 5 })]);
+    mounted.current = true;
+    Promise.all([fetchPlayers(), fetchMatches(), fetchNews(), fetchStaff()]).then(() => {
+      if (!mounted.current) return;
+      Promise.all([getStandings(), getAuditLog({ limit: 5 })]).then(([standings, audit]) => {
+        if (!mounted.current) return;
         if (standings.length > 0) setTopTeam(standings[0]);
         setRecentActivity(audit);
-      } catch { /* ignore */ }
-      setLoading(false);
-    };
-    init();
-  }, [fetchPlayers, fetchMatches, fetchNews, fetchStaff]);
+        setReady(true);
+      }).catch(() => setReady(true));
+    }).catch(() => setReady(true));
+    return () => { mounted.current = false; };
+  }, []);
 
   const finished = matches.filter(m => m.status === 'finished');
   const won = finished.filter(m => (m.racing_score ?? 0) > (m.opponent_score ?? 0)).length;
@@ -67,6 +68,20 @@ export default function Dashboard() {
   ];
 
   const tableLabels: Record<string, string> = { players: 'Joueurs', matches: 'Matchs', news: 'Actualités', staff: 'Staff' };
+
+  if (!ready) {
+    return (
+      <div className="space-y-6">
+        <h1 className="text-2xl font-display font-bold text-gray-900 dark:text-white">Dashboard</h1>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          {[1,2,3,4].map(i => <div key={i} className="h-24 rounded-xl bg-gray-100 dark:bg-gray-800 animate-pulse" />)}
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {[1,2,3].map(i => <div key={i} className="h-40 rounded-2xl bg-gray-100 dark:bg-gray-800 animate-pulse" />)}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -84,7 +99,7 @@ export default function Dashboard() {
                 <circle cx="18" cy="18" r="15.5" fill="none" stroke="currentColor" strokeWidth="3" className="text-gray-200 dark:text-gray-700" />
                 <circle cx="18" cy="18" r="15.5" fill="none" stroke="#F97316" strokeWidth="3" strokeDasharray={`${winRate},100`} strokeLinecap="round" />
               </svg>
-              <span className="absolute inset-0 flex items-center justify-center text-2xl font-black text-gray-900 dark:text-white">{loading ? '...' : `${winRate}%`}</span>
+              <span className="absolute inset-0 flex items-center justify-center text-2xl font-black text-gray-900 dark:text-white">{winRate}%</span>
             </div>
             <p className="text-xs text-gray-400 mt-3">{finished.length} matchs · {won} victoires</p>
           </div>
@@ -114,8 +129,7 @@ export default function Dashboard() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Widget title="Dernières actualités">
-          {loading ? [...Array(4)].map((_, i) => <div key={i} className="h-10 bg-gray-100 dark:bg-gray-700 rounded-lg animate-pulse mb-2" />)
-          : recentNews.length === 0 ? <p className="text-gray-400 text-sm py-4 text-center">Aucune actualité</p>
+          {recentNews.length === 0 ? <p className="text-gray-400 text-sm py-4 text-center">Aucune actualité</p>
           : <div className="space-y-2">{recentNews.map(n => (
             <div key={n.id} className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/30">
               <div className="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-700 flex-shrink-0 overflow-hidden">

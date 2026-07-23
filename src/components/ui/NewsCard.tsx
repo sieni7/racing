@@ -13,7 +13,7 @@ function formatDate(dateStr: string): string {
 function NewsCard({ news }: { news: NewsItem & { tags?: string[] } }) {
   const [imgError, setImgError] = useState(false);
   return (
-    <article className="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden card-hover group">
+    <article className="bg-white dark:bg-gray-800 rounded-[18px] shadow-card overflow-hidden card-hover group">
       <Link to={`/news/${news.slug}`}>
         <div className="relative h-48 bg-gray-100 dark:bg-gray-700 overflow-hidden">
           {news.cover_image_url && !imgError ? (
@@ -31,7 +31,7 @@ function NewsCard({ news }: { news: NewsItem & { tags?: string[] } }) {
         </div>
       </Link>
       <div className="p-4">
-        <time className="text-xs text-gray-600 dark:text-gray-300">{formatDate(news.published_at)}</time>
+        <time className="text-xs text-secondary dark:text-primary">{formatDate(news.published_at)}</time>
         <h3 className="font-display font-semibold text-gray-900 dark:text-white mt-1 line-clamp-2">
           <Link to={`/news/${news.slug}`} className="hover:text-primary transition-colors">
             {news.title}
@@ -41,13 +41,13 @@ function NewsCard({ news }: { news: NewsItem & { tags?: string[] } }) {
         {news.tags && (
           <div className="flex flex-wrap gap-1 mt-2">
             {news.tags.map((tag) => (
-              <span key={tag} className="px-2 py-0.5 bg-primary/10 text-primary text-xs rounded-full">{tag}</span>
+              <span key={tag} className="px-2 py-0.5 bg-cta/10 text-cta text-xs rounded-full">{tag}</span>
             ))}
           </div>
         )}
         <Link
           to={`/news/${news.slug}`}
-          className="inline-block mt-3 text-sm font-medium text-primary hover:text-cta transition-colors"
+          className="inline-block mt-3 text-sm font-medium text-secondary hover:text-primary transition-colors"
         >
           Lire la suite →
         </Link>

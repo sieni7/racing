@@ -1,17 +1,18 @@
 import React from 'react';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline';
+  variant?: 'primary' | 'secondary' | 'outline' | 'success';
   size?: 'sm' | 'md' | 'lg';
 }
 
 const Button: React.FC<ButtonProps> = ({ variant = 'primary', size = 'md', className = '', children, onClick, ...props }) => {
-  const base = 'relative overflow-hidden inline-flex items-center justify-center font-semibold rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed';
+  const base = 'relative overflow-hidden inline-flex items-center justify-center font-semibold rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed';
 
   const variants: Record<string, string> = {
-    primary: 'bg-primary text-white hover:bg-cta shadow-sm',
-    secondary: 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700',
-    outline: 'border-2 border-primary text-primary hover:bg-primary hover:text-white',
+    primary: 'bg-secondary text-white hover:bg-primary shadow-sm',
+    secondary: 'bg-cta text-white hover:opacity-90 shadow-sm',
+    outline: 'border-2 border-secondary text-secondary hover:bg-secondary hover:text-white',
+    success: 'bg-success text-white hover:opacity-90 shadow-sm',
   };
 
   const sizes: Record<string, string> = {
