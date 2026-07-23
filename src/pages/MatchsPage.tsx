@@ -14,9 +14,7 @@ export default function MatchsPage() {
   const [loading, setLoading] = useState(true);
   const perPage = 12;
 
-  useEffect(() => {
-    setPage(1);
-  }, [tab]);
+  useEffect(() => { setPage(1); }, [tab]);
 
   useEffect(() => {
     async function load() {
@@ -43,29 +41,33 @@ export default function MatchsPage() {
 
   const totalPages = Math.ceil(count / perPage);
 
+  const tabs = [
+    { key: 'all' as Tab, label: 'Tous', icon: '📋' },
+    { key: 'upcoming' as Tab, label: 'À venir', icon: '📅' },
+    { key: 'finished' as Tab, label: 'Terminés', icon: '✅' },
+  ];
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-12">
-      <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
-        <div>
-          <h1 className="font-display text-3xl font-bold text-gray-900 dark:text-white">Matchs</h1>
-          <p className="text-gray-500 dark:text-gray-400">{count} matchs</p>
-        </div>
+      <div className="mb-8">
+        <h1 className="font-display text-4xl font-black text-gray-900 dark:text-white">Matchs</h1>
+        <p className="text-gray-600 dark:text-gray-300 mt-1">{count} matchs</p>
+      </div>
 
-        <div className="flex gap-2">
-          {(['all', 'upcoming', 'finished'] as const).map((f) => (
-            <button
-              key={f}
-              onClick={() => setTab(f)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                tab === f
-                  ? 'bg-primary text-white'
-                  : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
-              }`}
-            >
-              {f === 'all' ? 'Tous' : f === 'upcoming' ? 'À venir' : 'Terminés'}
-            </button>
-          ))}
-        </div>
+      <div className="flex gap-2 mb-8 bg-gray-100 dark:bg-gray-800 p-1.5 rounded-xl w-fit">
+        {tabs.map((t) => (
+          <button
+            key={t.key}
+            onClick={() => setTab(t.key)}
+            className={`px-5 py-2.5 rounded-lg text-sm font-medium transition-all ${
+              tab === t.key
+                ? 'bg-white dark:bg-gray-700 text-primary shadow-sm'
+                : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+            }`}
+          >
+            {t.icon} {t.label}
+          </button>
+        ))}
       </div>
 
       {loading ? (
@@ -78,21 +80,21 @@ export default function MatchsPage() {
             ))}
           </div>
           {tab !== 'upcoming' && totalPages > 1 && (
-            <div className="flex justify-center items-center gap-4 mt-8">
+            <div className="flex items-center justify-center gap-4 mt-10">
               <button
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                 disabled={page <= 1}
-                className="px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                className="px-5 py-2.5 rounded-xl text-sm font-medium bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:border-primary hover:text-primary transition-all disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 ← Précédent
               </button>
-              <span className="text-sm text-gray-500 dark:text-gray-400">
-                Page {page} / {totalPages}
+              <span className="text-sm text-gray-500 dark:text-gray-400 px-4">
+                Page <strong>{page}</strong> / {totalPages}
               </span>
               <button
                 onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                 disabled={page >= totalPages}
-                className="px-4 py-2 rounded-lg text-sm font-medium bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                className="px-5 py-2.5 rounded-xl text-sm font-medium bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:border-primary hover:text-primary transition-all disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 Suivant →
               </button>
@@ -100,7 +102,10 @@ export default function MatchsPage() {
           )}
         </>
       ) : (
-        <p className="text-center py-12 text-gray-500 dark:text-gray-400">Aucun match trouvé.</p>
+        <div className="text-center py-20">
+          <p className="text-5xl mb-4">⚽</p>
+          <p className="text-gray-600 dark:text-gray-300">Aucun match trouvé.</p>
+        </div>
       )}
     </div>
   );
