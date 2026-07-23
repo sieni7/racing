@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation, Outlet } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
+import ScrollToTop from './ui/ScrollToTop';
 
 const navLinks = [
   { path: '/', label: 'Accueil', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
@@ -31,6 +32,8 @@ export default function Layout() {
 
   return (
     <div className="min-h-screen flex flex-col bg-sky-50">
+      <ScrollToTop />
+
       <nav
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 backdrop-blur-lg border-b border-secondary/10 ${
           scrolled ? 'shadow-lg py-2' : 'py-4'

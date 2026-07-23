@@ -40,7 +40,7 @@ export function AdminSidebar({ collapsed, onToggle, mobileOpen, onMobileClose }:
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    navigate('/login');
+    navigate('/');
   };
 
   return (

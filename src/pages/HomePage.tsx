@@ -142,10 +142,16 @@ export default function HomePage() {
           <div className="grid md:grid-cols-2 gap-12">
             <div>
               <h2 className="font-display text-2xl font-bold text-gray-900 dark:text-white mb-8 flex items-center gap-3">
-                <span className="text-3xl">🌟</span> Joueur du mois
+                <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                </svg> Joueur du mois
               </h2>
               <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 text-center shadow-sm border border-gray-100 dark:border-gray-700">
-                <div className="w-28 h-28 rounded-full bg-gradient-to-br from-sky-100 to-navy-100 dark:from-sky-900/30 dark:to-navy-900/30 mx-auto flex items-center justify-center text-6xl shadow-inner">🏆</div>
+                <div className="w-28 h-28 rounded-full bg-gradient-to-br from-sky-100 to-navy-100 dark:from-sky-900/30 dark:to-navy-900/30 mx-auto flex items-center justify-center shadow-inner">
+                  <svg className="w-12 h-12 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 3h14M9 3v2a4 4 0 01-4 4H3m12-6v2a4 4 0 004 4h2M5 21h14M9 21v-4a4 4 0 01-4-4H3m12 4v4m0-4a4 4 0 004-4h2" />
+                  </svg>
+                </div>
                 <h3 className="text-xl font-display font-bold text-gray-900 dark:text-white mt-5">Karamoko Touré</h3>
                 <p className="text-primary font-semibold">Attaquant · 12 buts</p>
                 <p className="text-sm text-gray-600 dark:text-gray-300 mt-3 max-w-sm mx-auto">Un mois exceptionnel, avec 5 buts et 2 passes décisives en 4 matches.</p>
@@ -153,7 +159,9 @@ export default function HomePage() {
             </div>
             <div>
               <h2 className="font-display text-2xl font-bold text-gray-900 dark:text-white mb-8 flex items-center gap-3">
-                <span className="text-3xl">⚽</span> Meilleurs buteurs
+                <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 2a8.003 8.003 0 017.938 7H4.062A8.003 8.003 0 0112 4zm-7.938 9h15.876A8.003 8.003 0 0112 20a8.003 8.003 0 01-7.938-7z" />
+                </svg> Meilleurs buteurs
               </h2>
               <div className="space-y-3">
                 {scorers.map((scorer, i) => (
