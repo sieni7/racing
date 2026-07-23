@@ -230,7 +230,7 @@ export const AdminProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
   const fetchGallery = async () => {
     try {
-      const data = await getGalleryItems();
+      const data = await getGalleryItems(undefined, true);
       setGallery(data);
     } catch {
       toast.error('Erreur chargement galerie');

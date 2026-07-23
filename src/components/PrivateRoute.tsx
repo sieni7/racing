@@ -14,6 +14,6 @@ export default function PrivateRoute({ children }: { children: React.ReactNode }
   }
 
   if (!user) return <Navigate to="/login" replace state={{ from: location }} />;
-  if (role !== 'admin') return <Navigate to="/" replace />;
+  if (role !== 'admin' && role !== 'viewer') return <Navigate to="/" replace />;
   return <>{children}</>;
 }

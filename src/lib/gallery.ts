@@ -1,12 +1,14 @@
 import { supabase } from './supabase';
 import type { Gallery } from '../types';
 
-export async function getGalleryItems(category?: string): Promise<Gallery[]> {
-  let query = supabase
-    .from('gallery')
-    .select('*')
-    .eq('is_active', true)
-    .order('sort_order', { ascending: true });
+export async function getGalleryItems(category?: string, admin = false): Promise<Gallery[]> {
+  let query = supabase.from('gallery').select('*');
+
+  if (!admin) {
+    query = query.eq('is_active', true).order('sort_order', { ascending: true });
+  } else {
+    query = query.order('published_at', { ascending: false });
+  }
 
   if (category) {
     query = query.eq('category', category);

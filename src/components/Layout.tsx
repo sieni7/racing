@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, Outlet } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 
@@ -12,7 +12,7 @@ const navLinks = [
   { path: '/classement', label: 'Classement', icon: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z' },
 ];
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function Layout() {
   const { user, signOut, loading } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const [scrolled, setScrolled] = useState(false);
@@ -107,7 +107,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       </nav>
 
       <main className="flex-1 pt-16">
-        {children}
+        <Outlet />
       </main>
 
       <footer className="bg-gray-900 dark:bg-gray-950 text-gray-300">

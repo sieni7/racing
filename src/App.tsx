@@ -5,6 +5,8 @@ import PrivateRoute from './components/PrivateRoute';
 import ErrorBoundary from './components/ErrorBoundary';
 import { AdminLayout } from './components/admin/AdminLayout';
 import { AdminProvider } from './contexts/AdminContext';
+import { AdminThemeProvider } from './contexts/AdminThemeContext';
+import { RealtimeProvider } from './contexts/RealtimeContext';
 
 const HomePage = lazy(() => import('./pages/HomePage'));
 const SquadPage = lazy(() => import('./pages/SquadPage'));
@@ -14,14 +16,16 @@ const NewsArticlePage = lazy(() => import('./pages/NewsArticlePage'));
 const Gallery = lazy(() => import('./pages/Gallery'));
 const StandingsPage = lazy(() => import('./pages/StandingsPage'));
 const LoginPage = lazy(() => import('./pages/LoginPage'));
-const AdminDashboard = lazy(() => import('./pages/admin/Dashboard'));
-const AdminPlayers = lazy(() => import('./pages/admin/Players'));
-const AdminMatches = lazy(() => import('./pages/admin/Matches'));
-const AdminNews = lazy(() => import('./pages/admin/News'));
-const AdminStaff = lazy(() => import('./pages/admin/Staff'));
+
+const AdminDashboard = lazy(() => import('./pages/admin/Dashboard/Dashboard'));
+const AdminPlayers = lazy(() => import('./pages/admin/Entities/Players/Players'));
+const AdminMatches = lazy(() => import('./pages/admin/Entities/Matches/Matches'));
+const AdminNews = lazy(() => import('./pages/admin/Entities/News/News'));
+const AdminStaff = lazy(() => import('./pages/admin/Entities/Staff/Staff'));
 const AdminSendPush = lazy(() => import('./pages/admin/SendPushPage'));
-const AdminGallery = lazy(() => import('./pages/admin/Gallery'));
-const AdminStandings = lazy(() => import('./pages/admin/Standings'));
+const AdminGallery = lazy(() => import('./pages/admin/Entities/Gallery/Gallery'));
+const AdminStandings = lazy(() => import('./pages/admin/Entities/Standings/Standings'));
+const AdminActivity = lazy(() => import('./pages/admin/Activity/ActivityLog'));
 
 function Loading() {
   return (
@@ -35,41 +39,46 @@ function App() {
   return (
     <ErrorBoundary>
       <BrowserRouter>
-        <Layout>
-          <Suspense fallback={<Loading />}>
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/effectif" element={<SquadPage />} />
-              <Route path="/matchs" element={<MatchsPage />} />
-              <Route path="/news" element={<NewsPage />} />
-              <Route path="/news/:slug" element={<NewsArticlePage />} />
-              <Route path="/galerie" element={<Gallery />} />
-              <Route path="/classement" element={<StandingsPage />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/register" element={<Navigate to="/login" replace />} />
-              <Route
-                path="/admin"
-                element={
-                  <PrivateRoute>
-                    <AdminProvider>
-                      <AdminLayout />
-                    </AdminProvider>
-                  </PrivateRoute>
-                }
-              >
-                <Route index element={<AdminDashboard />} />
-                <Route path="players" element={<AdminPlayers />} />
-                <Route path="matches" element={<AdminMatches />} />
-                <Route path="news" element={<AdminNews />} />
-                <Route path="staff" element={<AdminStaff />} />
-                <Route path="send-push" element={<AdminSendPush />} />
-                <Route path="gallery" element={<AdminGallery />} />
-                <Route path="standings" element={<AdminStandings />} />
-              </Route>
+        <Suspense fallback={<Loading />}>
+          <Routes>
+            <Route path="/*" element={<Layout />}>
+              <Route index element={<HomePage />} />
+              <Route path="effectif" element={<SquadPage />} />
+              <Route path="matchs" element={<MatchsPage />} />
+              <Route path="news" element={<NewsPage />} />
+              <Route path="news/:slug" element={<NewsArticlePage />} />
+              <Route path="galerie" element={<Gallery />} />
+              <Route path="classement" element={<StandingsPage />} />
+              <Route path="login" element={<LoginPage />} />
+              <Route path="register" element={<Navigate to="/login" replace />} />
               <Route path="*" element={<NotFound />} />
-            </Routes>
-          </Suspense>
-        </Layout>
+            </Route>
+            <Route
+              path="/admin"
+              element={
+                <PrivateRoute>
+                  <AdminProvider>
+                    <AdminThemeProvider>
+                      <RealtimeProvider>
+                        <AdminLayout />
+                      </RealtimeProvider>
+                    </AdminThemeProvider>
+                  </AdminProvider>
+                </PrivateRoute>
+              }
+            >
+              <Route index element={<AdminDashboard />} />
+              <Route path="players" element={<AdminPlayers />} />
+              <Route path="matches" element={<AdminMatches />} />
+              <Route path="news" element={<AdminNews />} />
+              <Route path="staff" element={<AdminStaff />} />
+              <Route path="send-push" element={<AdminSendPush />} />
+              <Route path="gallery" element={<AdminGallery />} />
+              <Route path="standings" element={<AdminStandings />} />
+              <Route path="activity" element={<AdminActivity />} />
+            </Route>
+          </Routes>
+        </Suspense>
       </BrowserRouter>
     </ErrorBoundary>
   );
