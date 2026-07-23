@@ -11,12 +11,15 @@ const SquadPage = lazy(() => import('./pages/SquadPage'));
 const MatchsPage = lazy(() => import('./pages/MatchsPage'));
 const NewsPage = lazy(() => import('./pages/NewsPage'));
 const NewsArticlePage = lazy(() => import('./pages/NewsArticlePage'));
+const GalleryPage = lazy(() => import('./pages/GalleryPage'));
+const StandingsPage = lazy(() => import('./pages/StandingsPage'));
 const LoginPage = lazy(() => import('./pages/LoginPage'));
 const AdminDashboard = lazy(() => import('./pages/admin/Dashboard'));
 const AdminPlayers = lazy(() => import('./pages/admin/Players'));
 const AdminMatches = lazy(() => import('./pages/admin/Matches'));
 const AdminNews = lazy(() => import('./pages/admin/News'));
 const AdminStaff = lazy(() => import('./pages/admin/Staff'));
+const AdminSendPush = lazy(() => import('./pages/admin/SendPushPage'));
 
 function Loading() {
   return (
@@ -38,6 +41,8 @@ function App() {
               <Route path="/matchs" element={<MatchsPage />} />
               <Route path="/news" element={<NewsPage />} />
               <Route path="/news/:slug" element={<NewsArticlePage />} />
+              <Route path="/galerie" element={<GalleryPage />} />
+              <Route path="/classement" element={<StandingsPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<Navigate to="/login" replace />} />
               <Route
@@ -55,6 +60,7 @@ function App() {
                 <Route path="matches" element={<AdminMatches />} />
                 <Route path="news" element={<AdminNews />} />
                 <Route path="staff" element={<AdminStaff />} />
+                <Route path="send-push" element={<AdminSendPush />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>

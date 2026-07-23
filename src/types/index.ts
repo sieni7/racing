@@ -57,3 +57,34 @@ export type Staff = {
   hired_at: string;
   left_at: string | null;
 };
+
+export type Gallery = {
+  id: string;
+  title: string;
+  description: string | null;
+  image_url: string;
+  thumbnail_url: string | null;
+  category: string | null;
+  match_id: string | null;
+  is_video: boolean;
+  video_url: string | null;
+  published_at: string;
+  is_active: boolean;
+  sort_order: number;
+};
+
+export type Standing = {
+  id: string;
+  team_name: string;
+  played: number;
+  won: number;
+  drawn: number;
+  lost: number;
+  goals_for: number;
+  goals_against: number;
+  goal_diff: number;
+  points: number;
+  form: string;
+  season: string;
+  updated_at: string;
+};

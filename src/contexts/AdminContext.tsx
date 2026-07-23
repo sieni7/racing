@@ -3,6 +3,9 @@ import { getAllPlayers, createPlayer as createPlayerSvc, updatePlayer as updateP
 import { getAllMatches, createMatch as createMatchSvc, updateMatch as updateMatchSvc, deleteMatch as deleteMatchSvc, type Match } from '../lib/matches';
 import { getAllNews, createNews as createNewsSvc, updateNews as updateNewsSvc, deleteNews as deleteNewsSvc, type News } from '../lib/news';
 import { getAllStaff, createStaff as createStaffSvc, updateStaff as updateStaffSvc, deleteStaff as deleteStaffSvc, type Staff } from '../lib/staff';
+import { getGalleryItems, createGalleryItem, updateGalleryItem, deleteGalleryItem } from '../lib/gallery';
+import { getStandings as getStandingsSvc, upsertStanding, deleteStanding as deleteStandingSvc } from '../lib/standings';
+import type { Gallery, Standing } from '../types';
 import toast from 'react-hot-toast';
 
 interface AdminState {
@@ -10,6 +13,8 @@ interface AdminState {
   matches: Match[];
   news: News[];
   staff: Staff[];
+  gallery: Gallery[];
+  standings: Standing[];
 }
 
 interface AdminActions {
@@ -17,6 +22,8 @@ interface AdminActions {
   fetchMatches: () => Promise<void>;
   fetchNews: () => Promise<void>;
   fetchStaff: () => Promise<void>;
+  fetchGallery: () => Promise<void>;
+  fetchStandings: () => Promise<void>;
   createPlayer: (data: Partial<Omit<Player, 'id'>>) => Promise<Player | null>;
   updatePlayer: (id: string, data: Partial<Omit<Player, 'id'>>) => Promise<Player | null>;
   deletePlayer: (id: string) => Promise<void>;
@@ -29,6 +36,12 @@ interface AdminActions {
   createStaff: (data: Partial<Omit<Staff, 'id'>>) => Promise<Staff | null>;
   updateStaff: (id: string, data: Partial<Omit<Staff, 'id'>>) => Promise<Staff | null>;
   deleteStaff: (id: string) => Promise<void>;
+  createGallery: (data: Partial<Omit<Gallery, 'id'>>) => Promise<Gallery | null>;
+  updateGallery: (id: string, data: Partial<Omit<Gallery, 'id'>>) => Promise<Gallery | null>;
+  deleteGallery: (id: string) => Promise<void>;
+  createStanding: (data: Partial<Omit<Standing, 'id'>>) => Promise<Standing | null>;
+  updateStanding: (id: string, data: Partial<Omit<Standing, 'id'>>) => Promise<Standing | null>;
+  deleteStanding: (id: string) => Promise<void>;
 }
 
 type AdminContextValue = AdminState & AdminActions;
@@ -40,6 +53,8 @@ export const AdminProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const [matches, setMatches] = useState<Match[]>([]);
   const [news, setNews] = useState<News[]>([]);
   const [staff, setStaff] = useState<Staff[]>([]);
+  const [gallery, setGallery] = useState<Gallery[]>([]);
+  const [standings, setStandings] = useState<Standing[]>([]);
 
   const fetchPlayers = async () => {
     try {
@@ -213,14 +228,102 @@ export const AdminProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     }
   };
 
+  const fetchGallery = async () => {
+    try {
+      const data = await getGalleryItems();
+      setGallery(data);
+    } catch {
+      toast.error('Erreur chargement galerie');
+    }
+  };
+
+  const fetchStandings = async () => {
+    try {
+      const data = await getStandingsSvc();
+      setStandings(data);
+    } catch {
+      toast.error('Erreur chargement classement');
+    }
+  };
+
+  const createGallery = async (data: Partial<Omit<Gallery, 'id'>>) => {
+    try {
+      const result = await createGalleryItem(data);
+      toast.success('Média ajouté');
+      await fetchGallery();
+      return result;
+    } catch {
+      toast.error('Erreur création média');
+      return null;
+    }
+  };
+
+  const updateGallery = async (id: string, data: Partial<Omit<Gallery, 'id'>>) => {
+    try {
+      const result = await updateGalleryItem(id, data);
+      toast.success('Média modifié');
+      await fetchGallery();
+      return result;
+    } catch {
+      toast.error('Erreur modification média');
+      return null;
+    }
+  };
+
+  const deleteGallery = async (id: string) => {
+    try {
+      await deleteGalleryItem(id);
+      toast.success('Média supprimé');
+      await fetchGallery();
+    } catch {
+      toast.error('Erreur suppression média');
+    }
+  };
+
+  const createStanding = async (data: Partial<Omit<Standing, 'id'>>) => {
+    try {
+      const result = await upsertStanding(data);
+      toast.success('Équipe ajoutée');
+      await fetchStandings();
+      return result;
+    } catch {
+      toast.error('Erreur ajout équipe');
+      return null;
+    }
+  };
+
+  const updateStanding = async (id: string, data: Partial<Omit<Standing, 'id'>>) => {
+    try {
+      const result = await upsertStanding({ ...data, id });
+      toast.success('Équipe modifiée');
+      await fetchStandings();
+      return result;
+    } catch {
+      toast.error('Erreur modification équipe');
+      return null;
+    }
+  };
+
+  const deleteStanding = async (id: string) => {
+    try {
+      await deleteStandingSvc(id);
+      toast.success('Équipe supprimée');
+      await fetchStandings();
+    } catch {
+      toast.error('Erreur suppression équipe');
+    }
+  };
+
   return (
     <AdminContext.Provider value={{
-      players, matches, news, staff,
-      fetchPlayers, fetchMatches, fetchNews, fetchStaff,
+      players, matches, news, staff, gallery, standings,
+      fetchPlayers, fetchMatches, fetchNews, fetchStaff, fetchGallery, fetchStandings,
       createPlayer, updatePlayer, deletePlayer,
       createMatch, updateMatch, deleteMatch,
       createNews, updateNews, deleteNews,
       createStaff, updateStaff, deleteStaff,
+      createGallery, updateGallery, deleteGallery,
+      createStanding, updateStanding, deleteStanding,
     }}>
       {children}
     </AdminContext.Provider>

@@ -8,6 +8,8 @@ const navLinks = [
   { path: '/effectif', label: 'Effectif' },
   { path: '/matchs', label: 'Matchs' },
   { path: '/news', label: 'Actualités' },
+  { path: '/galerie', label: 'Galerie' },
+  { path: '/classement', label: 'Classement' },
 ];
 
 export default function Layout({ children }: { children: React.ReactNode }) {
