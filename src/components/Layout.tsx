@@ -32,14 +32,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen flex flex-col">
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled
-            ? 'bg-white/90 dark:bg-gray-900/90 backdrop-blur shadow-md py-2'
-            : 'bg-transparent py-4'
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-white/90 dark:bg-gray-900/90 backdrop-blur ${
+          scrolled ? 'shadow-md py-2' : 'py-4'
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 flex items-center justify-between">
-          <Link to="/" className={`font-display font-bold text-xl ${scrolled ? 'text-primary' : 'text-white'}`}>
+          <Link to="/" className="font-display font-bold text-xl text-primary">
             RC Bingerville
           </Link>
 
@@ -48,7 +46,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Menu"
           >
-            <svg className={`w-6 h-6 ${scrolled ? 'text-gray-800 dark:text-white' : 'text-white'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-6 h-6 text-gray-800 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               {menuOpen ? (
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               ) : (
@@ -57,16 +55,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             </svg>
           </button>
 
-          <div className={`${menuOpen ? 'flex' : 'hidden'} lg:flex flex-col lg:flex-row gap-4 lg:items-center absolute lg:static top-full left-0 right-0 p-4 lg:p-0 ${scrolled ? 'bg-white dark:bg-gray-900' : 'bg-transparent'} lg:bg-transparent shadow-lg lg:shadow-none`}>
+          <div className={`${menuOpen ? 'flex' : 'hidden'} lg:flex flex-col lg:flex-row gap-4 lg:items-center absolute lg:static top-full left-0 right-0 p-4 lg:p-0 bg-white dark:bg-gray-900 lg:bg-transparent shadow-lg lg:shadow-none`}>
             {navLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
-                className={`flex items-center gap-2 font-medium transition-colors ${
-                  scrolled
-                    ? 'text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary'
-                    : 'text-white/90 hover:text-white'
-                }`}
+                className="flex items-center gap-2 font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={link.icon} />
@@ -78,11 +72,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <div className="flex items-center gap-3 lg:ml-4">
               <button
                 onClick={toggleTheme}
-                className={`p-2 rounded-full transition-colors ${
-                  scrolled
-                    ? 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
-                    : 'text-white/80 hover:text-white'
-                }`}
+                className="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                 aria-label="Changer le thème"
               >
                 {theme === 'light' ? (
