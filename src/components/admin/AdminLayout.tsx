@@ -8,6 +8,9 @@ const navItems = [
   { path: '/admin/matches', label: 'Matchs', icon: '⚽' },
   { path: '/admin/news', label: 'Actualités', icon: '📰' },
   { path: '/admin/staff', label: 'Staff', icon: '👥' },
+  { path: '/admin/gallery', label: 'Galerie', icon: '🖼️' },
+  { path: '/admin/standings', label: 'Classement', icon: '🏆' },
+  { path: '/admin/send-push', label: 'Push', icon: '🔔' },
 ];
 
 export const AdminLayout: React.FC = () => {

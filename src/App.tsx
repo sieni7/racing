@@ -20,6 +20,8 @@ const AdminMatches = lazy(() => import('./pages/admin/Matches'));
 const AdminNews = lazy(() => import('./pages/admin/News'));
 const AdminStaff = lazy(() => import('./pages/admin/Staff'));
 const AdminSendPush = lazy(() => import('./pages/admin/SendPushPage'));
+const AdminGallery = lazy(() => import('./pages/admin/Gallery'));
+const AdminStandings = lazy(() => import('./pages/admin/Standings'));
 
 function Loading() {
   return (
@@ -61,6 +63,8 @@ function App() {
                 <Route path="news" element={<AdminNews />} />
                 <Route path="staff" element={<AdminStaff />} />
                 <Route path="send-push" element={<AdminSendPush />} />
+                <Route path="gallery" element={<AdminGallery />} />
+                <Route path="standings" element={<AdminStandings />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>

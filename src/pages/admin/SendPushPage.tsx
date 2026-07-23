@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { AdminForm } from '../../components/admin/AdminForm';
+import { sendPush } from '../../lib/notifications';
 import type { NotificationPayload } from '../../lib/notifications';
 
 const pushFields = [
@@ -31,13 +32,8 @@ export const SendPushPage: React.FC = () => {
     setSubmitting(true);
     setFormErrors({});
     try {
-      const response = await fetch('/.netlify/functions/send-push', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ payload: formValues }),
-      });
-      if (!response.ok) throw new Error('Erreur envoi');
-      toast.success('Notification envoyée');
+      const result = await sendPush(formValues as NotificationPayload);
+      toast.success(`Notification envoyée à ${result.sent} abonné(s)`);
       setFormOpen(false);
     } catch (err: any) {
       toast.error('Erreur: ' + err.message);
