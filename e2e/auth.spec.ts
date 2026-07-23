@@ -1,5 +1,9 @@
 import { test, expect } from '@playwright/test';
 
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || '';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '';
+const HAS_CREDENTIALS = !!(ADMIN_EMAIL && ADMIN_PASSWORD);
+
 test.describe('Authentification', () => {
   test('page de connexion affiche le formulaire', async ({ page }) => {
     await page.goto('/login');
@@ -18,15 +22,15 @@ test.describe('Authentification', () => {
     await page.fill('input[type="email"]', 'invalide@test.com');
     await page.fill('input[type="password"]', 'mauvais-mot-de-passe');
     await page.click('button[type="submit"]');
-    await expect(page.locator('text=Erreur|Invalide|Incorrect')).toBeVisible({ timeout: 10000 }).catch(() => {
-      // L'erreur peut être visuelle ou via un toast
-    });
+    const errorLocator = page.locator('[role="alert"], .toast, [class*="error"], text=/Erreur|Invalide|Incorrect/').first();
+    await expect(errorLocator).toBeVisible({ timeout: 10000 });
   });
 
-  test('déconnexion depuis l\'admin', async ({ page }) => {
+  test('déconnexion depuis l\'admin', async ({ page, skip }) => {
+    test.skip(!HAS_CREDENTIALS, 'ADMIN_EMAIL / ADMIN_PASSWORD non définis');
     await page.goto('/login');
-    await page.fill('input[type="email"]', 'admin2@racing-bingerville.ci');
-    await page.fill('input[type="password"]', 'Admin2026!');
+    await page.fill('input[type="email"]', ADMIN_EMAIL);
+    await page.fill('input[type="password"]', ADMIN_PASSWORD);
     await page.click('button[type="submit"]');
     await page.waitForURL('/admin', { timeout: 15000 });
     await expect(page.locator('text=Déconnexion')).toBeVisible();
