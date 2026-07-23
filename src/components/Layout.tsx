@@ -32,8 +32,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen flex flex-col">
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-white/90 dark:bg-gray-900/90 backdrop-blur ${
-          scrolled ? 'shadow-md py-2' : 'py-4'
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border-b border-white/20 dark:border-gray-800/50 ${
+          scrolled ? 'shadow-lg py-2' : 'py-4'
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 flex items-center justify-between">
@@ -55,7 +55,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             </svg>
           </button>
 
-          <div className={`${menuOpen ? 'flex' : 'hidden'} lg:flex flex-col lg:flex-row gap-4 lg:items-center absolute lg:static top-full left-0 right-0 p-4 lg:p-0 bg-white dark:bg-gray-900 lg:bg-transparent shadow-lg lg:shadow-none`}>
+          <div className={`${menuOpen ? 'flex' : 'hidden'} lg:flex flex-col lg:flex-row gap-4 lg:items-center absolute lg:static top-full left-0 right-0 p-4 lg:p-0 bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg lg:bg-transparent lg:backdrop-blur-none shadow-lg lg:shadow-none`}>
             {navLinks.map((link) => (
               <Link
                 key={link.path}
