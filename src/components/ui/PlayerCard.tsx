@@ -6,7 +6,7 @@ function PlayerCard({ player }: { player: Player }) {
   const initials = `${player.first_name[0]}${player.last_name[0]}`;
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow group">
+    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden card-hover group">
       <div className="relative h-56 bg-gradient-to-br from-orange-100 to-blue-100 dark:from-orange-900/20 dark:to-blue-900/20">
         {player.photo_url && !imgError ? (
           <img

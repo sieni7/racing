@@ -1,3 +1,26 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card-hover:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+.card-hover-glow:hover {
+  box-shadow: 0 0 20px rgba(249, 115, 22, 0.3), 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+@keyframes shimmer {
+  100% { transform: translateX(100%); }
+}
+
+@keyframes ripple {
+  from { transform: scale(0); opacity: 1; }
+  to { transform: scale(4); opacity: 0; }
+}
+.animate-ripple {
+  animation: ripple 0.6s ease-out forwards;
+}

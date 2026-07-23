@@ -71,7 +71,7 @@ export default function Gallery() {
         <p className="text-center text-gray-500 dark:text-gray-400 py-12">Aucun média dans cette catégorie</p>
       ) : (
         <div
-          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+          className="columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4"
           role="list"
           aria-label="Galerie photos"
         >
@@ -79,7 +79,7 @@ export default function Gallery() {
             <article
               key={item.id}
               role="listitem"
-              className="group relative aspect-square overflow-hidden rounded-xl bg-gray-100 dark:bg-gray-800 cursor-pointer"
+              className="break-inside-avoid overflow-hidden rounded-xl bg-gray-100 dark:bg-gray-800 cursor-pointer group relative shadow-md hover:shadow-xl transition-shadow"
               onClick={() => {
                 const idx = filteredGallery.findIndex(f => f.id === item.id);
                 setCurrentIndex(idx);
@@ -90,7 +90,7 @@ export default function Gallery() {
                 src={item.thumbnail_url || item.image_url}
                 alt={item.title}
                 loading="lazy"
-                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               <div className="absolute bottom-3 left-3 right-3 text-white opacity-0 group-hover:opacity-100 transition-opacity">

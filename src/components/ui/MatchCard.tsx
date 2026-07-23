@@ -16,7 +16,7 @@ function MatchCard({ match }: { match: Match }) {
   const isUpcoming = match.status === 'upcoming';
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-5 hover:shadow-md transition-shadow border-l-4 border-primary">
+    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-5 card-hover border-l-4 border-primary">
       <div className="flex items-center justify-between mb-3">
         <span className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
           {match.competition} · Journée {match.matchday}

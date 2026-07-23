@@ -10,10 +10,10 @@ function formatDate(dateStr: string): string {
   });
 }
 
-function NewsCard({ news }: { news: NewsItem }) {
+function NewsCard({ news }: { news: NewsItem & { tags?: string[] } }) {
   const [imgError, setImgError] = useState(false);
   return (
-    <article className="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow group">
+    <article className="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden card-hover group">
       <Link to={`/news/${news.slug}`}>
         <div className="relative h-48 bg-gray-100 dark:bg-gray-700 overflow-hidden">
           {news.cover_image_url && !imgError ? (
@@ -38,6 +38,13 @@ function NewsCard({ news }: { news: NewsItem }) {
           </Link>
         </h3>
         <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 line-clamp-2">{news.excerpt}</p>
+        {news.tags && (
+          <div className="flex flex-wrap gap-1 mt-2">
+            {news.tags.map((tag) => (
+              <span key={tag} className="px-2 py-0.5 bg-primary/10 text-primary text-xs rounded-full">{tag}</span>
+            ))}
+          </div>
+        )}
         <Link
           to={`/news/${news.slug}`}
           className="inline-block mt-3 text-sm font-medium text-primary hover:text-cta transition-colors"
