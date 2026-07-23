@@ -3,6 +3,7 @@ import toast from 'react-hot-toast';
 import { useAdmin } from '../../../../contexts/AdminContext';
 import { DataTable, type Column } from '../../../../components/admin/data/DataTable';
 import { FormBuilder, type Field } from '../../../../components/admin/forms/FormBuilder';
+import { ViewModal } from '../../../../components/admin/ViewModal';
 import { ConfirmModal } from '../../../../components/admin/ConfirmModal';
 import { AuditHistory } from '../../../../components/admin/AuditHistory';
 import { ExportButton } from '../../../../components/admin/ExportButton';
@@ -34,6 +35,7 @@ export default function StandingsPage() {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [auditOpen, setAuditOpen] = useState(false);
+  const [viewItem, setViewItem] = useState<Standing | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const readOnly = useReadOnly();
 
@@ -47,6 +49,7 @@ export default function StandingsPage() {
 
   const handleAdd = useCallback(() => { setEditingId(null); setFormValues({}); setFormErrors({}); setFormOpen(true); }, []);
   const handleEdit = useCallback((item: Standing) => { setEditingId(item.id); setFormValues(item); setFormErrors({}); setFormOpen(true); }, []);
+  const handleView = useCallback((item: Standing) => { setViewItem(item); }, []);
   const handleDuplicate = useCallback((item: Standing) => {
     const { id, created_at, updated_at, ...rest } = item as any;
     setEditingId(null); setFormValues({ ...rest, team_name: `${rest.team_name}` }); setFormErrors({}); setFormOpen(true);
@@ -102,6 +105,20 @@ export default function StandingsPage() {
 
   const exportColumns = columns.map(({ key, label }) => ({ key, label }));
 
+  const viewFields = viewItem ? [
+    { label: 'Équipe', value: viewItem.team_name },
+    { label: 'Matchs joués', value: viewItem.played },
+    { label: 'Victoires', value: viewItem.won },
+    { label: 'Nuls', value: viewItem.drawn },
+    { label: 'Défaites', value: viewItem.lost },
+    { label: 'Buts pour', value: viewItem.goals_for },
+    { label: 'Buts contre', value: viewItem.goals_against },
+    { label: 'Différence', value: viewItem.goal_diff },
+    { label: 'Points', value: viewItem.points },
+    { label: 'Saison', value: viewItem.season || '—' },
+    { label: 'Forme', value: viewItem.form || '—' },
+  ] : [];
+
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
@@ -121,10 +138,11 @@ export default function StandingsPage() {
       <DataTable data={standings} columns={columns}
         onAdd={readOnly ? undefined : handleAdd}
         onEdit={readOnly ? undefined : handleEdit}
+        onView={handleView}
         onDelete={readOnly ? undefined : handleDelete}
         onDuplicate={readOnly ? undefined : handleDuplicate}
         onBulkDelete={readOnly ? undefined : handleBulkDelete}
-        searchFields={['team_name', 'season', 'group_name']}
+        searchFields={['team_name', 'season']}
         addLabel="Équipe" readOnly={readOnly} storageKey="rcb_dt_standings" />
 
       {formOpen && (
@@ -134,6 +152,9 @@ export default function StandingsPage() {
           onSubmit={handleSubmit} onCancel={() => setFormOpen(false)}
           loading={submitting} errors={formErrors} />
       )}
+
+      <ViewModal open={!!viewItem} onClose={() => setViewItem(null)} item={viewItem}
+        title={`Classement : ${viewItem?.team_name}`} fields={viewFields} />
 
       <AuditHistory open={auditOpen} onClose={() => setAuditOpen(false)} tableName="standings" />
 

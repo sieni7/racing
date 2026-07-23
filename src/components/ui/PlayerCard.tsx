@@ -7,7 +7,7 @@ function PlayerCard({ player }: { player: Player }) {
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-[18px] shadow-card overflow-hidden card-hover group">
-      <div className="relative h-56 bg-gradient-to-br from-racing-sky/20 to-racing-navy/10">
+      <div className="relative h-56 bg-gradient-to-br from-primary/20 to-secondary/10">
         {player.photo_url && !imgError ? (
           <img
             src={player.photo_url}

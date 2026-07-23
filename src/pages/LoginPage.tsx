@@ -30,7 +30,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-500 to-blue-800 px-4">
+    <div className="min-h-screen flex items-center justify-center gradient-hero px-4">
       <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 w-full max-w-md">
         <div className="text-center mb-6">
           <h1 className="font-display text-2xl font-bold text-gray-900 dark:text-white">Connexion</h1>
@@ -77,7 +77,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2.5 rounded-lg bg-primary hover:bg-cta text-white font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-2.5 rounded-lg bg-secondary hover:bg-primary text-white font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? 'Connexion…' : 'Se connecter'}
           </button>

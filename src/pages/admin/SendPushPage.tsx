@@ -54,7 +54,7 @@ export const SendPushPage: React.FC = () => {
       <div className="flex justify-end mb-4">
         <button
           onClick={() => { setFormValues({}); setFormErrors({}); setFormOpen(true); }}
-          className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-cta transition-colors"
+          className="px-4 py-2 bg-secondary text-white rounded-lg hover:bg-primary transition-colors"
         >
           + Nouvelle notification
         </button>

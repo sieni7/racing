@@ -228,7 +228,7 @@ export function DataTable<T extends { id: string }>({
           )}
           {extraActions}
           {onAdd && !readOnly && (
-            <button onClick={onAdd} className="px-5 py-2.5 rounded-xl bg-primary text-white text-sm font-medium hover:bg-cta shadow-sm">
+            <button onClick={onAdd} className="px-5 py-2.5 rounded-xl bg-secondary text-white text-sm font-medium hover:bg-primary shadow-sm">
               + {addLabel}
             </button>
           )}

@@ -89,7 +89,7 @@ export function AdminHeader({ onMenuToggle }: { onMenuToggle: () => void }) {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Rechercher (Ctrl+K)..."
-          className="w-full pl-9 pr-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-racing-sky/40 transition-shadow"
+          className="w-full pl-9 pr-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/40 transition-shadow"
         />
         {open && results.length > 0 && (
           <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden z-50">

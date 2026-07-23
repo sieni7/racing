@@ -20,7 +20,7 @@ function StaffCard({ member }: { member: Staff }) {
   const [imgError, setImgError] = useState(false);
   return (
     <div className="bg-white dark:bg-gray-800 rounded-[18px] shadow-card p-5 card-hover flex items-start gap-4">
-      <div className="w-16 h-16 rounded-full bg-gradient-to-br from-racing-sky/20 to-racing-navy/10 flex-shrink-0 overflow-hidden">
+      <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary/20 to-secondary/10 flex-shrink-0 overflow-hidden">
         {member.photo_url && !imgError ? (
           <img
             src={member.photo_url}

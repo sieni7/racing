@@ -84,7 +84,7 @@ export const ImportModal: React.FC<ImportModalProps> = ({ open, onClose, onImpor
               type="file"
               accept=".csv"
               onChange={handleFile}
-              className="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-medium file:bg-primary file:text-white hover:file:bg-cta"
+              className="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-medium file:bg-secondary file:text-white hover:file:bg-primary"
             />
             <p className="text-xs text-gray-400 mt-1">Colonnes attendues : {columns.map(c => c.label).join(', ')}</p>
           </div>
@@ -134,7 +134,7 @@ export const ImportModal: React.FC<ImportModalProps> = ({ open, onClose, onImpor
             <button
               onClick={handleImport}
               disabled={!fileRef.current?.files?.[0] || loading || missingHeaders.length > 0}
-              className="px-5 py-2.5 rounded-xl bg-primary text-white text-sm font-medium hover:bg-cta transition-colors disabled:opacity-50 shadow-sm"
+              className="px-5 py-2.5 rounded-xl bg-secondary text-white text-sm font-medium hover:bg-primary transition-colors disabled:opacity-50 shadow-sm"
             >
               {loading ? 'Import...' : 'Importer'}
             </button>

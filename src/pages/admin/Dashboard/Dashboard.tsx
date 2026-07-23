@@ -61,10 +61,10 @@ export default function Dashboard() {
   const recentNews = [...news].sort((a, b) => new Date(b.published_at || '').getTime() - new Date(a.published_at || '').getTime()).slice(0, 4);
 
   const stats = [
-    { label: 'Joueurs', value: players.length, color: 'from-blue-600 to-blue-700', icon: 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197' },
-    { label: 'Matchs', value: matches.length, color: 'from-emerald-600 to-emerald-700', icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z' },
-    { label: 'Actualités', value: news.length, color: 'from-orange-600 to-orange-700', icon: 'M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1' },
-    { label: 'Staff', value: staff.length, color: 'from-purple-600 to-purple-700', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857' },
+    { label: 'Joueurs', value: players.length, color: 'from-secondary to-navy-700', icon: 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197' },
+    { label: 'Matchs', value: matches.length, color: 'from-primary to-sky-600', icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z' },
+    { label: 'Actualités', value: news.length, color: 'from-cta to-red-600', icon: 'M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1' },
+    { label: 'Staff', value: staff.length, color: 'from-green-600 to-green-700', icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857' },
   ];
 
   const tableLabels: Record<string, string> = { players: 'Joueurs', matches: 'Matchs', news: 'Actualités', staff: 'Staff' };
@@ -97,7 +97,7 @@ export default function Dashboard() {
             <div className="relative w-24 h-24">
               <svg className="w-24 h-24 -rotate-90" viewBox="0 0 36 36">
                 <circle cx="18" cy="18" r="15.5" fill="none" stroke="currentColor" strokeWidth="3" className="text-gray-200 dark:text-gray-700" />
-                <circle cx="18" cy="18" r="15.5" fill="none" stroke="#F97316" strokeWidth="3" strokeDasharray={`${winRate},100`} strokeLinecap="round" />
+                <circle cx="18" cy="18" r="15.5" fill="none" stroke="#59C7F7" strokeWidth="3" strokeDasharray={`${winRate},100`} strokeLinecap="round" />
               </svg>
               <span className="absolute inset-0 flex items-center justify-center text-2xl font-black text-gray-900 dark:text-white">{winRate}%</span>
             </div>

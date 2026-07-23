@@ -164,7 +164,7 @@ export default function HomePage() {
                       i === 2 ? 'bg-sky-100 text-sky-600' :
                       'bg-gray-50 text-gray-400'
                     }`}>{i + 1}</span>
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-100 to-blue-100 dark:from-orange-900/20 dark:to-blue-900/20 flex items-center justify-center text-sm font-bold text-gray-500 dark:text-gray-400">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-sky-100 to-navy-100 dark:from-sky-900/20 dark:to-navy-900/20 flex items-center justify-center text-sm font-bold text-gray-500 dark:text-gray-400">
                       {scorer.player.split(' ').map(n => n[0]).join('')}
                     </div>
                     <div className="flex-1 min-w-0">

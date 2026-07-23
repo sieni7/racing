@@ -174,6 +174,9 @@ export default function NewsPage() {
         </>
       )}
 
+      <ViewModal open={!!viewItem} onClose={() => setViewItem(null)} item={viewItem}
+        title={`Actualité : ${viewItem?.title}`} fields={viewFields} />
+
       <AuditHistory open={auditOpen} onClose={() => setAuditOpen(false)} tableName="news" />
 
       <ConfirmModal isOpen={confirmOpen} title="Confirmer la suppression"

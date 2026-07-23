@@ -111,7 +111,7 @@ export default function StandingsPage() {
                       <span className={`inline-flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold ${
                         idx === 0 ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400' :
                         idx === 1 ? 'bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-300' :
-                        idx === 2 ? 'bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400' :
+                        idx === 2 ? 'bg-sky-100 text-sky-600 dark:bg-sky-900/30 dark:text-sky-400' :
                         'text-gray-600 dark:text-gray-400'
                       }`}>{idx + 1}</span>
                     </td>

@@ -26,9 +26,9 @@ function MatchCard({ match }: { match: Match }) {
   const result = getMatchResult(match);
 
   const borderColor = result === 'victory' 
-    ? 'border-racing-green' 
+    ? 'border-success' 
     : result === 'defeat' 
-    ? 'border-racing-red' 
+    ? 'border-cta' 
     : result === 'draw'
     ? 'border-primary'
     : 'border-secondary';

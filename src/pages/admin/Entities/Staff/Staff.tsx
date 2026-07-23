@@ -3,6 +3,7 @@ import toast from 'react-hot-toast';
 import { useAdmin } from '../../../../contexts/AdminContext';
 import { DataTable, type Column } from '../../../../components/admin/data/DataTable';
 import { FormBuilder, type Field } from '../../../../components/admin/forms/FormBuilder';
+import { ViewModal } from '../../../../components/admin/ViewModal';
 import { ConfirmModal } from '../../../../components/admin/ConfirmModal';
 import { AuditHistory } from '../../../../components/admin/AuditHistory';
 import { ExportButton } from '../../../../components/admin/ExportButton';
@@ -41,6 +42,7 @@ export default function StaffPage() {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [auditOpen, setAuditOpen] = useState(false);
+  const [viewItem, setViewItem] = useState<Staff | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const readOnly = useReadOnly();
 
@@ -48,6 +50,7 @@ export default function StaffPage() {
 
   const handleAdd = useCallback(() => { setEditingId(null); setFormValues({ is_active: 'true' }); setFormErrors({}); setFormOpen(true); }, []);
   const handleEdit = useCallback((item: Staff) => { setEditingId(item.id); setFormValues({ ...item, is_active: String(item.is_active) }); setFormErrors({}); setFormOpen(true); }, []);
+  const handleView = useCallback((item: Staff) => { setViewItem(item); }, []);
   const handleDuplicate = useCallback((item: Staff) => {
     const { id, created_at, updated_at, ...rest } = item as any;
     setEditingId(null); setFormValues({ ...rest, first_name: `${rest.first_name} (copie)` }); setFormErrors({}); setFormOpen(true);
@@ -98,6 +101,16 @@ export default function StaffPage() {
 
   const exportColumns = columns.map(({ key, label }) => ({ key: key === 'first_name' ? 'full_name' : key, label }));
 
+  const viewFields = viewItem ? [
+    { label: 'Prénom', value: viewItem.first_name },
+    { label: 'Nom', value: viewItem.last_name },
+    { label: 'Rôle', value: roleLabels[viewItem.role] || viewItem.role },
+    { label: 'Email', value: viewItem.email || '—' },
+    { label: 'Téléphone', value: viewItem.phone || '—' },
+    { label: 'Biographie', value: viewItem.bio || '—' },
+    { label: 'Actif', value: viewItem.is_active ? 'Oui' : 'Non' },
+  ] : [];
+
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
@@ -117,6 +130,7 @@ export default function StaffPage() {
       <DataTable data={staff} columns={columns}
         onAdd={readOnly ? undefined : handleAdd}
         onEdit={readOnly ? undefined : handleEdit}
+        onView={handleView}
         onDelete={readOnly ? undefined : handleDelete}
         onDuplicate={readOnly ? undefined : handleDuplicate}
         onBulkDelete={readOnly ? undefined : handleBulkDelete}
@@ -130,6 +144,9 @@ export default function StaffPage() {
           onSubmit={handleSubmit} onCancel={() => setFormOpen(false)}
           loading={submitting} errors={formErrors} />
       )}
+
+      <ViewModal open={!!viewItem} onClose={() => setViewItem(null)} item={viewItem}
+        title={`Staff : ${viewItem?.first_name} ${viewItem?.last_name}`} fields={viewFields} />
 
       <AuditHistory open={auditOpen} onClose={() => setAuditOpen(false)} tableName="staff" />
 
