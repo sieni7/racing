@@ -28,7 +28,9 @@ export default function HeroCarousel({ news }: { news: NewsItem[] }) {
       {item.cover_image_url && (
         <img
           src={item.cover_image_url}
-          alt=""
+          alt={item.title || ''}
+          loading="lazy"
+          decoding="async"
           className="absolute inset-0 w-full h-full object-cover opacity-20"
         />
       )}

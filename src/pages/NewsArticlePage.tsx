@@ -79,6 +79,7 @@ export default function NewsArticlePage() {
           src={article.cover_image_url}
           alt={article.title}
           loading="lazy"
+          decoding="async"
           onError={() => setImgError(true)}
           className="w-full h-64 md:h-80 object-cover rounded-xl my-6"
         />

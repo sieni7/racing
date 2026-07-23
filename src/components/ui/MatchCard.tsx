@@ -1,3 +1,4 @@
+import React from 'react';
 import type { Match } from '../../types';
 
 function formatDate(dateStr: string): string {
@@ -10,7 +11,7 @@ function formatDate(dateStr: string): string {
   });
 }
 
-export default function MatchCard({ match }: { match: Match }) {
+function MatchCard({ match }: { match: Match }) {
   const isFinished = match.status === 'finished';
   const isUpcoming = match.status === 'upcoming';
 
@@ -69,3 +70,5 @@ export default function MatchCard({ match }: { match: Match }) {
     </div>
   );
 }
+
+export default React.memo(MatchCard);

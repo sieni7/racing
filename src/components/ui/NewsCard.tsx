@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import type { NewsItem } from '../../types';
 
@@ -10,7 +10,7 @@ function formatDate(dateStr: string): string {
   });
 }
 
-export default function NewsCard({ news }: { news: NewsItem }) {
+function NewsCard({ news }: { news: NewsItem }) {
   const [imgError, setImgError] = useState(false);
   return (
     <article className="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow group">
@@ -21,6 +21,7 @@ export default function NewsCard({ news }: { news: NewsItem }) {
               src={news.cover_image_url}
               alt={news.title}
               loading="lazy"
+              decoding="async"
               onError={() => setImgError(true)}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
             />
@@ -47,3 +48,5 @@ export default function NewsCard({ news }: { news: NewsItem }) {
     </article>
   );
 }
+
+export default React.memo(NewsCard);

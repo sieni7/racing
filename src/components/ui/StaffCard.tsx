@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import type { Staff } from '../../types';
 
 function roleLabel(role: string): string {
@@ -16,7 +16,7 @@ function roleLabel(role: string): string {
   return labels[role] ?? role;
 }
 
-export default function StaffCard({ member }: { member: Staff }) {
+function StaffCard({ member }: { member: Staff }) {
   const [imgError, setImgError] = useState(false);
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-5 hover:shadow-md transition-shadow flex items-start gap-4">
@@ -26,6 +26,7 @@ export default function StaffCard({ member }: { member: Staff }) {
             src={member.photo_url}
             alt={`${member.first_name} ${member.last_name}`}
             loading="lazy"
+            decoding="async"
             onError={() => setImgError(true)}
             className="w-full h-full object-cover"
           />
@@ -47,3 +48,5 @@ export default function StaffCard({ member }: { member: Staff }) {
     </div>
   );
 }
+
+export default React.memo(StaffCard);

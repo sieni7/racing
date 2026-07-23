@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import type { Player } from '../../types';
 
-export default function PlayerCard({ player }: { player: Player }) {
+function PlayerCard({ player }: { player: Player }) {
   const [imgError, setImgError] = useState(false);
   const initials = `${player.first_name[0]}${player.last_name[0]}`;
 
@@ -13,6 +13,7 @@ export default function PlayerCard({ player }: { player: Player }) {
             src={player.photo_url}
             alt={`${player.first_name} ${player.last_name}`}
             loading="lazy"
+            decoding="async"
             onError={() => setImgError(true)}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
@@ -39,3 +40,5 @@ export default function PlayerCard({ player }: { player: Player }) {
     </div>
   );
 }
+
+export default React.memo(PlayerCard);
