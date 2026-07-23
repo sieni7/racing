@@ -18,7 +18,7 @@ function MatchCard({ match }: { match: Match }) {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-5 card-hover border-l-4 border-primary">
       <div className="flex items-center justify-between mb-3">
-        <span className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+        <span className="text-xs font-medium text-gray-600 dark:text-gray-300 uppercase tracking-wider">
           {match.competition} · Journée {match.matchday}
         </span>
         <span className={`text-xs font-semibold px-2 py-1 rounded-full ${
@@ -40,11 +40,11 @@ function MatchCard({ match }: { match: Match }) {
         <div className="flex items-center gap-3">
           {isFinished && match.racing_score !== null ? (
             <div className="flex items-center gap-2 text-2xl font-bold">
-              <span className={match.racing_score > (match.opponent_score ?? -1) ? 'text-primary' : 'text-gray-500 dark:text-gray-400'}>
+              <span className={match.racing_score > (match.opponent_score ?? -1) ? 'text-primary' : 'text-gray-600 dark:text-gray-300'}>
                 {match.racing_score}
               </span>
-              <span className="text-gray-300 dark:text-gray-600">-</span>
-              <span className={match.opponent_score !== null && match.opponent_score > match.racing_score ? 'text-primary' : 'text-gray-500 dark:text-gray-400'}>
+              <span className="text-gray-400 dark:text-gray-500">-</span>
+              <span className={match.opponent_score !== null && match.opponent_score > match.racing_score ? 'text-primary' : 'text-gray-600 dark:text-gray-300'}>
                 {match.opponent_score}
               </span>
             </div>
@@ -58,7 +58,7 @@ function MatchCard({ match }: { match: Match }) {
         </div>
       </div>
 
-      <div className="mt-3 text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1 justify-center">
+      <div className="mt-3 text-xs text-gray-600 dark:text-gray-300 flex items-center gap-1 justify-center">
         <span>{formatDate(match.match_date)}</span>
         {match.venue && (
           <>

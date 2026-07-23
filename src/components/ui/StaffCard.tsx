@@ -42,7 +42,7 @@ function StaffCard({ member }: { member: Staff }) {
         </h3>
         <p className="text-sm text-primary font-medium">{roleLabel(member.role)}</p>
         {member.bio && (
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 line-clamp-2">{member.bio}</p>
+          <p className="text-sm text-gray-600 dark:text-gray-300 mt-1 line-clamp-2">{member.bio}</p>
         )}
       </div>
     </div>

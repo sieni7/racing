@@ -19,7 +19,7 @@ function PlayerCard({ player }: { player: Player }) {
           />
         ) : (
           <div className="flex items-center justify-center h-full">
-            <span className="text-4xl font-bold text-gray-400 dark:text-gray-600">{initials}</span>
+            <span className="text-4xl font-bold text-gray-500 dark:text-gray-400">{initials}</span>
           </div>
         )}
         <div className="absolute top-3 right-3 bg-primary text-white text-xs font-bold rounded-full w-8 h-8 flex items-center justify-center shadow">
@@ -30,7 +30,7 @@ function PlayerCard({ player }: { player: Player }) {
         <h3 className="font-display font-semibold text-gray-900 dark:text-white">
           {player.first_name} {player.last_name}
         </h3>
-        <p className="text-sm text-gray-500 dark:text-gray-400 capitalize">{player.position}</p>
+        <p className="text-sm text-gray-600 dark:text-gray-300 capitalize">{player.position}</p>
         <div className="flex items-center gap-2 mt-2 text-xs text-gray-400 dark:text-gray-500">
           <span>{player.nationality}</span>
           <span>·</span>

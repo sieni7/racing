@@ -35,12 +35,12 @@ export default function HeroCarousel({ news }: { news: NewsItem[] }) {
         />
       )}
       <div className="relative max-w-3xl mx-auto px-4 text-center">
-        <time className="text-sm text-white/60 mb-2 block">
+        <time className="text-sm text-white/70 mb-2 block">
           {new Date(item.published_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
         </time>
         <h1 className="font-display text-4xl md:text-5xl font-bold mb-4">{item.title}</h1>
         {item.excerpt && (
-          <p className="text-lg text-white/80 mb-8 line-clamp-2">{item.excerpt}</p>
+          <p className="text-lg text-white/90 mb-8 line-clamp-2">{item.excerpt}</p>
         )}
         <Link
           to={`/news/${item.slug}`}

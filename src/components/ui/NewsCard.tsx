@@ -31,13 +31,13 @@ function NewsCard({ news }: { news: NewsItem & { tags?: string[] } }) {
         </div>
       </Link>
       <div className="p-4">
-        <time className="text-xs text-gray-500 dark:text-gray-400">{formatDate(news.published_at)}</time>
+        <time className="text-xs text-gray-600 dark:text-gray-300">{formatDate(news.published_at)}</time>
         <h3 className="font-display font-semibold text-gray-900 dark:text-white mt-1 line-clamp-2">
           <Link to={`/news/${news.slug}`} className="hover:text-primary transition-colors">
             {news.title}
           </Link>
         </h3>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 line-clamp-2">{news.excerpt}</p>
+        <p className="text-sm text-gray-600 dark:text-gray-300 mt-2 line-clamp-2">{news.excerpt}</p>
         {news.tags && (
           <div className="flex flex-wrap gap-1 mt-2">
             {news.tags.map((tag) => (
