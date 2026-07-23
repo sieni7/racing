@@ -14,9 +14,8 @@ describe('staff service', () => {
         { id: '2', first_name: 'Marie', last_name: 'Martin', role: 'medecin' },
       ];
 
-      const mockSelect = vi.fn().mockReturnValue({
-        order: vi.fn().mockResolvedValue(mockStaff),
-      });
+      const mockOrder = vi.fn().mockResolvedValue({ data: mockStaff, error: null });
+      const mockSelect = vi.fn().mockReturnValue({ order: mockOrder });
       (supabase.from as vi.Mock).mockReturnValue({ select: mockSelect });
 
       const result = await getAllStaff();
@@ -30,7 +29,7 @@ describe('staff service', () => {
       const newStaff = { first_name: 'Pierre', last_name: 'Durand', role: 'preparateur_physique' };
       const createdStaff = { id: '3', ...newStaff };
 
-      const mockSingle = vi.fn().mockResolvedValue(createdStaff);
+      const mockSingle = vi.fn().mockResolvedValue({ data: createdStaff, error: null });
       const mockSelect = vi.fn().mockReturnValue({ single: mockSingle });
       const mockInsert = vi.fn().mockReturnValue({ select: mockSelect });
       (supabase.from as vi.Mock).mockReturnValue({ insert: mockInsert });
@@ -45,7 +44,7 @@ describe('staff service', () => {
     it('should update staff on success', async () => {
       const updatedStaff = { id: '1', first_name: 'Jean', last_name: 'Dupont', role: 'entraineur_adjoint' };
 
-      const mockSingle = vi.fn().mockResolvedValue(updatedStaff);
+      const mockSingle = vi.fn().mockResolvedValue({ data: updatedStaff, error: null });
       const mockSelect = vi.fn().mockReturnValue({ single: mockSingle });
       const mockEq = vi.fn().mockReturnValue({ select: mockSelect });
       const mockUpdate = vi.fn().mockReturnValue({ eq: mockEq });
@@ -59,7 +58,7 @@ describe('staff service', () => {
 
   describe('deleteStaff', () => {
     it('should delete staff on success', async () => {
-      const mockEq = vi.fn().mockResolvedValue(undefined);
+      const mockEq = vi.fn().mockResolvedValue({ error: null });
       const mockDelete = vi.fn().mockReturnValue({ eq: mockEq });
       (supabase.from as vi.Mock).mockReturnValue({ delete: mockDelete });
 

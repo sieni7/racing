@@ -11,7 +11,7 @@ const SquadPage = lazy(() => import('./pages/SquadPage'));
 const MatchsPage = lazy(() => import('./pages/MatchsPage'));
 const NewsPage = lazy(() => import('./pages/NewsPage'));
 const NewsArticlePage = lazy(() => import('./pages/NewsArticlePage'));
-const GalleryPage = lazy(() => import('./pages/GalleryPage'));
+const Gallery = lazy(() => import('./pages/Gallery'));
 const StandingsPage = lazy(() => import('./pages/StandingsPage'));
 const LoginPage = lazy(() => import('./pages/LoginPage'));
 const AdminDashboard = lazy(() => import('./pages/admin/Dashboard'));
@@ -43,7 +43,7 @@ function App() {
               <Route path="/matchs" element={<MatchsPage />} />
               <Route path="/news" element={<NewsPage />} />
               <Route path="/news/:slug" element={<NewsArticlePage />} />
-              <Route path="/galerie" element={<GalleryPage />} />
+              <Route path="/galerie" element={<Gallery />} />
               <Route path="/classement" element={<StandingsPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<Navigate to="/login" replace />} />

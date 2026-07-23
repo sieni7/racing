@@ -14,9 +14,8 @@ describe('news service', () => {
         { id: '2', title: 'News 2', slug: 'news-2', status: 'draft', published_at: null, content: 'Content 2' },
       ];
 
-      const mockSelect = vi.fn().mockReturnValue({
-        order: vi.fn().mockResolvedValue(mockNews),
-      });
+      const mockOrder = vi.fn().mockResolvedValue({ data: mockNews, error: null });
+      const mockSelect = vi.fn().mockReturnValue({ order: mockOrder });
       (supabase.from as vi.Mock).mockReturnValue({ select: mockSelect });
 
       const result = await getAllNews();
@@ -31,11 +30,9 @@ describe('news service', () => {
         { id: '1', title: 'News 1', slug: 'news-1', status: 'published', published_at: '2026-01-15', content: 'Content 1' },
       ];
 
-      const mockSelect = vi.fn().mockReturnValue({
-        eq: vi.fn().mockReturnValue({
-          order: vi.fn().mockResolvedValue(mockNews),
-        }),
-      });
+      const mockOrder = vi.fn().mockResolvedValue({ data: mockNews, error: null });
+      const mockEq = vi.fn().mockReturnValue({ order: mockOrder });
+      const mockSelect = vi.fn().mockReturnValue({ eq: mockEq });
       (supabase.from as vi.Mock).mockReturnValue({ select: mockSelect });
 
       const result = await getPublishedNews();
@@ -50,13 +47,10 @@ describe('news service', () => {
         { id: '1', title: 'News 1', slug: 'news-1', status: 'published' },
       ];
 
-      const mockSelect = vi.fn().mockReturnValue({
-        eq: vi.fn().mockReturnValue({
-          order: vi.fn().mockReturnValue({
-            limit: vi.fn().mockResolvedValue(recentNews),
-          }),
-        }),
-      });
+      const mockLimit = vi.fn().mockResolvedValue({ data: recentNews, error: null });
+      const mockOrder = vi.fn().mockReturnValue({ limit: mockLimit });
+      const mockEq = vi.fn().mockReturnValue({ order: mockOrder });
+      const mockSelect = vi.fn().mockReturnValue({ eq: mockEq });
       (supabase.from as vi.Mock).mockReturnValue({ select: mockSelect });
 
       const result = await getRecentNews(3);
@@ -69,11 +63,9 @@ describe('news service', () => {
     it('should return news by slug on success', async () => {
       const mockNews = { id: '1', title: 'Test News', slug: 'news-1', status: 'published' };
 
-      const mockSelect = vi.fn().mockReturnValue({
-        eq: vi.fn().mockReturnValue({
-          single: vi.fn().mockResolvedValue(mockNews),
-        }),
-      });
+      const mockSingle = vi.fn().mockResolvedValue({ data: mockNews, error: null });
+      const mockEq = vi.fn().mockReturnValue({ single: mockSingle });
+      const mockSelect = vi.fn().mockReturnValue({ eq: mockEq });
       (supabase.from as vi.Mock).mockReturnValue({ select: mockSelect });
 
       const result = await getNewsBySlug('news-1');
@@ -86,11 +78,9 @@ describe('news service', () => {
     it('should return news by id on success', async () => {
       const mockNews = { id: '1', title: 'Test News', slug: 'news-1', status: 'published' };
 
-      const mockSelect = vi.fn().mockReturnValue({
-        eq: vi.fn().mockReturnValue({
-          single: vi.fn().mockResolvedValue(mockNews),
-        }),
-      });
+      const mockSingle = vi.fn().mockResolvedValue({ data: mockNews, error: null });
+      const mockEq = vi.fn().mockReturnValue({ single: mockSingle });
+      const mockSelect = vi.fn().mockReturnValue({ eq: mockEq });
       (supabase.from as vi.Mock).mockReturnValue({ select: mockSelect });
 
       const result = await getNewsById('1');
@@ -104,7 +94,7 @@ describe('news service', () => {
       const newNews = { title: 'New Article', slug: 'new-article', content: 'Content', status: 'published' };
       const createdNews = { id: '3', ...newNews };
 
-      const mockSingle = vi.fn().mockResolvedValue(createdNews);
+      const mockSingle = vi.fn().mockResolvedValue({ data: createdNews, error: null });
       const mockSelect = vi.fn().mockReturnValue({ single: mockSingle });
       const mockInsert = vi.fn().mockReturnValue({ select: mockSelect });
       (supabase.from as vi.Mock).mockReturnValue({ insert: mockInsert });
@@ -119,7 +109,7 @@ describe('news service', () => {
     it('should update news on success', async () => {
       const updatedNews = { id: '1', title: 'Updated Title', slug: 'news-1', status: 'published' };
 
-      const mockSingle = vi.fn().mockResolvedValue(updatedNews);
+      const mockSingle = vi.fn().mockResolvedValue({ data: updatedNews, error: null });
       const mockSelect = vi.fn().mockReturnValue({ single: mockSingle });
       const mockEq = vi.fn().mockReturnValue({ select: mockSelect });
       const mockUpdate = vi.fn().mockReturnValue({ eq: mockEq });
@@ -133,7 +123,7 @@ describe('news service', () => {
 
   describe('deleteNews', () => {
     it('should delete news on success', async () => {
-      const mockEq = vi.fn().mockResolvedValue(undefined);
+      const mockEq = vi.fn().mockResolvedValue({ error: null });
       const mockDelete = vi.fn().mockReturnValue({ eq: mockEq });
       (supabase.from as vi.Mock).mockReturnValue({ delete: mockDelete });
 

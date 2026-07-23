@@ -3,7 +3,7 @@ import type { Gallery } from '../types';
 
 const categories = ['Tous', 'Match', 'Entraînement', 'Événement', 'Autre'] as const;
 
-export default function GalleryPage() {
+export default function Gallery() {
   const [gallery, setGallery] = useState<Gallery[]>([]);
   const [activeCategory, setActiveCategory] = useState<string>('Tous');
   const [lightboxOpen, setLightboxOpen] = useState(false);

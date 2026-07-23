@@ -22,13 +22,10 @@ describe('matches service', () => {
         { id: '1', opponent_name: 'Team A', match_date: '2026-01-15', status: 'upcoming' },
       ];
 
-      const mockSelect = vi.fn().mockReturnValue({
-        eq: vi.fn().mockReturnValue({
-          order: vi.fn().mockReturnValue({
-            limit: vi.fn().mockResolvedValue(mockMatches),
-          }),
-        }),
-      });
+      const mockLimit = vi.fn().mockResolvedValue({ data: mockMatches, error: null });
+      const mockOrder = vi.fn().mockReturnValue({ limit: mockLimit });
+      const mockEq = vi.fn().mockReturnValue({ order: mockOrder });
+      const mockSelect = vi.fn().mockReturnValue({ eq: mockEq });
       (supabase.from as vi.Mock).mockReturnValue({ select: mockSelect });
 
       const result = await getUpcomingMatches(5);
@@ -44,9 +41,8 @@ describe('matches service', () => {
         { id: '2', opponent_name: 'Team B', match_date: '2026-02-01', status: 'upcoming' },
       ];
 
-      const mockSelect = vi.fn().mockReturnValue({
-        order: vi.fn().mockResolvedValue(mockMatches),
-      });
+      const mockOrder = vi.fn().mockResolvedValue({ data: mockMatches, error: null });
+      const mockSelect = vi.fn().mockReturnValue({ order: mockOrder });
       (supabase.from as vi.Mock).mockReturnValue({ select: mockSelect });
 
       const result = await getAllMatches();
@@ -61,15 +57,10 @@ describe('matches service', () => {
         { id: '1', opponent_name: 'Team A', match_date: '2026-01-15', status: 'finished' },
       ];
 
-      const mockSelect = vi.fn().mockReturnValue({
-        select: vi.fn().mockReturnValue({
-          eq: vi.fn().mockReturnValue({
-            order: vi.fn().mockReturnValue({
-              range: vi.fn().mockResolvedValue({ data: mockMatches, error: null, count: 1 }),
-            }),
-          }),
-        }),
-      });
+      const mockRange = vi.fn().mockResolvedValue({ data: mockMatches, error: null, count: 1 });
+      const mockOrder = vi.fn().mockReturnValue({ range: mockRange });
+      const mockEq = vi.fn().mockReturnValue({ order: mockOrder });
+      const mockSelect = vi.fn().mockReturnValue({ eq: mockEq });
       (supabase.from as vi.Mock).mockReturnValue({ select: mockSelect });
 
       const result = await getPastMatches(1, 12);
@@ -79,15 +70,10 @@ describe('matches service', () => {
     });
 
     it('should throw on error', async () => {
-      const mockSelect = vi.fn().mockReturnValue({
-        select: vi.fn().mockReturnValue({
-          eq: vi.fn().mockReturnValue({
-            order: vi.fn().mockReturnValue({
-              range: vi.fn().mockRejectedValue(new Error('DB Error')),
-            }),
-          }),
-        }),
-      });
+      const mockRange = vi.fn().mockRejectedValue(new Error('DB Error'));
+      const mockOrder = vi.fn().mockReturnValue({ range: mockRange });
+      const mockEq = vi.fn().mockReturnValue({ order: mockOrder });
+      const mockSelect = vi.fn().mockReturnValue({ eq: mockEq });
       (supabase.from as vi.Mock).mockReturnValue({ select: mockSelect });
 
       await expect(getPastMatches(1, 12)).rejects.toThrow('DB Error');
@@ -101,13 +87,9 @@ describe('matches service', () => {
         { id: '2', opponent_name: 'Team B', match_date: '2026-02-01' },
       ];
 
-      const mockSelect = vi.fn().mockReturnValue({
-        select: vi.fn().mockReturnValue({
-          order: vi.fn().mockReturnValue({
-            range: vi.fn().mockResolvedValue({ data: mockMatches, error: null, count: 2 }),
-          }),
-        }),
-      });
+      const mockRange = vi.fn().mockResolvedValue({ data: mockMatches, error: null, count: 2 });
+      const mockOrder = vi.fn().mockReturnValue({ range: mockRange });
+      const mockSelect = vi.fn().mockReturnValue({ order: mockOrder });
       (supabase.from as vi.Mock).mockReturnValue({ select: mockSelect });
 
       const result = await getAllMatchesPaginated(1, 12);
@@ -121,11 +103,9 @@ describe('matches service', () => {
     it('should return match by id on success', async () => {
       const mockMatch = { id: '1', opponent_name: 'Team A', match_date: '2026-01-15', status: 'finished' };
 
-      const mockSelect = vi.fn().mockReturnValue({
-        eq: vi.fn().mockReturnValue({
-          single: vi.fn().mockResolvedValue(mockMatch),
-        }),
-      });
+      const mockSingle = vi.fn().mockResolvedValue({ data: mockMatch, error: null });
+      const mockEq = vi.fn().mockReturnValue({ single: mockSingle });
+      const mockSelect = vi.fn().mockReturnValue({ eq: mockEq });
       (supabase.from as vi.Mock).mockReturnValue({ select: mockSelect });
 
       const result = await getMatchById('1');
@@ -139,7 +119,7 @@ describe('matches service', () => {
       const newMatch = { opponent_name: 'New Team', match_date: '2026-10-01', status: 'upcoming' };
       const createdMatch = { id: '3', ...newMatch };
 
-      const mockSingle = vi.fn().mockResolvedValue(createdMatch);
+      const mockSingle = vi.fn().mockResolvedValue({ data: createdMatch, error: null });
       const mockSelect = vi.fn().mockReturnValue({ single: mockSingle });
       const mockInsert = vi.fn().mockReturnValue({ select: mockSelect });
       (supabase.from as vi.Mock).mockReturnValue({ insert: mockInsert });
@@ -154,7 +134,7 @@ describe('matches service', () => {
     it('should update match on success', async () => {
       const updatedMatch = { id: '1', opponent_name: 'Updated Team', match_date: '2026-01-15' };
 
-      const mockSingle = vi.fn().mockResolvedValue(updatedMatch);
+      const mockSingle = vi.fn().mockResolvedValue({ data: updatedMatch, error: null });
       const mockSelect = vi.fn().mockReturnValue({ single: mockSingle });
       const mockEq = vi.fn().mockReturnValue({ select: mockSelect });
       const mockUpdate = vi.fn().mockReturnValue({ eq: mockEq });
@@ -168,7 +148,7 @@ describe('matches service', () => {
 
   describe('deleteMatch', () => {
     it('should delete match on success', async () => {
-      const mockEq = vi.fn().mockResolvedValue(undefined);
+      const mockEq = vi.fn().mockResolvedValue({ error: null });
       const mockDelete = vi.fn().mockReturnValue({ eq: mockEq });
       (supabase.from as vi.Mock).mockReturnValue({ delete: mockDelete });
 
