@@ -55,12 +55,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             </svg>
           </button>
 
-          <div className={`${menuOpen ? 'flex' : 'hidden'} lg:flex flex-col lg:flex-row gap-4 lg:items-center absolute lg:static top-full left-0 right-0 p-4 lg:p-0 bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg lg:bg-transparent lg:backdrop-blur-none shadow-lg lg:shadow-none`}>
+          <div className={`${menuOpen ? 'flex' : 'hidden'} lg:flex flex-col lg:flex-row gap-4 lg:items-center absolute lg:static top-full left-0 right-0 p-4 lg:p-0 shadow-lg lg:shadow-none`}>
             {navLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
-                className="flex items-center gap-2 font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors"
+                className="flex items-center gap-2 font-medium text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors lg:bg-transparent rounded-lg px-3 py-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={link.icon} />
@@ -69,7 +69,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               </Link>
             ))}
 
-            <div className="flex items-center gap-3 lg:ml-4">
+            <div className="flex items-center gap-3 lg:ml-4 lg:bg-transparent rounded-lg px-3 py-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
               <button
                 onClick={toggleTheme}
                 className="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
