@@ -1,5 +1,5 @@
 /**
- * Script d'upload des images locales vers Supabase Storage + création des enregistrements.
+ * Upload des images locales vers Supabase Storage + création enregistrements.
  * Usage : node scripts/upload-gallery.mjs
  */
 
@@ -37,50 +37,42 @@ if (!bucketExists) {
 
 // ── Upload des images ─────────────────────────────────────────
 const galleryDir = join(__dirname, '..', 'src', 'assets', 'gallery');
-const files = readdirSync(galleryDir).filter(f => /\.(jpe?g|png|webp|gif)$/i.test(f));
+const files = readdirSync(galleryDir).filter(f => /\.(jpe?g|png|webp|gif)$/i.test(f)).sort();
 
 if (files.length === 0) {
   console.log('❌ Aucune image trouvée dans src/assets/gallery/');
   process.exit(0);
 }
 
+const pad = String(files.length).length;
 console.log(`📸 ${files.length} image(s) trouvée(s), upload en cours...\n`);
 
-for (const file of files) {
+for (let i = 0; i < files.length; i++) {
+  const file = files[i];
   const filePath = join(galleryDir, file);
   const stats = statSync(filePath);
   const buffer = readFileSync(filePath);
 
-  // Titre depuis le nom de fichier
-  const title = file
-    .replace(/\.(jpe?g|png|webp|gif)$/i, '')
-    .replace(/^magnific__/, '')
-    .replace(/__\d+$/, '')
-    .replace(/[-_]/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim()
-    .replace(/^./, c => c.toUpperCase());
+  const ext = file.match(/\.(jpe?g|png|webp|gif)$/i)[1];
+  const num = String(i + 1).padStart(pad, '0');
+  const storageName = `image-${num}.${ext}`;
 
-  // Upload vers Supabase Storage
-  const storagePath = `gallery/${Date.now()}_${file}`;
   const { error: uploadError } = await supabase.storage
     .from('gallery')
-    .upload(storagePath, buffer, {
-      contentType: `image/${file.endsWith('.png') ? 'png' : file.endsWith('.webp') ? 'webp' : 'jpeg'}`,
-      upsert: false,
+    .upload(storageName, buffer, {
+      contentType: `image/${ext === 'png' ? 'png' : ext === 'webp' ? 'webp' : 'jpeg'}`,
+      upsert: true,
     });
 
   if (uploadError) {
-    console.error(`   ❌ ${file} : ${uploadError.message}`);
+    console.error(`   ❌ ${file} → ${storageName} : ${uploadError.message}`);
     continue;
   }
 
-  const { data: { publicUrl } } = supabase.storage.from('gallery').getPublicUrl(storagePath);
+  const { data: { publicUrl } } = supabase.storage.from('gallery').getPublicUrl(storageName);
 
-  // Création enregistrement dans la table gallery
   const { error: dbError } = await supabase.from('gallery').insert({
-    title,
-    description: null,
+    title: `Image ${num}`,
     image_url: publicUrl,
     thumbnail_url: publicUrl,
     category: 'other',
@@ -93,7 +85,7 @@ for (const file of files) {
     continue;
   }
 
-  console.log(`   ✅ ${file} → "${title}" (${(stats.size / 1024).toFixed(0)} KB)`);
+  console.log(`   ✅ ${file} → ${storageName} (${(stats.size / 1024).toFixed(0)} KB)`);
 }
 
 console.log(`\n✅ Terminé ! Rafraîchis la galerie dans l'admin.`);
