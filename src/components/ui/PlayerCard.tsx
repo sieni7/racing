@@ -1,27 +1,20 @@
-import React, { useState } from 'react';
+import React from 'react';
 import type { Player } from '../../types';
+import fallbackImg from '../../assets/man.jpg';
 
 function PlayerCard({ player }: { player: Player }) {
-  const [imgError, setImgError] = useState(false);
-  const initials = `${player.first_name[0]}${player.last_name[0]}`;
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-[18px] shadow-card overflow-hidden card-hover group">
       <div className="relative h-56 bg-gradient-to-br from-primary/20 to-secondary/10">
-        {player.photo_url && !imgError ? (
-          <img
-            src={player.photo_url}
-            alt={`${player.first_name} ${player.last_name}`}
-            loading="lazy"
-            decoding="async"
-            onError={() => setImgError(true)}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-          />
-        ) : (
-          <div className="flex items-center justify-center h-full">
-            <span className="text-4xl font-bold text-gray-500 dark:text-gray-400">{initials}</span>
-          </div>
-        )}
+        <img
+          src={player.photo_url || fallbackImg}
+          alt={`${player.first_name} ${player.last_name}`}
+          loading="lazy"
+          decoding="async"
+          onError={(e) => { if (e.currentTarget.src !== fallbackImg) e.currentTarget.src = fallbackImg; }}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+        />
         <div className="absolute top-3 right-3 bg-secondary text-white text-xs font-bold rounded-full w-8 h-8 flex items-center justify-center shadow">
           {player.jersey_number}
         </div>

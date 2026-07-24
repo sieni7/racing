@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import type { Staff } from '../../types';
+import fallbackImg from '../../assets/man.jpg';
 
 function roleLabel(role: string): string {
   const labels: Record<string, string> = {
@@ -17,24 +18,17 @@ function roleLabel(role: string): string {
 }
 
 function StaffCard({ member }: { member: Staff }) {
-  const [imgError, setImgError] = useState(false);
   return (
     <div className="bg-white dark:bg-gray-800 rounded-[18px] shadow-card p-5 card-hover flex items-start gap-4">
       <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary/20 to-secondary/10 flex-shrink-0 overflow-hidden">
-        {member.photo_url && !imgError ? (
-          <img
-            src={member.photo_url}
-            alt={`${member.first_name} ${member.last_name}`}
-            loading="lazy"
-            decoding="async"
-            onError={() => setImgError(true)}
-            className="w-full h-full object-cover"
-          />
-        ) : (
-          <div className="flex items-center justify-center h-full text-lg font-bold text-gray-400">
-            {member.first_name[0]}{member.last_name[0]}
-          </div>
-        )}
+        <img
+          src={member.photo_url || fallbackImg}
+          alt={`${member.first_name} ${member.last_name}`}
+          loading="lazy"
+          decoding="async"
+          onError={(e) => { if (e.currentTarget.src !== fallbackImg) e.currentTarget.src = fallbackImg; }}
+          className="w-full h-full object-cover"
+        />
       </div>
       <div className="min-w-0">
         <h3 className="font-display font-semibold text-gray-900 dark:text-white">
