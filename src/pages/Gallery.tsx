@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import type { Gallery } from '../types';
 import SEOHead from '../components/SEOHead';
 
@@ -10,6 +10,8 @@ export default function Gallery() {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [imgLoading, setImgLoading] = useState(false);
+  const overlayRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     fetch('/.netlify/functions/get-gallery')
@@ -20,15 +22,43 @@ export default function Gallery() {
 
   const filteredGallery = gallery.filter(g => activeCategory === 'Tous' || g.category === activeCategory);
 
-  const closeLightbox = useCallback(() => setLightboxOpen(false), []);
+  const openLightbox = useCallback((idx: number) => {
+    setCurrentIndex(idx);
+    setImgLoading(true);
+    setLightboxOpen(true);
+    setTimeout(() => overlayRef.current?.classList.remove('opacity-0'), 10);
+  }, []);
+
+  const closeLightbox = useCallback(() => {
+    overlayRef.current?.classList.add('opacity-0');
+    setTimeout(() => setLightboxOpen(false), 200);
+  }, []);
+
   const prevImage = useCallback(() => {
-    setCurrentIndex(i => (i - 1 + filteredGallery.length) % filteredGallery.length);
+    setCurrentIndex(i => {
+      const next = (i - 1 + filteredGallery.length) % filteredGallery.length;
+      setImgLoading(true);
+      return next;
+    });
   }, [filteredGallery.length]);
+
   const nextImage = useCallback(() => {
-    setCurrentIndex(i => (i + 1) % filteredGallery.length);
+    setCurrentIndex(i => {
+      const next = (i + 1) % filteredGallery.length;
+      setImgLoading(true);
+      return next;
+    });
   }, [filteredGallery.length]);
 
   useKeyboardNavigation(lightboxOpen, closeLightbox, prevImage, nextImage);
+
+  // Touch/swipe support
+  const touchStart = useRef(0);
+  const onTouchStart = (e: React.TouchEvent) => { touchStart.current = e.touches[0].clientX; };
+  const onTouchEnd = (e: React.TouchEvent) => {
+    const diff = touchStart.current - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) diff > 0 ? nextImage() : prevImage();
+  };
 
   if (loading) {
     return (
@@ -72,21 +102,13 @@ export default function Gallery() {
       {filteredGallery.length === 0 ? (
         <p className="text-center text-gray-500 dark:text-gray-400 py-12">Aucun média dans cette catégorie</p>
       ) : (
-        <div
-          className="columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4"
-          role="list"
-          aria-label="Galerie photos"
-        >
+        <div className="columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4" role="list" aria-label="Galerie photos">
           {filteredGallery.map((item) => (
             <article
               key={item.id}
               role="listitem"
               className="break-inside-avoid overflow-hidden rounded-xl bg-gray-100 dark:bg-gray-800 cursor-pointer group relative shadow-md hover:shadow-xl transition-shadow"
-              onClick={() => {
-                const idx = filteredGallery.findIndex(f => f.id === item.id);
-                setCurrentIndex(idx);
-                setLightboxOpen(true);
-              }}
+              onClick={() => openLightbox(filteredGallery.findIndex(f => f.id === item.id))}
             >
               <img
                 src={item.thumbnail_url || item.image_url}
@@ -106,14 +128,17 @@ export default function Gallery() {
 
       {lightboxOpen && filteredGallery.length > 0 && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/95"
+          ref={overlayRef}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 transition-opacity duration-200 opacity-0"
           role="dialog"
           aria-modal="true"
           aria-label="Visionneuse galerie"
           onClick={closeLightbox}
+          onTouchStart={onTouchStart}
+          onTouchEnd={onTouchEnd}
         >
           <button
-            className="absolute top-4 right-4 p-2 text-white/70 hover:text-white rounded-full bg-black/50"
+            className="absolute top-4 right-4 z-10 p-2 text-white/70 hover:text-white rounded-full bg-black/50 hover:bg-black/70 transition-colors"
             onClick={closeLightbox}
             aria-label="Fermer"
           >
@@ -123,7 +148,7 @@ export default function Gallery() {
           </button>
 
           <button
-            className="absolute left-4 p-2 text-white/70 hover:text-white rounded-full bg-black/50"
+            className="absolute left-4 z-10 p-2 text-white/70 hover:text-white rounded-full bg-black/50 hover:bg-black/70 transition-colors"
             onClick={(e) => { e.stopPropagation(); prevImage(); }}
             aria-label="Précédent"
           >
@@ -132,20 +157,27 @@ export default function Gallery() {
             </svg>
           </button>
 
-          <div className="relative w-full max-w-5xl max-h-[85vh]">
+          <div className="relative w-full max-w-5xl max-h-[85vh] flex items-center justify-center" onClick={e => e.stopPropagation()}>
+            {imgLoading && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-8 h-8 border-4 border-white/30 border-t-white rounded-full animate-spin" />
+              </div>
+            )}
             <img
               src={filteredGallery[currentIndex]?.image_url}
               alt={filteredGallery[currentIndex]?.title}
-              className="max-w-full max-h-[80vh] object-contain"
+              className={`max-w-full max-h-[80vh] object-contain transition-opacity duration-300 ${imgLoading ? 'opacity-0' : 'opacity-100'}`}
+              onLoad={() => setImgLoading(false)}
+              onError={() => setImgLoading(false)}
             />
-            <div className="absolute bottom-4 left-0 right-0 text-center text-white">
-              <p className="font-medium">{filteredGallery[currentIndex]?.title}</p>
+            <div className="absolute bottom-4 left-0 right-0 text-center text-white pointer-events-none">
+              <p className="font-medium drop-shadow-lg">{filteredGallery[currentIndex]?.title}</p>
               <p className="text-sm text-white/70">{currentIndex + 1} / {filteredGallery.length}</p>
             </div>
           </div>
 
           <button
-            className="absolute right-4 p-2 text-white/70 hover:text-white rounded-full bg-black/50"
+            className="absolute right-4 z-10 p-2 text-white/70 hover:text-white rounded-full bg-black/50 hover:bg-black/70 transition-colors"
             onClick={(e) => { e.stopPropagation(); nextImage(); }}
             aria-label="Suivant"
           >
