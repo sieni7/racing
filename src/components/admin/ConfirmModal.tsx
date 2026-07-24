@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useFocusTrap } from '../../hooks/useFocusTrap';
 
 interface ConfirmModalProps {
   isOpen: boolean;
@@ -18,13 +19,18 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
   onCancel,
   loading = false,
 }) => {
+  const trapRef = useFocusTrap(isOpen);
+
   useEffect(() => {
     if (!isOpen) return;
-    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onCancel(); };
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onCancel();
+      if (e.key === 'Enter' && !loading) onConfirm();
+    };
     document.addEventListener('keydown', handler);
     document.body.style.overflow = 'hidden';
     return () => { document.removeEventListener('keydown', handler); document.body.style.overflow = ''; };
-  }, [isOpen, onCancel]);
+  }, [isOpen, onCancel, onConfirm, loading]);
 
   return (
     <AnimatePresence>
@@ -33,7 +39,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
           style={{ backdropFilter: 'blur(6px)' }}
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
           onClick={onCancel} role="dialog" aria-modal="true">
-          <motion.div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-md p-6"
+          <motion.div ref={trapRef} className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-md p-6"
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}

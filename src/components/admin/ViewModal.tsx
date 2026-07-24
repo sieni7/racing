@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import fallbackImg from '../../assets/img/man.jpg';
+import { useFocusTrap } from '../../hooks/useFocusTrap';
 
 interface ViewField {
   label: string;
@@ -26,8 +27,11 @@ const fieldColors: Record<string, string> = {
 };
 
 export function ViewModal<T>({ open, onClose, item, title, fields, imageUrl, imageBadge }: ViewModalProps<T>) {
+  const trapRef = useFocusTrap(open);
+  const [imageLoaded, setImageLoaded] = useState(false);
+
   useEffect(() => {
-    if (!open) return;
+    if (!open) { setImageLoaded(false); return; }
     const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
     document.addEventListener('keydown', handler);
     document.body.style.overflow = 'hidden';
@@ -41,7 +45,7 @@ export function ViewModal<T>({ open, onClose, item, title, fields, imageUrl, ima
           style={{ backdropFilter: 'blur(6px)' }}
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
           onClick={onClose} role="dialog" aria-modal="true">
-          <motion.div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden"
+          <motion.div ref={trapRef} className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden"
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -49,9 +53,11 @@ export function ViewModal<T>({ open, onClose, item, title, fields, imageUrl, ima
             onClick={e => e.stopPropagation()}>
             {imageUrl && (
               <div className="relative h-48 bg-gradient-to-br from-primary/20 to-secondary/10">
+                {!imageLoaded && <div className="absolute inset-0 animate-pulse bg-gray-200 dark:bg-gray-700" />}
                 <img src={imageUrl} alt={title}
-                  className="w-full h-full object-cover"
-                  onError={(e) => { if (e.currentTarget.src !== fallbackImg) e.currentTarget.src = fallbackImg; }} />
+                  className={`w-full h-full object-cover transition-opacity duration-300 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+                  onLoad={() => setImageLoaded(true)}
+                  onError={(e) => { setImageLoaded(true); if (e.currentTarget.src !== fallbackImg) e.currentTarget.src = fallbackImg; }} />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
                 {imageBadge != null && (
                   <div className="absolute top-3 right-3 bg-secondary text-white text-xs font-bold rounded-full w-9 h-9 flex items-center justify-center shadow-lg border-2 border-white/20">

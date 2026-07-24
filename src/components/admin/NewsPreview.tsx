@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useFocusTrap } from '../../hooks/useFocusTrap';
 
 interface NewsPreviewProps {
   open: boolean;
@@ -12,6 +13,8 @@ interface NewsPreviewProps {
 }
 
 export const NewsPreview: React.FC<NewsPreviewProps> = ({ open, onClose, title, content, excerpt, coverImageUrl, status }) => {
+  const trapRef = useFocusTrap(open);
+
   useEffect(() => {
     if (!open) return;
     const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
@@ -27,7 +30,7 @@ export const NewsPreview: React.FC<NewsPreviewProps> = ({ open, onClose, title, 
           style={{ backdropFilter: 'blur(6px)' }}
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
           onClick={onClose} role="dialog" aria-modal="true">
-          <motion.div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto"
+          <motion.div ref={trapRef} className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto"
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
