@@ -33,6 +33,11 @@ export async function markAsRead(id: string): Promise<void> {
 export async function replyToMessage(id: string, reply_body: string): Promise<void> {
   const { error } = await supabase.from(TABLE).update({ replied: true, reply_body }).eq('id', id);
   if (error) throw error;
+  fetch('/.netlify/functions/notify-reply', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id, reply_body }),
+  }).catch(() => {}); // fire-and-forget
 }
 
 export async function deleteContactMessage(id: string): Promise<void> {
