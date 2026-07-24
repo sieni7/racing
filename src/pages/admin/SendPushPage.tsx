@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
-import { AdminForm } from '../../components/admin/AdminForm';
+import { FormBuilder } from '../../components/admin/forms/FormBuilder';
 import { sendPush } from '../../lib/notifications';
 import type { NotificationPayload } from '../../lib/notifications';
 
@@ -61,7 +61,7 @@ export const SendPushPage: React.FC = () => {
       </div>
 
       {formOpen && (
-        <AdminForm
+        <FormBuilder
           title="Envoyer une notification"
           fields={pushFields}
           values={formValues}
