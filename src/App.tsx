@@ -26,6 +26,7 @@ const AdminSendPush = lazy(() => import('./pages/admin/SendPushPage'));
 const AdminGallery = lazy(() => import('./pages/admin/Entities/Gallery/Gallery'));
 const AdminStandings = lazy(() => import('./pages/admin/Entities/Standings/Standings'));
 const AdminActivity = lazy(() => import('./pages/admin/Activity/ActivityLog'));
+const AdminSiteConfig = lazy(() => import('./pages/admin/SiteConfig/SiteConfig'));
 
 function Loading() {
   return (
@@ -76,6 +77,7 @@ function App() {
               <Route path="gallery" element={<AdminGallery />} />
               <Route path="standings" element={<AdminStandings />} />
               <Route path="activity" element={<AdminActivity />} />
+              <Route path="site-config" element={<AdminSiteConfig />} />
             </Route>
           </Routes>
         </Suspense>
