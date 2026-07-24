@@ -3,6 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout';
 import PrivateRoute from './components/PrivateRoute';
 import ErrorBoundary from './components/ErrorBoundary';
+import SplashScreen from './components/SplashScreen';
 import { AdminLayout } from './components/admin/AdminLayout';
 import { AdminProvider } from './contexts/AdminContext';
 import { AdminThemeProvider } from './contexts/AdminThemeContext';
@@ -16,6 +17,8 @@ const NewsArticlePage = lazy(() => import('./pages/NewsArticlePage'));
 const Gallery = lazy(() => import('./pages/Gallery'));
 const StandingsPage = lazy(() => import('./pages/StandingsPage'));
 const LoginPage = lazy(() => import('./pages/LoginPage'));
+const ContactPage = lazy(() => import('./pages/ContactPage'));
+const MaintenancePage = lazy(() => import('./pages/MaintenancePage'));
 
 const AdminDashboard = lazy(() => import('./pages/admin/Dashboard/Dashboard'));
 const AdminPlayers = lazy(() => import('./pages/admin/Entities/Players/Players'));
@@ -27,6 +30,7 @@ const AdminGallery = lazy(() => import('./pages/admin/Entities/Gallery/Gallery')
 const AdminStandings = lazy(() => import('./pages/admin/Entities/Standings/Standings'));
 const AdminActivity = lazy(() => import('./pages/admin/Activity/ActivityLog'));
 const AdminSiteConfig = lazy(() => import('./pages/admin/SiteConfig/SiteConfig'));
+const AdminContactMessages = lazy(() => import('./pages/admin/Contact/ContactMessages'));
 
 function Loading() {
   return (
@@ -39,6 +43,7 @@ function Loading() {
 function App() {
   return (
     <ErrorBoundary>
+      <SplashScreen />
       <BrowserRouter>
         <Suspense fallback={<Loading />}>
           <Routes>
@@ -50,6 +55,8 @@ function App() {
               <Route path="news/:slug" element={<NewsArticlePage />} />
               <Route path="galerie" element={<Gallery />} />
               <Route path="classement" element={<StandingsPage />} />
+              <Route path="contact" element={<ContactPage />} />
+              <Route path="maintenance" element={<MaintenancePage />} />
               <Route path="login" element={<LoginPage />} />
               <Route path="register" element={<Navigate to="/login" replace />} />
               <Route path="*" element={<NotFound />} />
@@ -78,6 +85,7 @@ function App() {
               <Route path="standings" element={<AdminStandings />} />
               <Route path="activity" element={<AdminActivity />} />
               <Route path="site-config" element={<AdminSiteConfig />} />
+              <Route path="contact" element={<AdminContactMessages />} />
             </Route>
           </Routes>
         </Suspense>
