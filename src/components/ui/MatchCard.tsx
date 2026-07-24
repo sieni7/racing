@@ -67,7 +67,7 @@ function MatchCard({ match }: { match: Match }) {
               </span>
             </div>
           ) : (
-            <span className="text-sm font-semibold text-secondary uppercase">VS</span>
+            <span className="text-sm font-semibold text-secondary dark:text-primary uppercase">VS</span>
           )}
         </div>
 

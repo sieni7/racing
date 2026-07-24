@@ -11,7 +11,7 @@ const Button: React.FC<ButtonProps> = ({ variant = 'primary', size = 'md', class
   const variants: Record<string, string> = {
     primary: 'bg-secondary text-white hover:bg-primary shadow-sm',
     secondary: 'bg-cta text-white hover:opacity-90 shadow-sm',
-    outline: 'border-2 border-secondary text-secondary hover:bg-secondary hover:text-white',
+    outline: 'border-2 border-secondary dark:border-primary text-secondary dark:text-primary hover:bg-secondary dark:hover:bg-primary hover:text-white',
     success: 'bg-success text-white hover:opacity-90 shadow-sm',
   };
 

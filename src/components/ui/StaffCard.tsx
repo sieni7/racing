@@ -34,7 +34,7 @@ function StaffCard({ member }: { member: Staff }) {
         <h3 className="font-display font-semibold text-gray-900 dark:text-white">
           {member.first_name} {member.last_name}
         </h3>
-        <p className="text-sm text-secondary font-medium">{roleLabel(member.role)}</p>
+        <p className="text-sm text-secondary dark:text-primary font-medium">{roleLabel(member.role)}</p>
         {member.bio && (
           <p className="text-sm text-gray-600 dark:text-gray-300 mt-1 line-clamp-2">{member.bio}</p>
         )}

@@ -47,7 +47,7 @@ function NewsCard({ news }: { news: NewsItem & { tags?: string[] } }) {
         )}
         <Link
           to={`/news/${news.slug}`}
-          className="inline-block mt-3 text-sm font-medium text-secondary hover:text-primary transition-colors"
+          className="inline-block mt-3 text-sm font-medium text-secondary dark:text-primary hover:text-primary transition-colors"
         >
           Lire la suite →
         </Link>

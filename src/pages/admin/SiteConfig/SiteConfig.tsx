@@ -9,7 +9,9 @@ export default function SiteConfigPage() {
 
   useEffect(() => {
     getSiteConfig().then(data => {
-      setValues(data ? { ...data } : { ...DEFAULT_CONFIG });
+      const base = data ? { ...data } : { ...DEFAULT_CONFIG };
+      if (!base.metrics_config?.length) base.metrics_config = [...DEFAULT_CONFIG.metrics_config];
+      setValues(base);
       setLoading(false);
     }).catch(() => {
       setValues({ ...DEFAULT_CONFIG } as any);

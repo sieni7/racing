@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import type { Match, NewsItem } from '../types';
 import { getUpcomingMatches } from '../lib/matches';
 import { getRecentNews } from '../lib/news';
-import { getSiteConfig } from '../lib/site-config';
+import { getSiteConfig, DEFAULT_CONFIG } from '../lib/site-config';
 import type { HeroSlide, HeroSettings } from '../lib/site-config';
 import MatchCard from '../components/ui/MatchCard';
 import NewsCard from '../components/ui/NewsCard';
@@ -67,12 +67,13 @@ export default function HomePage() {
         setRecentNews(news);
         if (config?.hero_slides?.length) setHeroSlides(config.hero_slides);
         if (config?.hero_settings) setHeroSettings(config.hero_settings);
-        if (config?.metrics_config) setMetricsConfig(config.metrics_config);
+        if (config?.metrics_config?.length) setMetricsConfig(config.metrics_config);
+        else setMetricsConfig(DEFAULT_CONFIG.metrics_config);
         if (config) setConfigValues({
-          club_history_years: config.club_history_years,
-          players_count: config.players_count,
-          championships: config.championships,
-          staff_count: config.staff_count,
+          club_history_years: config.club_history_years ?? DEFAULT_CONFIG.club_history_years,
+          players_count: config.players_count ?? DEFAULT_CONFIG.players_count,
+          championships: config.championships ?? DEFAULT_CONFIG.championships,
+          staff_count: config.staff_count ?? DEFAULT_CONFIG.staff_count,
         });
       } catch (err) {
         console.error('Erreur chargement HomePage:', err);
@@ -112,8 +113,8 @@ export default function HomePage() {
       </AnimatedSection>
 
       <AnimatedSection className="max-w-7xl mx-auto px-4 py-20">
-        <div className="grid md:grid-cols-2 gap-12">
-          <div>
+        <div className="flex flex-col lg:flex-row gap-12">
+          <div className="flex-1">
             <div className="flex items-center justify-between mb-6">
               <h2 className="font-display text-2xl font-bold text-gray-900 dark:text-white">Prochain match</h2>
               <Link to="/matchs" className="text-sm font-medium text-primary hover:text-cta transition-colors">Voir tout →</Link>
@@ -123,10 +124,12 @@ export default function HomePage() {
             ) : upcomingMatch ? (
               <MatchCard match={upcomingMatch} />
             ) : (
-              <p className="text-gray-600 dark:text-gray-300">Aucun match à venir.</p>
+              <div className="bg-white dark:bg-gray-800 rounded-[18px] shadow-card p-8 text-center">
+                <p className="text-gray-500 dark:text-gray-400">Aucun match à venir.</p>
+              </div>
             )}
           </div>
-          <div>
+          <div className="flex-[2]">
             <div className="flex items-center justify-between mb-6">
               <h2 className="font-display text-2xl font-bold text-gray-900 dark:text-white">Dernières actualités</h2>
               <Link to="/news" className="text-sm font-medium text-primary hover:text-cta transition-colors">Voir tout →</Link>
@@ -137,13 +140,15 @@ export default function HomePage() {
                 <CardSkeleton />
               </div>
             ) : recentNews.length > 0 ? (
-              <div className="space-y-6">
+              <div className="grid sm:grid-cols-2 gap-6">
                 {recentNews.map((item) => (
                   <NewsCard key={item.id} news={item} />
                 ))}
               </div>
             ) : (
-              <p className="text-gray-600 dark:text-gray-300">Aucune actualité pour le moment.</p>
+              <div className="bg-white dark:bg-gray-800 rounded-[18px] shadow-card p-8 text-center">
+                <p className="text-gray-500 dark:text-gray-400">Aucune actualité pour le moment.</p>
+              </div>
             )}
           </div>
         </div>

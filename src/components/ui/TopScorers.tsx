@@ -13,7 +13,7 @@ const TopScorers: React.FC<{ scorers: Scorer[] }> = ({ scorers }) => {
     <div className="space-y-3">
       {scorers.map((scorer, index) => (
         <div key={index} className="flex items-center gap-4 p-3 bg-white dark:bg-gray-800 rounded-[18px] shadow-card card-hover">
-          <span className="text-2xl font-bold text-secondary/30 w-8 text-center">{index + 1}</span>
+          <span className="text-2xl font-bold text-secondary/30 dark:text-primary/30 w-8 text-center">{index + 1}</span>
           <img src={scorer.image || fallbackImg} alt={scorer.player}
             className="w-10 h-10 rounded-full object-cover"
             onError={(e) => { if (e.currentTarget.src !== fallbackImg) e.currentTarget.src = fallbackImg; }} />
