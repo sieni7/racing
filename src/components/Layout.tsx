@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, Outlet } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 import ScrollToTop from './ui/ScrollToTop';
 import CookieConsent from './ui/CookieConsent';
 import NotificationPrompt from './ui/NotificationPrompt';
 import InstallPrompt from './ui/InstallPrompt';
+import PageTransition from './PageTransition';
 
 const navLinks = [
   { path: '/', label: 'Accueil', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
@@ -117,7 +119,11 @@ export default function Layout() {
       </nav>
 
       <main className="flex-1 pt-16">
-        <Outlet />
+        <AnimatePresence mode="wait">
+          <PageTransition key={location.pathname}>
+            <Outlet />
+          </PageTransition>
+        </AnimatePresence>
       </main>
 
       <footer className="bg-[#13213D] text-white">
