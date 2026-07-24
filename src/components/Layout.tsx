@@ -7,6 +7,7 @@ import ScrollToTop from './ui/ScrollToTop';
 import CookieConsent from './ui/CookieConsent';
 import NotificationPrompt from './ui/NotificationPrompt';
 import InstallPrompt from './ui/InstallPrompt';
+import InAppNotification from './ui/InAppNotification';
 import PageTransition from './PageTransition';
 
 const navLinks = [
@@ -37,6 +38,10 @@ export default function Layout() {
 
   return (
     <div className="min-h-screen flex flex-col bg-sky-50">
+      <a href="#main-content" className="skip-link">Aller au contenu</a>
+
+      <InAppNotification />
+
       <ScrollToTop />
       <CookieConsent />
       <NotificationPrompt />
@@ -56,7 +61,8 @@ export default function Layout() {
           <button
             className="lg:hidden p-2 rounded"
             onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Menu"
+            aria-label={menuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
+            aria-expanded={menuOpen}
           >
             <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               {menuOpen ? (
@@ -118,7 +124,7 @@ export default function Layout() {
         </div>
       </nav>
 
-      <main className="flex-1 pt-16">
+      <main id="main-content" className="flex-1 pt-16" tabIndex={-1}>
         <AnimatePresence mode="wait">
           <PageTransition key={location.pathname}>
             <Outlet />

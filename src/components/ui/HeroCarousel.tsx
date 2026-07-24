@@ -55,14 +55,16 @@ export default function HeroCarousel({ news }: { news: NewsItem[] }) {
           <button
             onClick={prev}
             className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors"
+            aria-label="Actualité précédente"
           >
-            ‹
+            <span aria-hidden="true">‹</span>
           </button>
           <button
             onClick={next}
             className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors"
+            aria-label="Actualité suivante"
           >
-            ›
+            <span aria-hidden="true">›</span>
           </button>
           <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
             {news.map((_, i) => (
