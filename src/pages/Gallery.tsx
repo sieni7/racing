@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import type { Gallery } from '../types';
+import { getGalleryItems } from '../lib/gallery';
 import SEOHead from '../components/SEOHead';
 
 const categories = ['Tous', 'Match', 'Entraînement', 'Événement', 'Autre'] as const;
@@ -14,8 +15,7 @@ export default function Gallery() {
   const overlayRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    fetch('/.netlify/functions/get-gallery')
-      .then(r => r.json())
+    getGalleryItems()
       .then(data => { setGallery(data); setLoading(false); })
       .catch(() => setLoading(false));
   }, []);
