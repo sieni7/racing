@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -28,9 +28,12 @@ const typeStyles: Record<ModalType, { border: string; scale: number }> = {
   success: { border: 'border-t-2 border-green-500', scale: 0.95 },
 };
 
+const SWIPE_THRESHOLD = 80;
+
 export const ModalWrapper = React.forwardRef<HTMLDivElement, ModalWrapperProps>(
   ({ open, onClose, children, size = 'lg', type = 'info' }, ref) => {
     const style = typeStyles[type];
+    const dragY = useRef(0);
 
     useEffect(() => {
       if (!open) return;
@@ -51,7 +54,17 @@ export const ModalWrapper = React.forwardRef<HTMLDivElement, ModalWrapperProps>(
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: style.scale, y: 20 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+              drag="y"
+              dragConstraints={{ top: 0, bottom: 0 }}
+              dragElastic={0.3}
+              onDrag={(_, info) => { dragY.current = info.offset.y; }}
+              onDragEnd={(_, info) => {
+                if (info.offset.y > SWIPE_THRESHOLD) onClose();
+              }}
               onClick={e => e.stopPropagation()}>
+              <div className="sm:hidden flex justify-center pt-2 pb-0 absolute top-0 left-0 right-0 z-10">
+                <div className="w-10 h-1 rounded-full bg-gray-300 dark:bg-gray-600" />
+              </div>
               {children}
             </motion.div>
           </motion.div>
