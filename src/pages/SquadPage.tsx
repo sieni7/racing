@@ -210,7 +210,7 @@ export default function SquadPage() {
                       <h3 className="font-display font-semibold text-sm text-gray-900 dark:text-white truncate">
                         {member.first_name} {member.last_name}
                       </h3>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{roleLabels[member.role] || member.role}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{roleLabels[member.fonction || member.role] || member.fonction || member.role}</p>
                     </div>
                   </div>
                 </div>

@@ -15,10 +15,11 @@ import type { Staff } from '../../../../lib/staff';
 const fields: Field[] = [
   { name: 'first_name', label: 'Prénom', type: 'text', required: true },
   { name: 'last_name', label: 'Nom', type: 'text', required: true },
-  { name: 'role', label: 'Rôle', type: 'select', options: [
+  { name: 'fonction', label: 'Fonction', type: 'select', options: [
     { value: 'coach', label: 'Entraîneur' }, { value: 'assistant_coach', label: 'Entraîneur adjoint' },
     { value: 'physio', label: 'Kinésithérapeute' }, { value: 'doctor', label: 'Médecin' },
     { value: 'team_manager', label: 'Team manager' }, { value: 'president', label: 'Président' },
+    { value: 'manager', label: 'Manager' }, { value: 'joueur', label: 'Joueur' }, { value: 'parent', label: 'Parent' },
     { value: 'other', label: 'Autre' },
   ], required: true },
   { name: 'email', label: 'Email', type: 'email' },
@@ -28,9 +29,10 @@ const fields: Field[] = [
   { name: 'is_active', label: 'Actif', type: 'select', options: [{ value: 'true', label: 'Oui' }, { value: 'false', label: 'Non' }] },
 ];
 
-const roleLabels: Record<string, string> = {
+const fonctionLabels: Record<string, string> = {
   coach: 'Entraîneur', assistant_coach: 'Entraîneur adjoint', physio: 'Kinésithérapeute',
-  doctor: 'Médecin', team_manager: 'Team manager', president: 'Président', other: 'Autre',
+  doctor: 'Médecin', team_manager: 'Team manager', president: 'Président',
+  manager: 'Manager', joueur: 'Joueur', parent: 'Parent', other: 'Autre',
 };
 
 export default function StaffPage() {
@@ -94,7 +96,7 @@ export default function StaffPage() {
 
   const columns: Column<Staff>[] = [
     { key: 'first_name', label: 'Nom', render: (s) => `${s.first_name} ${s.last_name}` },
-    { key: 'role', label: 'Rôle', render: (s) => roleLabels[s.role] || s.role },
+    { key: 'fonction', label: 'Fonction', render: (s) => fonctionLabels[s.fonction || s.role] || s.fonction || s.role },
     { key: 'email', label: 'Email' },
     { key: 'is_active', label: 'Actif', render: (s) => s.is_active ? <span className="text-green-600">●</span> : <span className="text-gray-300">○</span>, width: '60px' },
   ];
@@ -104,7 +106,7 @@ export default function StaffPage() {
   const viewFields = viewItem ? [
     { label: 'Prénom', value: viewItem.first_name },
     { label: 'Nom', value: viewItem.last_name },
-    { label: 'Rôle', value: roleLabels[viewItem.role] || viewItem.role },
+    { label: 'Fonction', value: fonctionLabels[viewItem.fonction || viewItem.role] || viewItem.fonction || viewItem.role },
     { label: 'Email', value: viewItem.email || '—' },
     { label: 'Téléphone', value: viewItem.phone || '—' },
     { label: 'Biographie', value: viewItem.bio || '—' },
@@ -134,7 +136,7 @@ export default function StaffPage() {
         onDelete={readOnly ? undefined : handleDelete}
         onDuplicate={readOnly ? undefined : handleDuplicate}
         onBulkDelete={readOnly ? undefined : handleBulkDelete}
-        searchFields={['first_name', 'last_name', 'email', 'role']}
+        searchFields={['first_name', 'last_name', 'email', 'fonction', 'role']}
         addLabel="Membre" readOnly={readOnly} storageKey="rcb_dt_staff" />
 
       {formOpen && (

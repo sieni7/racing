@@ -13,7 +13,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (!user) return;
-    navigate(role === 'admin' ? '/admin' : '/', { replace: true });
+    navigate(role && ['super-admin', 'admin', 'redacteur'].includes(role) ? '/admin' : '/', { replace: true });
   }, [user, role, navigate]);
 
   async function handleSubmit(event: FormEvent) {

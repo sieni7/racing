@@ -49,6 +49,7 @@ export type Staff = {
   last_name: string;
   slug: string;
   role: string;
+  fonction: string;
   photo_url: string;
   bio: string;
   email: string;

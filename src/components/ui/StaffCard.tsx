@@ -2,7 +2,7 @@ import React from 'react';
 import type { Staff } from '../../types';
 import fallbackImg from '../../assets/img/man.jpg';
 
-function roleLabel(role: string): string {
+function fonctionLabel(fonction: string): string {
   const labels: Record<string, string> = {
     entraineur_principal: 'Entraîneur principal',
     entraineur_adjoint: 'Entraîneur adjoint',
@@ -12,9 +12,11 @@ function roleLabel(role: string): string {
     manager: 'Manager général',
     medecin: 'Médecin',
     president: 'Président',
+    joueur: 'Joueur',
+    parent: 'Parent',
     autre: 'Autre',
   };
-  return labels[role] ?? role;
+  return labels[fonction] ?? fonction;
 }
 
 function StaffCard({ member }: { member: Staff }) {
@@ -34,7 +36,7 @@ function StaffCard({ member }: { member: Staff }) {
         <h3 className="font-display font-semibold text-gray-900 dark:text-white">
           {member.first_name} {member.last_name}
         </h3>
-        <p className="text-sm text-secondary dark:text-primary font-medium">{roleLabel(member.role)}</p>
+        <p className="text-sm text-secondary dark:text-primary font-medium">{fonctionLabel(member.fonction || member.role)}</p>
         {member.bio && (
           <p className="text-sm text-gray-600 dark:text-gray-300 mt-1 line-clamp-2">{member.bio}</p>
         )}
