@@ -3,9 +3,11 @@ import type { Player, Staff } from '../types';
 import { getPlayers } from '../lib/players';
 import { getStaff } from '../lib/staff';
 import PlayerCard from '../components/ui/PlayerCard';
+import fallbackImg from '../assets/man.jpg';
 import { ViewModal } from '../components/admin/ViewModal';
 import { ListSkeleton } from '../components/ui/Skeleton';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
+import SEOHead from '../components/SEOHead';
 
 const positionOrder: Record<string, number> = {
   gardien: 0, defenseur: 1, milieu: 2, attaquant: 3,
@@ -119,6 +121,7 @@ export default function SquadPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-12">
+      <SEOHead title="Effectif" description="Découvrez l'effectif complet du Racing Club de Bingerville : joueurs, staff technique et statistiques." />
       <div className="mb-8">
         <h1 className="font-display text-4xl font-black text-gray-900 dark:text-white">Effectif</h1>
         <p className="text-gray-600 dark:text-gray-300 mt-1">{players.length} joueurs · {staff.length} staff</p>
@@ -209,18 +212,11 @@ export default function SquadPage() {
               {staff.map((member) => (
                 <div key={member.id} className="flex-shrink-0 w-48 snap-start">
                   <div className="bg-white dark:bg-gray-800 rounded-[18px] shadow-card overflow-hidden card-hover">
-                    <div className="aspect-square bg-gradient-to-br from-blue-100 to-blue-50 dark:from-blue-900/20 dark:to-gray-800 relative overflow-hidden">
-                      {member.photo_url ? (
-                        <img src={member.photo_url} alt={`${member.first_name} ${member.last_name}`}
-                          loading="lazy" decoding="async"
-                          className="w-full h-full object-cover" />
-                      ) : (
-                        <div className="flex items-center justify-center h-full">
-                          <span className="text-3xl font-bold text-gray-400 dark:text-gray-500">
-                            {member.first_name[0]}{member.last_name[0]}
-                          </span>
-                        </div>
-                      )}
+                    <div className="aspect-square bg-gradient-to-br from-primary/20 to-secondary/10 dark:from-sky-900/20 dark:to-navy-900/20 relative overflow-hidden">
+                      <img src={member.photo_url || fallbackImg} alt={`${member.first_name} ${member.last_name}`}
+                        loading="lazy" decoding="async"
+                        onError={(e) => { if (e.currentTarget.src !== fallbackImg) e.currentTarget.src = fallbackImg; }}
+                        className="w-full h-full object-cover" />
                     </div>
                     <div className="p-3 text-center">
                       <h3 className="font-display font-semibold text-sm text-gray-900 dark:text-white truncate">

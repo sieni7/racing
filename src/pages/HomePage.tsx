@@ -9,6 +9,7 @@ import HeroCarousel from '../components/ui/HeroCarousel';
 import { CardSkeleton } from '../components/ui/Skeleton';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
 import { useCounter } from '../hooks/useCounter';
+import SEOHead, { organizationJsonLd } from '../components/SEOHead';
 
 function AnimatedSection({ children, className = '' }: { children: React.ReactNode; className?: string }) {
   const { ref, isVisible } = useScrollAnimation();
@@ -67,6 +68,7 @@ export default function HomePage() {
 
   return (
     <>
+      <SEOHead title="Accueil" description="Site officiel du Racing Club de Bingerville — actualités, matchs, effectif, galerie et classement." jsonLd={organizationJsonLd()} />
       {loading ? (
         <div className="min-h-[80vh] -mt-16 bg-gray-200 dark:bg-gray-800 animate-pulse" />
       ) : recentNews.length > 0 ? (

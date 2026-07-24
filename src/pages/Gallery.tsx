@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import type { Gallery } from '../types';
+import SEOHead from '../components/SEOHead';
 
 const categories = ['Tous', 'Match', 'Entraînement', 'Événement', 'Autre'] as const;
 
@@ -44,6 +45,7 @@ export default function Gallery() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-12">
+      <SEOHead title="Galerie" description="Galerie photos et vidéos du Racing Club de Bingerville." />
       <header className="mb-8">
         <h1 className="text-3xl font-display font-bold">Galerie</h1>
         <p className="text-gray-600 dark:text-gray-400 mt-2">{gallery.length} média{gallery.length > 1 ? 's' : ''}</p>

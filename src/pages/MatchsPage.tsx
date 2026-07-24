@@ -3,6 +3,7 @@ import type { Match } from '../types';
 import { getUpcomingMatches, getPastMatches, getAllMatchesPaginated } from '../lib/matches';
 import MatchCard from '../components/ui/MatchCard';
 import { ListSkeleton } from '../components/ui/Skeleton';
+import SEOHead from '../components/SEOHead';
 
 type Tab = 'all' | 'upcoming' | 'finished';
 
@@ -49,6 +50,7 @@ export default function MatchsPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-12">
+      <SEOHead title="Matchs" description="Calendrier et résultats des matchs du Racing Club de Bingerville." />
       <div className="mb-8">
         <h1 className="font-display text-4xl font-black text-gray-900 dark:text-white">Matchs</h1>
         <p className="text-gray-600 dark:text-gray-300 mt-1">{count} matchs</p>

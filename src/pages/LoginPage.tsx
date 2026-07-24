@@ -1,6 +1,7 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import SEOHead from '../components/SEOHead';
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -31,6 +32,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center gradient-hero px-4">
+      <SEOHead title="Connexion" description="Connexion à l'espace administration du Racing Club de Bingerville." />
       <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 w-full max-w-md">
         <div className="text-center mb-6">
           <h1 className="font-display text-2xl font-bold text-gray-900 dark:text-white">Connexion</h1>

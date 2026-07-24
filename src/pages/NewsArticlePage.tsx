@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import type { NewsItem } from '../types';
 import { getNewsBySlug } from '../lib/news';
+import SEOHead, { articleJsonLd } from '../components/SEOHead';
 
 export default function NewsArticlePage() {
   const { slug } = useParams() as { slug: string };
@@ -69,6 +70,7 @@ export default function NewsArticlePage() {
 
   return (
     <article className="max-w-3xl mx-auto px-4 py-12">
+      <SEOHead title={article?.title || ''} description={article?.excerpt || ''} image={article?.cover_image_url} url={`/news/${article?.slug}`} type="article" publishedAt={article?.published_at} author="RC Bingerville" jsonLd={article ? articleJsonLd(article.title, article.excerpt || '', `/news/${article.slug}`, article.cover_image_url, article.published_at, 'RC Bingerville') : undefined} />
       <Link to="/news" className="text-sm text-primary hover:text-cta mb-6 inline-block">← Retour aux actualités</Link>
       <h1 className="font-display text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">{article.title}</h1>
       <time className="text-sm text-gray-500 dark:text-gray-400">

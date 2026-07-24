@@ -4,6 +4,7 @@ import type { NewsItem } from '../types';
 import { getNews } from '../lib/news';
 import NewsCard from '../components/ui/NewsCard';
 import { ListSkeleton } from '../components/ui/Skeleton';
+import SEOHead from '../components/SEOHead';
 
 const PER_PAGE = 9;
 
@@ -35,6 +36,7 @@ export default function NewsPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-12">
+      <SEOHead title="Actualités" description="Toute l'actualité du Racing Club de Bingerville." />
       <div className="mb-8">
         <h1 className="font-display text-4xl font-black text-gray-900 dark:text-white">Actualités</h1>
         <p className="text-gray-600 dark:text-gray-300 mt-1">{total} articles</p>

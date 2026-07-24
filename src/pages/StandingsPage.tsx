@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { Standing } from '../types';
 import { getStandings, getSeasons } from '../lib/standings';
+import SEOHead from '../components/SEOHead';
 
 const formColors: Record<string, string> = {
   V: 'bg-green-500',
@@ -59,6 +60,7 @@ export default function StandingsPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-12">
+      <SEOHead title="Classement" description="Classement du championnat — Racing Club de Bingerville." />
       <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
         <div>
           <h1 className="font-display text-4xl font-black text-gray-900 dark:text-white">Classement</h1>
