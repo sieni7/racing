@@ -202,8 +202,10 @@ export default function SquadPage() {
             <span className="text-sm font-medium text-gray-500 dark:text-gray-400">({staff.length})</span>
           </div>
 
+          <style>{`.no-scrollbar::-webkit-scrollbar { display: none; }`}</style>
           <div className="relative">
-            <div ref={scrollRef} className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory">
+            <div ref={scrollRef} className="no-scrollbar flex gap-4 overflow-x-auto snap-x snap-mandatory"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
               {staff.map((member) => (
                 <div key={member.id} className="flex-shrink-0 w-48 snap-start">
                   <div className="bg-white dark:bg-gray-800 rounded-[18px] shadow-card overflow-hidden card-hover">
