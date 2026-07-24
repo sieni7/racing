@@ -154,7 +154,7 @@ export default function StandingsPage() {
       )}
 
       <ViewModal open={!!viewItem} onClose={() => setViewItem(null)} item={viewItem}
-        title={`Classement : ${viewItem?.team_name}`} fields={viewFields} />
+        title={viewItem?.team_name || ''} fields={viewFields} />
 
       <AuditHistory open={auditOpen} onClose={() => setAuditOpen(false)} tableName="standings" />
 

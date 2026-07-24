@@ -3,8 +3,8 @@ import type { Player, Staff } from '../types';
 import { getPlayers } from '../lib/players';
 import { getStaff } from '../lib/staff';
 import PlayerCard from '../components/ui/PlayerCard';
-import fallbackImg from '../assets/man.jpg';
 import { ViewModal } from '../components/admin/ViewModal';
+import fallbackImg from '../assets/man.jpg';
 import { ListSkeleton } from '../components/ui/Skeleton';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
 import SEOHead from '../components/SEOHead';
@@ -94,18 +94,6 @@ export default function SquadPage() {
       return acc;
     }, {} as Record<string, Player[]>)
   ).sort(([a], [b]) => (positionOrder[a] ?? 99) - (positionOrder[b] ?? 99));
-
-  const viewFields = viewItem ? [
-    { label: 'Nom', value: `${viewItem.first_name} ${viewItem.last_name}` },
-    { label: 'Numéro', value: viewItem.jersey_number },
-    { label: 'Position', value: roleLabels[viewItem.position] || viewItem.position },
-    { label: 'Date de naissance', value: viewItem.date_of_birth ? new Date(viewItem.date_of_birth).toLocaleDateString('fr-FR') : '—' },
-    { label: 'Nationalité', value: viewItem.nationality || '—' },
-    { label: 'Taille', value: viewItem.height_cm ? `${viewItem.height_cm} cm` : '—' },
-    { label: 'Poids', value: viewItem.weight_kg ? `${viewItem.weight_kg} kg` : '—' },
-    { label: 'Pied fort', value: viewItem.preferred_foot || '—' },
-    { label: 'Bio', value: viewItem.bio || '—' },
-  ] : [];
 
   if (loading) {
     return (
@@ -246,7 +234,17 @@ export default function SquadPage() {
       )}
 
       <ViewModal open={!!viewItem} onClose={() => setViewItem(null)} item={viewItem}
-        title={`${viewItem?.first_name} ${viewItem?.last_name}`} fields={viewFields} />
+        title={`${viewItem?.first_name} ${viewItem?.last_name}`}
+        imageUrl={viewItem?.photo_url} imageBadge={viewItem?.jersey_number}
+        fields={viewItem ? [
+          { label: 'Position', value: roleLabels[viewItem.position] || viewItem.position },
+          { label: 'Date de naissance', value: viewItem.date_of_birth ? new Date(viewItem.date_of_birth).toLocaleDateString('fr-FR') : '—' },
+          { label: 'Nationalité', value: viewItem.nationality || '—' },
+          { label: 'Taille', value: viewItem.height_cm ? `${viewItem.height_cm} cm` : '—' },
+          { label: 'Poids', value: viewItem.weight_kg ? `${viewItem.weight_kg} kg` : '—' },
+          { label: 'Pied fort', value: viewItem.preferred_foot || '—' },
+          ...(viewItem.bio ? [{ label: 'Bio', value: viewItem.bio }] : []),
+        ] : []} />
     </div>
   );
 }

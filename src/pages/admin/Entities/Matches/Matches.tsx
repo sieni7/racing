@@ -151,7 +151,7 @@ export default function MatchesPage() {
       )}
 
       <ViewModal open={!!viewItem} onClose={() => setViewItem(null)} item={viewItem}
-        title={`Match : ${viewItem?.opponent_name}`} fields={viewFields} />
+        title={viewItem?.opponent_name || ''} fields={viewFields} />
 
       <AuditHistory open={auditOpen} onClose={() => setAuditOpen(false)} tableName="matches" />
 

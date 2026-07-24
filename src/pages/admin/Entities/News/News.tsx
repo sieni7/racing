@@ -175,7 +175,8 @@ export default function NewsPage() {
       )}
 
       <ViewModal open={!!viewItem} onClose={() => setViewItem(null)} item={viewItem}
-        title={`Actualité : ${viewItem?.title}`} fields={viewFields} />
+        title={viewItem?.title || ''} fields={viewFields}
+        imageUrl={viewItem?.cover_image_url} />
 
       <AuditHistory open={auditOpen} onClose={() => setAuditOpen(false)} tableName="news" />
 

@@ -173,7 +173,8 @@ export default function PlayersPage() {
       )}
 
       <ViewModal open={!!viewItem} onClose={() => setViewItem(null)} item={viewItem}
-        title={`Joueur : ${viewItem?.first_name} ${viewItem?.last_name}`} fields={viewFields} />
+        title={`${viewItem?.first_name} ${viewItem?.last_name}`} fields={viewFields}
+        imageUrl={viewItem?.photo_url} imageBadge={viewItem?.jersey_number} />
 
       <ImportModal open={importOpen} onClose={() => setImportOpen(false)} onImport={handleImport}
         columns={exportColumns} title="Import joueurs CSV" />

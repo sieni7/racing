@@ -139,7 +139,8 @@ export default function GalleryPage() {
       )}
 
       <ViewModal open={!!viewItem} onClose={() => setViewItem(null)} item={viewItem}
-        title={`Image : ${viewItem?.title}`} fields={viewFields} />
+        title={viewItem?.title || ''} fields={viewFields}
+        imageUrl={viewItem?.image_url} />
 
       <AuditHistory open={auditOpen} onClose={() => setAuditOpen(false)} tableName="gallery" />
 

@@ -3,9 +3,12 @@ import { Link } from 'react-router-dom';
 import type { Match, NewsItem } from '../types';
 import { getUpcomingMatches } from '../lib/matches';
 import { getRecentNews } from '../lib/news';
+import { getSiteConfig } from '../lib/site-config';
+import type { HeroSlide, HeroSettings } from '../lib/site-config';
 import MatchCard from '../components/ui/MatchCard';
 import NewsCard from '../components/ui/NewsCard';
 import HeroCarousel from '../components/ui/HeroCarousel';
+import fallbackImg from '../assets/man.jpg';
 import { CardSkeleton } from '../components/ui/Skeleton';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
 import { useCounter } from '../hooks/useCounter';
@@ -36,27 +39,41 @@ function StatCard({ label, target, suffix = '' }: { label: string; target: numbe
 }
 
 const scorers = [
-  { player: 'Karamoko Touré', goals: 12, position: 'Attaquant' },
-  { player: 'Mamadou Diallo', goals: 8, position: 'Milieu offensif' },
-  { player: 'Ibrahim Koné', goals: 6, position: 'Attaquant' },
-  { player: 'Jean-Claude Akpa', goals: 5, position: 'Ailier' },
-  { player: 'Souleymane Traoré', goals: 4, position: 'Milieu' },
+  { player: 'Karamoko Touré', goals: 12, position: 'Attaquant', image: '' },
+  { player: 'Mamadou Diallo', goals: 8, position: 'Milieu offensif', image: '' },
+  { player: 'Ibrahim Koné', goals: 6, position: 'Attaquant', image: '' },
+  { player: 'Jean-Claude Akpa', goals: 5, position: 'Ailier', image: '' },
+  { player: 'Souleymane Traoré', goals: 4, position: 'Milieu', image: '' },
 ];
 
 export default function HomePage() {
   const [upcomingMatch, setUpcomingMatch] = useState<Match | null>(null);
   const [recentNews, setRecentNews] = useState<NewsItem[]>([]);
+  const [heroSlides, setHeroSlides] = useState<HeroSlide[]>([]);
+  const [heroSettings, setHeroSettings] = useState<HeroSettings>({ transition: 'fade', autoplay: true, interval: 5000, show_arrows: true, show_dots: true });
+  const [metricsConfig, setMetricsConfig] = useState<{ key: string; label: string; visible: boolean }[]>([]);
+  const [configValues, setConfigValues] = useState<Record<string, number>>({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function load() {
       try {
-        const [matches, news] = await Promise.all([
+        const [matches, news, config] = await Promise.all([
           getUpcomingMatches(),
           getRecentNews(3),
+          getSiteConfig(),
         ]);
         setUpcomingMatch(matches[0] ?? null);
         setRecentNews(news);
+        if (config?.hero_slides?.length) setHeroSlides(config.hero_slides);
+        if (config?.hero_settings) setHeroSettings(config.hero_settings);
+        if (config?.metrics_config) setMetricsConfig(config.metrics_config);
+        if (config) setConfigValues({
+          club_history_years: config.club_history_years,
+          players_count: config.players_count,
+          championships: config.championships,
+          staff_count: config.staff_count,
+        });
       } catch (err) {
         console.error('Erreur chargement HomePage:', err);
       } finally {
@@ -71,32 +88,25 @@ export default function HomePage() {
       <SEOHead title="Accueil" description="Site officiel du Racing Club de Bingerville — actualités, matchs, effectif, galerie et classement." jsonLd={organizationJsonLd()} />
       {loading ? (
         <div className="min-h-[80vh] -mt-16 bg-gray-200 dark:bg-gray-800 animate-pulse" />
-      ) : recentNews.length > 0 ? (
-        <HeroCarousel news={recentNews} />
       ) : (
-        <section className="relative min-h-[80vh] -mt-16 flex items-center justify-center gradient-hero text-white overflow-hidden">
-          <div className="relative z-10 text-center px-4 max-w-3xl">
-            <h1 className="font-display text-5xl md:text-7xl font-black mb-4">Racing Club de Bingerville</h1>
-            <p className="text-xl text-white/90 mb-8">Le ciel et le marine, une histoire de passion</p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <Link to="/matchs" className="px-8 py-3 bg-white text-primary font-bold rounded-full hover:shadow-lg hover:bg-gray-100 transition-all">
-                Calendrier
-              </Link>
-              <Link to="/effectif" className="px-8 py-3 bg-white/10 backdrop-blur-sm text-white font-semibold rounded-full border-2 border-white/30 hover:bg-white/20 transition-all">
-                Effectif
-              </Link>
-            </div>
-          </div>
-        </section>
+        <HeroCarousel slides={heroSlides} settings={heroSettings} />
       )}
 
       <AnimatedSection className="bg-gradient-to-r from-sky-50 to-navy-50 dark:from-gray-800 dark:to-gray-800 py-16">
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            <StatCard label="Années d'histoire" target={75} suffix="+" />
-            <StatCard label="Joueurs" target={28} />
-            <StatCard label="Championnats" target={4} />
-            <StatCard label="Staff" target={12} />
+            {metricsConfig.filter(m => m.visible).map(mc => (
+              <StatCard key={mc.key} label={mc.label} target={configValues[mc.key] || 0}
+                suffix={mc.key === 'club_history_years' ? '+' : ''} />
+            ))}
+            {metricsConfig.filter(m => m.visible).length === 0 && (
+              <>
+                <StatCard label="Années d'histoire" target={75} suffix="+" />
+                <StatCard label="Joueurs" target={28} />
+                <StatCard label="Championnats" target={4} />
+                <StatCard label="Staff" target={12} />
+              </>
+            )}
           </div>
         </div>
       </AnimatedSection>
@@ -149,10 +159,9 @@ export default function HomePage() {
                 </svg> Joueur du mois
               </h2>
               <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 text-center shadow-sm border border-gray-100 dark:border-gray-700">
-                <div className="w-28 h-28 rounded-full bg-gradient-to-br from-sky-100 to-navy-100 dark:from-sky-900/30 dark:to-navy-900/30 mx-auto flex items-center justify-center shadow-inner">
-                  <svg className="w-12 h-12 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 3h14M9 3v2a4 4 0 01-4 4H3m12-6v2a4 4 0 004 4h2M5 21h14M9 21v-4a4 4 0 01-4-4H3m12 4v4m0-4a4 4 0 004-4h2" />
-                  </svg>
+                <div className="w-28 h-28 rounded-full mx-auto shadow-inner overflow-hidden border-4 border-primary/20">
+                  <img src={fallbackImg} alt="Karamoko Touré"
+                    className="w-full h-full object-cover" />
                 </div>
                 <h3 className="text-xl font-display font-bold text-gray-900 dark:text-white mt-5">Karamoko Touré</h3>
                 <p className="text-primary font-semibold">Attaquant · 12 buts</p>
@@ -174,8 +183,10 @@ export default function HomePage() {
                       i === 2 ? 'bg-sky-100 text-sky-600' :
                       'bg-gray-50 text-gray-400'
                     }`}>{i + 1}</span>
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-sky-100 to-navy-100 dark:from-sky-900/20 dark:to-navy-900/20 flex items-center justify-center text-sm font-bold text-gray-500 dark:text-gray-400">
-                      {scorer.player.split(' ').map(n => n[0]).join('')}
+                    <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 border border-gray-200 dark:border-gray-600">
+                      <img src={scorer.image || fallbackImg} alt={scorer.player}
+                        className="w-full h-full object-cover"
+                        onError={(e) => { if (e.currentTarget.src !== fallbackImg) e.currentTarget.src = fallbackImg; }} />
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="font-semibold text-gray-900 dark:text-white truncate">{scorer.player}</p>

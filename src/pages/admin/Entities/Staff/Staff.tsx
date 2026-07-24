@@ -146,7 +146,8 @@ export default function StaffPage() {
       )}
 
       <ViewModal open={!!viewItem} onClose={() => setViewItem(null)} item={viewItem}
-        title={`Staff : ${viewItem?.first_name} ${viewItem?.last_name}`} fields={viewFields} />
+        title={`${viewItem?.first_name} ${viewItem?.last_name}`} fields={viewFields}
+        imageUrl={viewItem?.photo_url} />
 
       <AuditHistory open={auditOpen} onClose={() => setAuditOpen(false)} tableName="staff" />
 
