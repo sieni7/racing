@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import type { NewsItem } from '../types';
 import { getNewsBySlug } from '../lib/news';
 import SEOHead, { articleJsonLd } from '../components/SEOHead';
+import ShareButtons from '../components/ui/ShareButtons';
 
 export default function NewsArticlePage() {
   const { slug } = useParams() as { slug: string };
@@ -93,6 +94,8 @@ export default function NewsArticlePage() {
       <div className="prose prose-gray dark:prose-invert max-w-none mt-6">
         <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">{article.content}</p>
       </div>
+
+      <ShareButtons url={`/news/${article.slug}`} title={article.title} />
     </article>
   );
 }
