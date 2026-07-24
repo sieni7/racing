@@ -7,22 +7,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['icons/icon.svg', 'manifest.json'],
-      manifest: {
-        name: 'Racing Club de Bingerville',
-        short_name: 'RCB',
-        description: "Site officiel du Racing Club de Bingerville — Ligue 1 Côte d'Ivoire",
-        start_url: '/',
-        display: 'standalone',
-        orientation: 'portrait',
-        theme_color: '#F97316',
-        background_color: '#ffffff',
-        categories: ['sports', 'football'],
-        lang: 'fr',
-        icons: [
-          { src: '/icons/icon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any' },
-        ],
-      },
+      includeAssets: ['icons/icon.svg', 'manifest.json', 'icons/icon-192.png', 'icons/icon-512.png'],
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,jpg,jpeg,webp}'],
         navigateFallback: '/offline.html',

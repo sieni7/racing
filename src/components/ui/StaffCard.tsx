@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Staff } from '../../types';
-import fallbackImg from '../../assets/man.jpg';
+import fallbackImg from '../../assets/img/man.jpg';
 
 function roleLabel(role: string): string {
   const labels: Record<string, string> = {

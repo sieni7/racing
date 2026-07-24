@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Player } from '../../types';
-import fallbackImg from '../../assets/man.jpg';
+import fallbackImg from '../../assets/img/man.jpg';
 
 function PlayerCard({ player }: { player: Player }) {
 

@@ -4,7 +4,7 @@ import { getPlayers } from '../lib/players';
 import { getStaff } from '../lib/staff';
 import PlayerCard from '../components/ui/PlayerCard';
 import { ViewModal } from '../components/admin/ViewModal';
-import fallbackImg from '../assets/man.jpg';
+import fallbackImg from '../assets/img/man.jpg';
 import { ListSkeleton } from '../components/ui/Skeleton';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
 import SEOHead from '../components/SEOHead';

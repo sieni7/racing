@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import fallbackImg from '../../assets/man.jpg';
+import fallbackImg from '../../assets/img/man.jpg';
 
 interface ViewField {
   label: string;

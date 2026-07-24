@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { HeroSlide, HeroSettings } from '../../lib/site-config';
-import fallbackImg from '../../assets/man.jpg';
+import fallbackImg from '../../assets/img/man.jpg';
 
 interface HeroCarouselProps {
   slides: HeroSlide[];

@@ -8,7 +8,7 @@ import type { HeroSlide, HeroSettings } from '../lib/site-config';
 import MatchCard from '../components/ui/MatchCard';
 import NewsCard from '../components/ui/NewsCard';
 import HeroCarousel from '../components/ui/HeroCarousel';
-import fallbackImg from '../assets/man.jpg';
+import fallbackImg from '../assets/img/man.jpg';
 import { CardSkeleton } from '../components/ui/Skeleton';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
 import { useCounter } from '../hooks/useCounter';
