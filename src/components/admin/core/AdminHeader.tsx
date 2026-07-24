@@ -43,6 +43,8 @@ export function AdminHeader({ onMenuToggle }: { onMenuToggle: () => void }) {
       { label: 'Classement', path: '/admin/standings', type: 'Page', keywords: ['classement', 'standing'] },
       { label: 'Push', path: '/admin/send-push', type: 'Page', keywords: ['push', 'notification'] },
       { label: 'Activité', path: '/admin/activity', type: 'Page', keywords: ['activité', 'activity', 'log', 'audit'] },
+      { label: 'Meilleurs buteurs', path: '/admin/top-scorers', type: 'Page', keywords: ['buteur', 'but', 'scorer', 'top'] },
+      { label: 'Joueurs du mois', path: '/admin/players-of-month', type: 'Page', keywords: ['joueur', 'mois', 'pom'] },
     ];
     const match = types.filter(t =>
       t.label.toLowerCase().includes(term) || t.keywords.some(k => k.includes(term))

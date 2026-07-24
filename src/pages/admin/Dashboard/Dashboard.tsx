@@ -52,7 +52,7 @@ function Widget({ title, children, className = '' }: { title: string; children: 
   );
 }
 
-const activityLabels: Record<string, string> = { players: 'Joueurs', matches: 'Matchs', news: 'Actualités', staff: 'Staff', gallery: 'Galerie', standings: 'Classement' };
+const activityLabels: Record<string, string> = { players: 'Joueurs', matches: 'Matchs', news: 'Actualités', staff: 'Staff', gallery: 'Galerie', standings: 'Classement', top_scorers: 'Meilleurs buteurs', players_of_month: 'Joueurs du mois' };
 const activityColors: Record<string, string> = { CREATE: 'bg-green-500', UPDATE: 'bg-blue-500', DELETE: 'bg-red-500' };
 const activityText: Record<string, string> = { CREATE: 'Création', UPDATE: 'Modification', DELETE: 'Suppression' };
 

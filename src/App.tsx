@@ -31,6 +31,8 @@ const AdminStandings = lazy(() => import('./pages/admin/Entities/Standings/Stand
 const AdminActivity = lazy(() => import('./pages/admin/Activity/ActivityLog'));
 const AdminSiteConfig = lazy(() => import('./pages/admin/SiteConfig/SiteConfig'));
 const AdminContactMessages = lazy(() => import('./pages/admin/Contact/ContactMessages'));
+const AdminTopScorers = lazy(() => import('./pages/admin/Entities/TopScorers/TopScorers'));
+const AdminPlayersOfMonth = lazy(() => import('./pages/admin/Entities/PlayersOfMonth/PlayersOfMonth'));
 
 function Loading() {
   return (
@@ -86,6 +88,8 @@ function App() {
               <Route path="activity" element={<AdminActivity />} />
               <Route path="site-config" element={<AdminSiteConfig />} />
               <Route path="contact" element={<AdminContactMessages />} />
+              <Route path="top-scorers" element={<AdminTopScorers />} />
+              <Route path="players-of-month" element={<AdminPlayersOfMonth />} />
             </Route>
           </Routes>
         </Suspense>

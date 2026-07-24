@@ -5,6 +5,8 @@ import { getAllNews, createNews as createNewsSvc, updateNews as updateNewsSvc, d
 import { getAllStaff, createStaff as createStaffSvc, updateStaff as updateStaffSvc, deleteStaff as deleteStaffSvc, type Staff } from '../lib/staff';
 import { getGalleryItems, createGalleryItem, updateGalleryItem, deleteGalleryItem } from '../lib/gallery';
 import { getStandings as getStandingsSvc, upsertStanding, deleteStanding as deleteStandingSvc } from '../lib/standings';
+import { getTopScorers as getTopScorersSvc, createTopScorer as createTopScorerSvc, updateTopScorer as updateTopScorerSvc, deleteTopScorer as deleteTopScorerSvc, type TopScorer } from '../lib/top-scorers';
+import { getAllPlayersOfMonth, createPlayerOfMonth as createPomSvc, updatePlayerOfMonth as updatePomSvc, deletePlayerOfMonth as deletePomSvc, type PlayerOfMonth } from '../lib/players-of-month';
 import type { Gallery, Standing } from '../types';
 import toast from 'react-hot-toast';
 
@@ -15,6 +17,8 @@ interface AdminState {
   staff: Staff[];
   gallery: Gallery[];
   standings: Standing[];
+  topScorers: TopScorer[];
+  playersOfMonth: PlayerOfMonth[];
 }
 
 interface AdminActions {
@@ -24,6 +28,8 @@ interface AdminActions {
   fetchStaff: () => Promise<void>;
   fetchGallery: () => Promise<void>;
   fetchStandings: () => Promise<void>;
+  fetchTopScorers: () => Promise<void>;
+  fetchPlayersOfMonth: () => Promise<void>;
   createPlayer: (data: Partial<Omit<Player, 'id'>>) => Promise<Player | null>;
   updatePlayer: (id: string, data: Partial<Omit<Player, 'id'>>) => Promise<Player | null>;
   deletePlayer: (id: string) => Promise<void>;
@@ -42,6 +48,12 @@ interface AdminActions {
   createStanding: (data: Partial<Omit<Standing, 'id'>>) => Promise<Standing | null>;
   updateStanding: (id: string, data: Partial<Omit<Standing, 'id'>>) => Promise<Standing | null>;
   deleteStanding: (id: string) => Promise<void>;
+  createTopScorer: (data: Partial<Omit<TopScorer, 'id'>>) => Promise<TopScorer | null>;
+  updateTopScorer: (id: string, data: Partial<Omit<TopScorer, 'id'>>) => Promise<TopScorer | null>;
+  deleteTopScorer: (id: string) => Promise<void>;
+  createPlayerOfMonth: (data: Partial<Omit<PlayerOfMonth, 'id'>>) => Promise<PlayerOfMonth | null>;
+  updatePlayerOfMonth: (id: string, data: Partial<Omit<PlayerOfMonth, 'id'>>) => Promise<PlayerOfMonth | null>;
+  deletePlayerOfMonth: (id: string) => Promise<void>;
 }
 
 type AdminContextValue = AdminState & AdminActions;
@@ -55,6 +67,8 @@ export const AdminProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const [staff, setStaff] = useState<Staff[]>([]);
   const [gallery, setGallery] = useState<Gallery[]>([]);
   const [standings, setStandings] = useState<Standing[]>([]);
+  const [topScorers, setTopScorers] = useState<TopScorer[]>([]);
+  const [playersOfMonth, setPlayersOfMonth] = useState<PlayerOfMonth[]>([]);
 
   const fetchPlayers = async () => {
     try {
@@ -280,6 +294,92 @@ export const AdminProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     }
   };
 
+  const fetchTopScorers = async () => {
+    try {
+      const data = await getTopScorersSvc();
+      setTopScorers(data);
+    } catch {
+      toast.error('Erreur chargement buteurs');
+    }
+  };
+
+  const fetchPlayersOfMonth = async () => {
+    try {
+      const data = await getAllPlayersOfMonth();
+      setPlayersOfMonth(data);
+    } catch {
+      toast.error('Erreur chargement joueurs du mois');
+    }
+  };
+
+  const createTopScorer = async (data: Partial<Omit<TopScorer, 'id'>>) => {
+    try {
+      const result = await createTopScorerSvc(data);
+      toast.success('Buteur ajouté');
+      await fetchTopScorers();
+      return result;
+    } catch {
+      toast.error('Erreur ajout buteur');
+      return null;
+    }
+  };
+
+  const updateTopScorer = async (id: string, data: Partial<Omit<TopScorer, 'id'>>) => {
+    try {
+      const result = await updateTopScorerSvc(id, data);
+      toast.success('Buteur modifié');
+      await fetchTopScorers();
+      return result;
+    } catch {
+      toast.error('Erreur modification buteur');
+      return null;
+    }
+  };
+
+  const deleteTopScorer = async (id: string) => {
+    try {
+      await deleteTopScorerSvc(id);
+      toast.success('Buteur supprimé');
+      await fetchTopScorers();
+    } catch {
+      toast.error('Erreur suppression buteur');
+    }
+  };
+
+  const createPlayerOfMonth = async (data: Partial<Omit<PlayerOfMonth, 'id'>>) => {
+    try {
+      const result = await createPomSvc(data);
+      toast.success('Joueur du mois ajouté');
+      await fetchPlayersOfMonth();
+      return result;
+    } catch {
+      toast.error('Erreur ajout');
+      return null;
+    }
+  };
+
+  const updatePlayerOfMonth = async (id: string, data: Partial<Omit<PlayerOfMonth, 'id'>>) => {
+    try {
+      const result = await updatePomSvc(id, data);
+      toast.success('Joueur du mois modifié');
+      await fetchPlayersOfMonth();
+      return result;
+    } catch {
+      toast.error('Erreur modification');
+      return null;
+    }
+  };
+
+  const deletePlayerOfMonth = async (id: string) => {
+    try {
+      await deletePomSvc(id);
+      toast.success('Joueur du mois supprimé');
+      await fetchPlayersOfMonth();
+    } catch {
+      toast.error('Erreur suppression');
+    }
+  };
+
   const createStanding = async (data: Partial<Omit<Standing, 'id'>>) => {
     try {
       const result = await upsertStanding(data);
@@ -316,14 +416,16 @@ export const AdminProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
   return (
     <AdminContext.Provider value={{
-      players, matches, news, staff, gallery, standings,
-      fetchPlayers, fetchMatches, fetchNews, fetchStaff, fetchGallery, fetchStandings,
+      players, matches, news, staff, gallery, standings, topScorers, playersOfMonth,
+      fetchPlayers, fetchMatches, fetchNews, fetchStaff, fetchGallery, fetchStandings, fetchTopScorers, fetchPlayersOfMonth,
       createPlayer, updatePlayer, deletePlayer,
       createMatch, updateMatch, deleteMatch,
       createNews, updateNews, deleteNews,
       createStaff, updateStaff, deleteStaff,
       createGallery, updateGallery, deleteGallery,
       createStanding, updateStanding, deleteStanding,
+      createTopScorer, updateTopScorer, deleteTopScorer,
+      createPlayerOfMonth, updatePlayerOfMonth, deletePlayerOfMonth,
     }}>
       {children}
     </AdminContext.Provider>

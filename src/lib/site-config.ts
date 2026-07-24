@@ -24,6 +24,12 @@ export interface MetricConfig {
   visible: boolean;
 }
 
+export interface Sponsor {
+  name: string;
+  logo_url: string;
+  website_url: string;
+}
+
 export interface SiteConfig {
   id: string;
   club_history_years: number;
@@ -41,6 +47,7 @@ export interface SiteConfig {
   maintenance_mode: boolean;
   hero_slides: HeroSlide[];
   hero_settings: HeroSettings;
+  sponsors: Sponsor[];
   updated_at: string;
 }
 
@@ -69,7 +76,7 @@ export async function upsertSiteConfig(values: Partial<SiteConfig>): Promise<Sit
   return data as SiteConfig;
 }
 
-export const DEFAULT_CONFIG: Omit<SiteConfig, 'id' | 'updated_at'> = {
+export const DEFAULT_CONFIG: Omit<SiteConfig, 'id' | 'updated_at'> & { sponsors: Sponsor[] } = {
   club_history_years: 75,
   players_count: 28,
   championships: 4,
@@ -94,4 +101,5 @@ export const DEFAULT_CONFIG: Omit<SiteConfig, 'id' | 'updated_at'> = {
     { id: '3', title: 'Actualités du club', subtitle: 'Toute l\'actualité du Racing Club', cta_label: 'Lire les actus', cta_link: '/news', image_url: '', order: 2 },
   ],
   hero_settings: { transition: 'fade', autoplay: true, interval: 5000, show_arrows: true, show_dots: true },
+  sponsors: [],
 };

@@ -20,7 +20,7 @@ export function RealtimeProvider({ children }: { children: ReactNode }) {
   const [events, setEvents] = useState<RealtimeEvent[]>([]);
 
   useEffect(() => {
-    const tables = ['players', 'matches', 'news', 'staff', 'gallery', 'standings'];
+    const tables = ['players', 'matches', 'news', 'staff', 'gallery', 'standings', 'top_scorers', 'players_of_month'];
     const channels = tables.map(table => {
       return supabase
         .channel(`${table}-changes`)
@@ -31,6 +31,7 @@ export function RealtimeProvider({ children }: { children: ReactNode }) {
             const labels: Record<string, string> = {
               players: 'Joueurs', matches: 'Matchs', news: 'Actualités',
               staff: 'Staff', gallery: 'Galerie', standings: 'Classement',
+              top_scorers: 'Meilleurs buteurs', players_of_month: 'Joueurs du mois',
             };
             const label = labels[table] || table;
             const messages: Record<string, string> = {

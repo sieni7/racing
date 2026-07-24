@@ -11,6 +11,8 @@ const labelMap: Record<string, string> = {
   standings: 'Classement',
   'send-push': 'Push',
   activity: 'Activité',
+  'top-scorers': 'Meilleurs buteurs',
+  'players-of-month': 'Joueurs du mois',
 };
 
 export function AdminBreadcrumb() {

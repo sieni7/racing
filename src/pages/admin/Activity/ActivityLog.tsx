@@ -8,7 +8,7 @@ const actionColors: Record<string, string> = {
   RESTORE: 'text-purple-600 bg-purple-50 dark:bg-purple-900/20',
 };
 const actionLabels: Record<string, string> = { CREATE: 'Création', UPDATE: 'Modification', DELETE: 'Suppression', RESTORE: 'Restauration' };
-const tableLabels: Record<string, string> = { players: 'Joueurs', matches: 'Matchs', news: 'Actualités', staff: 'Staff', gallery: 'Galerie', standings: 'Classement' };
+const tableLabels: Record<string, string> = { players: 'Joueurs', matches: 'Matchs', news: 'Actualités', staff: 'Staff', gallery: 'Galerie', standings: 'Classement', top_scorers: 'Meilleurs buteurs', players_of_month: 'Joueurs du mois', newsletter_subscriptions: 'Newsletter' };
 
 export default function ActivityLog() {
   const [entries, setEntries] = useState<AuditEntry[]>([]);
