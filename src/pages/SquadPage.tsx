@@ -1,9 +1,9 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useRef } from 'react';
 import type { Player, Staff } from '../types';
 import { getPlayers } from '../lib/players';
 import { getStaff } from '../lib/staff';
 import PlayerCard from '../components/ui/PlayerCard';
-import StaffCard from '../components/ui/StaffCard';
+import { ViewModal } from '../components/admin/ViewModal';
 import { ListSkeleton } from '../components/ui/Skeleton';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
 
@@ -34,12 +34,30 @@ function AnimatedSection({ children, className = '' }: { children: React.ReactNo
   );
 }
 
+const roleLabels: Record<string, string> = {
+  gardien: 'Gardien',
+  defenseur: 'Défenseur',
+  milieu: 'Milieu',
+  attaquant: 'Attaquant',
+  entraineur_principal: 'Entraîneur principal',
+  entraineur_adjoint: 'Entraîneur adjoint',
+  preparateur_physique: 'Préparateur physique',
+  entraineur_gardiens: 'Entraîneur gardiens',
+  directeur_sportif: 'Directeur sportif',
+  manager: 'Manager général',
+  medecin: 'Médecin',
+  president: 'Président',
+  autre: 'Autre',
+};
+
 export default function SquadPage() {
   const [players, setPlayers] = useState<Player[]>([]);
   const [staff, setStaff] = useState<Staff[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [positionFilter, setPositionFilter] = useState('all');
+  const [viewItem, setViewItem] = useState<Player | null>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     async function load() {
@@ -74,6 +92,18 @@ export default function SquadPage() {
       return acc;
     }, {} as Record<string, Player[]>)
   ).sort(([a], [b]) => (positionOrder[a] ?? 99) - (positionOrder[b] ?? 99));
+
+  const viewFields = viewItem ? [
+    { label: 'Nom', value: `${viewItem.first_name} ${viewItem.last_name}` },
+    { label: 'Numéro', value: viewItem.jersey_number },
+    { label: 'Position', value: roleLabels[viewItem.position] || viewItem.position },
+    { label: 'Date de naissance', value: viewItem.date_of_birth ? new Date(viewItem.date_of_birth).toLocaleDateString('fr-FR') : '—' },
+    { label: 'Nationalité', value: viewItem.nationality || '—' },
+    { label: 'Taille', value: viewItem.height_cm ? `${viewItem.height_cm} cm` : '—' },
+    { label: 'Poids', value: viewItem.weight_kg ? `${viewItem.weight_kg} kg` : '—' },
+    { label: 'Pied fort', value: viewItem.preferred_foot || '—' },
+    { label: 'Bio', value: viewItem.bio || '—' },
+  ] : [];
 
   if (loading) {
     return (
@@ -136,20 +166,26 @@ export default function SquadPage() {
 
       {groups.length === 0 ? (
         <div className="text-center py-20">
-          <p className="text-5xl mb-4">🔍</p>
+          <svg className="w-12 h-12 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
           <p className="text-gray-600 dark:text-gray-300">Aucun joueur ne correspond aux critères.</p>
         </div>
       ) : (
         groups.map(([position, positionPlayers]) => (
           <AnimatedSection key={position} className="mb-16">
-            <h2 className="font-display text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-3">
-              <span className="w-1 h-7 bg-primary rounded-full inline-block" />
-              {positionLabel(position)}
-              <span className="text-sm font-normal text-gray-400 dark:text-gray-500">({positionPlayers.length})</span>
-            </h2>
+            <div className="inline-flex items-center gap-3 bg-gray-100/80 dark:bg-gray-800/80 rounded-xl px-4 py-2 mb-6">
+              <span className="w-1 h-7 bg-primary rounded-full" />
+              <h2 className="font-display text-xl font-bold text-gray-900 dark:text-white">
+                {positionLabel(position)}
+              </h2>
+              <span className="text-sm font-medium text-gray-500 dark:text-gray-400">({positionPlayers.length})</span>
+            </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {positionPlayers.map((player) => (
-                <PlayerCard key={player.id} player={player} />
+                <button key={player.id} onClick={() => setViewItem(player)} className="text-left w-full">
+                  <PlayerCard player={player} />
+                </button>
               ))}
             </div>
           </AnimatedSection>
@@ -158,17 +194,61 @@ export default function SquadPage() {
 
       {staff.length > 0 && (
         <AnimatedSection className="mt-8">
-          <h2 className="font-display text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-3">
-            <span className="w-1 h-7 bg-blue-600 rounded-full inline-block" />
-            Staff technique
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {staff.map((member) => (
-              <StaffCard key={member.id} member={member} />
-            ))}
+          <div className="inline-flex items-center gap-3 bg-blue-100/80 dark:bg-blue-900/30 rounded-xl px-4 py-2 mb-6">
+            <span className="w-1 h-7 bg-blue-600 rounded-full" />
+            <h2 className="font-display text-xl font-bold text-gray-900 dark:text-white">
+              Staff technique
+            </h2>
+            <span className="text-sm font-medium text-gray-500 dark:text-gray-400">({staff.length})</span>
+          </div>
+
+          <div className="relative">
+            <div ref={scrollRef} className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory">
+              {staff.map((member) => (
+                <div key={member.id} className="flex-shrink-0 w-48 snap-start">
+                  <div className="bg-white dark:bg-gray-800 rounded-[18px] shadow-card overflow-hidden card-hover">
+                    <div className="aspect-square bg-gradient-to-br from-blue-100 to-blue-50 dark:from-blue-900/20 dark:to-gray-800 relative overflow-hidden">
+                      {member.photo_url ? (
+                        <img src={member.photo_url} alt={`${member.first_name} ${member.last_name}`}
+                          loading="lazy" decoding="async"
+                          className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="flex items-center justify-center h-full">
+                          <span className="text-3xl font-bold text-gray-400 dark:text-gray-500">
+                            {member.first_name[0]}{member.last_name[0]}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                    <div className="p-3 text-center">
+                      <h3 className="font-display font-semibold text-sm text-gray-900 dark:text-white truncate">
+                        {member.first_name} {member.last_name}
+                      </h3>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{roleLabels[member.role] || member.role}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <button onClick={() => { scrollRef.current?.scrollBy({ left: -200, behavior: 'smooth' }); }}
+              className="absolute left-0 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white dark:bg-gray-700 shadow-lg flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors -ml-5">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <button onClick={() => { scrollRef.current?.scrollBy({ left: 200, behavior: 'smooth' }); }}
+              className="absolute right-0 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white dark:bg-gray-700 shadow-lg flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors -mr-5">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
           </div>
         </AnimatedSection>
       )}
+
+      <ViewModal open={!!viewItem} onClose={() => setViewItem(null)} item={viewItem}
+        title={`${viewItem?.first_name} ${viewItem?.last_name}`} fields={viewFields} />
     </div>
   );
 }
