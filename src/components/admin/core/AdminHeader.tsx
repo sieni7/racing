@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, NavLink } from 'react-router-dom';
+import { supabase } from '../../../lib/supabase';
 
 interface SearchResult {
   label: string;
@@ -15,6 +16,11 @@ export function AdminHeader({ onMenuToggle }: { onMenuToggle: () => void }) {
   const navigate = useNavigate();
   const inputRef = useRef<HTMLInputElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    navigate('/');
+  };
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -109,7 +115,17 @@ export function AdminHeader({ onMenuToggle }: { onMenuToggle: () => void }) {
       </div>
 
       <div className="flex items-center gap-2">
-        <span className="w-2 h-2 rounded-full bg-success" title="Connecté" />
+        <NavLink to="/" className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 hover:text-secondary transition-colors" title="Voir le site">
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+          </svg>
+        </NavLink>
+        <button onClick={handleLogout} className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 hover:text-cta transition-colors" title="Déconnexion">
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+          </svg>
+        </button>
+        <span className="w-2.5 h-2.5 rounded-full bg-success ml-1" title="Connecté" />
       </div>
     </header>
   );

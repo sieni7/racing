@@ -1,4 +1,5 @@
 import React from 'react';
+import fallbackImg from '../../assets/man.jpg';
 
 interface Scorer {
   player: string;
@@ -13,7 +14,9 @@ const TopScorers: React.FC<{ scorers: Scorer[] }> = ({ scorers }) => {
       {scorers.map((scorer, index) => (
         <div key={index} className="flex items-center gap-4 p-3 bg-white dark:bg-gray-800 rounded-[18px] shadow-card card-hover">
           <span className="text-2xl font-bold text-secondary/30 w-8 text-center">{index + 1}</span>
-          <img src={scorer.image} alt={scorer.player} className="w-10 h-10 rounded-full object-cover" />
+          <img src={scorer.image || fallbackImg} alt={scorer.player}
+            className="w-10 h-10 rounded-full object-cover"
+            onError={(e) => { if (e.currentTarget.src !== fallbackImg) e.currentTarget.src = fallbackImg; }} />
           <div className="flex-1">
             <p className="font-semibold text-gray-900 dark:text-white">{scorer.player}</p>
             <p className="text-xs text-gray-500 dark:text-gray-400">{scorer.position}</p>

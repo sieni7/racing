@@ -1,5 +1,4 @@
-import { NavLink, useNavigate } from 'react-router-dom';
-import { supabase } from '../../../lib/supabase';
+import { NavLink } from 'react-router-dom';
 
 const navGroups = [
   {
@@ -25,6 +24,7 @@ const navGroups = [
       { path: '/admin/send-push', label: 'Push', icon: 'M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9' },
       { path: '/admin/activity', label: 'Activité', icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' },
       { path: '/admin/site-config', label: 'Site', icon: 'M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z' },
+      { path: '/admin/contact', label: 'Contacts', icon: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z' },
     ],
   },
 ];
@@ -37,13 +37,6 @@ interface AdminSidebarProps {
 }
 
 export function AdminSidebar({ collapsed, onToggle, mobileOpen, onMobileClose }: AdminSidebarProps) {
-  const navigate = useNavigate();
-
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    navigate('/');
-  };
-
   return (
     <>
       {mobileOpen && <div className="fixed inset-0 bg-black/50 z-30 md:hidden" onClick={onMobileClose} />}
@@ -53,9 +46,9 @@ export function AdminSidebar({ collapsed, onToggle, mobileOpen, onMobileClose }:
       } ${mobileOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
         <div className="h-16 flex items-center justify-between px-4 border-b border-white/10">
           {!collapsed && (
-            <div>
+            <div className="flex items-center gap-2">
               <span className="font-display font-bold text-base text-primary">RCB</span>
-              <span className="text-white/60 text-xs ml-2">Admin</span>
+              <span className="text-white/60 text-xs">Admin</span>
             </div>
           )}
           <button onClick={onToggle} className="p-1.5 rounded-lg hover:bg-white/10 transition-colors text-white/60" aria-label="Toggle sidebar">
@@ -100,14 +93,9 @@ export function AdminSidebar({ collapsed, onToggle, mobileOpen, onMobileClose }:
         </nav>
 
         <div className="border-t border-white/10 p-2">
-          <button onClick={handleLogout}
-            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white/60 hover:text-cta hover:bg-white/10 w-full transition-all"
-            title={collapsed ? 'Déconnexion' : undefined}>
-            <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-            </svg>
-            {!collapsed && <span>Déconnexion</span>}
-          </button>
+          {!collapsed && (
+            <p className="text-[10px] uppercase tracking-widest text-white/40 text-center">RCB Admin v1.0</p>
+          )}
         </div>
       </aside>
     </>
